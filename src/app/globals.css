@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   DESIGN TOKENS — see STRUCTURE.md § Design system for the rationale.
+
+   The differentiating decision: competitors in this trade almost universally
+   run white-background + mid-blue. We invert it. Deep marine navy carries the
+   page, a bright hydro blue does the brand work, and a single scarce orange is
+   reserved exclusively for conversion actions. Orange-on-navy is the highest
+   contrast pairing available to us, so the CTA is never competing with the
+   brand colour for attention.
+   ========================================================================== */
+@theme {
+  /* Ink — deep marine navy. Dominant surface, not just text. */
+  --color-ink-50: #eef4f9;
+  --color-ink-100: #d3e2ef;
+  --color-ink-200: #a3c0d8;
+  --color-ink-300: #6b93b6;
+  --color-ink-400: #3d6789;
+  --color-ink-500: #234a67;
+  --color-ink-600: #16334a;
+  --color-ink-700: #0e2537;
+  --color-ink-800: #0a1b28;
+  --color-ink-900: #06131d;
+  --color-ink-950: #030b12;
+
+  /* Hydro — the brand blue. Water, clarity, pressure. */
+  --color-hydro-50: #eaf7ff;
+  --color-hydro-100: #cfedff;
+  --color-hydro-200: #9fdaff;
+  --color-hydro-300: #63c2fb;
+  --color-hydro-400: #2ea6ef;
+  --color-hydro-500: #0b8fd6;
+  --color-hydro-600: #0071b0;
+  --color-hydro-700: #005a8d;
+  --color-hydro-800: #064a73;
+  --color-hydro-900: #0a3e60;
+
+  /* Signal — CTA ONLY. If it isn't a conversion action, it isn't this colour. */
+  --color-signal-50: #fff3ed;
+  --color-signal-100: #ffe2d3;
+  --color-signal-200: #ffc0a6;
+  --color-signal-300: #ff9670;
+  --color-signal-400: #ff6a2b;
+  --color-signal-500: #f74e0c;
+  --color-signal-600: #e33604;
+  --color-signal-700: #bc2607;
+  --color-signal-800: #95210e;
+  --color-signal-900: #781f0f;
+
+  /* Mint — "clean" indicator. Reveal lines, checkmarks, after-states. */
+  --color-mint-300: #6ef0d3;
+  --color-mint-400: #3fe0bf;
+  --color-mint-500: #16c5a3;
+  --color-mint-600: #059e83;
+  --color-mint-700: #077e6a;
+
+  /* Sand — warm neutral for alternating sections, so light bands aren't
+     sterile white against all that navy. */
+  --color-sand-50: #faf8f5;
+  --color-sand-100: #f4f0e9;
+  --color-sand-200: #e8e0d4;
+  --color-sand-300: #d6c9b6;
+
+  /* Typography.
+     PLACEHOLDER STACKS — system fonts so the scaffold builds with zero network
+     dependency. STRUCTURE.md § Typography names the two fonts to swap in via
+     next/font once you're ready; only these two lines change. */
+  --font-display:
+    "Barlow Condensed", "Oswald", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", sans-serif;
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+
+  /* Fluid display sizes — clamp() so headings scale continuously rather than
+     stepping at breakpoints. */
+  --text-display-sm: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+  --text-display-md: clamp(2.5rem, 1.6rem + 3.6vw, 4.25rem);
+  --text-display-lg: clamp(3rem, 1.7rem + 5.2vw, 5.75rem);
+
+  --radius-card: 0.875rem;
+  --radius-pill: 999px;
+
+  /* Elevation tuned for a dark-dominant page: shadows are tinted navy, not
+     neutral black, so cards sit in the palette instead of on top of it. */
+  --shadow-card: 0 1px 2px rgb(6 19 29 / 0.06), 0 8px 24px -8px rgb(6 19 29 / 0.14);
+  --shadow-lift: 0 2px 4px rgb(6 19 29 / 0.08), 0 20px 40px -12px rgb(6 19 29 / 0.24);
+  --shadow-glow: 0 0 0 1px rgb(11 143 214 / 0.24), 0 12px 32px -8px rgb(11 143 214 / 0.36);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+  --header-height: 4.5rem;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Anchor targets clear the sticky header. */
+  scroll-padding-top: calc(var(--header-height) + 1rem);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-white);
+  color: var(--color-ink-800);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Visible, on-brand focus ring everywhere. Never remove without a replacement. */
+:focus-visible {
+  outline: 3px solid var(--color-hydro-400);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+::selection {
+  background-color: var(--color-hydro-200);
+  color: var(--color-ink-900);
+}
+
+/* ---------------------------------------------------------------------------
+   Utilities
+   ------------------------------------------------------------------------- */
+
+/* Skip link — visually hidden until focused. */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  z-index: 100;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-ink-900);
+  color: white;
+  border-radius: var(--radius-pill);
+}
+
+/* The "clean reveal" motif — a diagonal wipe edge echoing a surface-cleaner
+   pass. Used sparingly at section boundaries; it's the site's one signature
+   shape and it stops working if it's everywhere. */
+.edge-wipe-top {
+  clip-path: polygon(0 3.5rem, 100% 0, 100% 100%, 0 100%);
+}
+.edge-wipe-bottom {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 3.5rem), 0 100%);
+}
+
+/* Subtle water-texture wash for dark sections. */
+.hydro-mesh {
+  background-image:
+    radial-gradient(60rem 40rem at 12% -10%, rgb(11 143 214 / 0.35), transparent 60%),
+    radial-gradient(45rem 35rem at 92% 8%, rgb(63 224 191 / 0.16), transparent 62%),
+    radial-gradient(40rem 30rem at 50% 110%, rgb(11 143 214 / 0.18), transparent 60%);
+}
+
+/* Grid used behind dark hero/CTA bands. */
+.blueprint-grid {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+}
+
+/* Placeholder frame for not-yet-shot photography. Deliberately obvious — it
+   should read as "image goes here", never as a finished design choice. */
+.img-placeholder {
+  background-color: var(--color-ink-100);
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgb(11 143 214 / 0.07) 0 1rem,
+    transparent 1rem 2rem
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
