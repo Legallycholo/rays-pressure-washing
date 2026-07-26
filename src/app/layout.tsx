@@ -4,8 +4,7 @@ import { site } from "@/content/site";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { StickyCallBar } from "@/components/layout/StickyCallBar";
-import { StickyQuoteRail } from "@/components/layout/StickyQuoteRail";
-import { ChatLauncher } from "@/components/ChatLauncher";
+import { ContactHub } from "@/components/ContactHub";
 import { JsonLd } from "@/components/JsonLd";
 import { localBusinessSchema } from "@/lib/schema";
 
@@ -55,8 +54,31 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className="flex min-h-dvh flex-col pb-[68px] lg:pb-0">
+    // The reveal bootstrap below writes an attribute onto <html> before React
+    // hydrates, which is a mismatch by construction — suppress it here rather
+    // than let it surface as a false alarm on every page.
+    <html lang="en" suppressHydrationWarning>
+      <body className="flex min-h-dvh flex-col pb-[calc(var(--callbar-height)+var(--safe-bottom))] lg:pb-0">
+        {/*
+          Arms the entrance-reveal base state before first paint (see
+          Reveal.tsx). It has to be inline and synchronous: setting this from a
+          `useEffect` would flash the content in, then hide it, then fade it
+          back — worse than no animation.
+
+          The timer is the failure valve. `data-reveal-live` is set by the
+          first `Reveal` that mounts, so if hydration never happens or throws,
+          nothing claims it, the base state is dropped, and every revealed
+          section becomes plainly visible. Content is never left hidden behind
+          a script that didn't run.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){var d=document.documentElement;d.setAttribute('data-reveal-ready','');" +
+              "setTimeout(function(){if(!d.hasAttribute('data-reveal-live'))" +
+              "d.removeAttribute('data-reveal-ready')},4000)})()",
+          }}
+        />
         <a href="#main" className="skip-link">
           Skip to main content
         </a>
@@ -66,11 +88,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Footer />
-        {/* Mobile bar and desktop rail are mutually exclusive by breakpoint. */}
+        {/* Two persistent affordances, not three: the mobile-only action bar
+            along the bottom edge, and one hub in the bottom-right corner at
+            every breakpoint. */}
         <StickyCallBar />
-        <StickyQuoteRail />
-        {/* Bottom-left: the one corner the other two don't occupy. */}
-        <ChatLauncher />
+        <ContactHub />
       </body>
     </html>
   );

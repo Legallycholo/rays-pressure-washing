@@ -354,6 +354,59 @@ review. No unverified claim.
 
 ---
 
+## Phase 14 — Motion system and Contact Hub
+
+Built from `ANIMATIONS.md`. `[~]` means it needs hardware or tooling this
+environment doesn't have — those are the follow-ups, not oversights.
+
+- [x] `--ease-spring` token added; `STRUCTURE.md` §10.4 rewritten to match
+- [x] `Reveal` — one shared `IntersectionObserver`, `unobserve` after firing,
+      never re-triggers on scroll-back
+- [x] Reveal degrades to plain visible content with JS off *and* if hydration
+      fails after the pre-paint bootstrap (4s failure valve in `layout.tsx`)
+- [x] `Reveal` applied to `HowItWorks`, `ServicesGrid`, `Testimonials`,
+      `BundlesSection`, `TrustBar`, `StatsRow` — 2 groups per section, never
+      per card
+- [x] `StatsRow` reveals the row; the numbers still never count up
+- [x] `StackingCards` — height reserved by normal document flow, so there is
+      no shift when the effect initialises
+- [x] Scroll listener is `passive`, rAF-throttled, and genuinely detached
+      below `lg` and under `prefers-reduced-motion` (not merely hidden)
+- [x] Stacking deck has an explicit reduced-motion *layout* branch, not just
+      the global duration kill-switch
+- [x] `HowItWorks` mobile/`sm` layout unchanged — one DOM, no duplicate copy
+- [x] `active:scale-[0.97]` press state on every `Button` variant
+- [x] `GalleryLightbox` opens/closes on a transition (`@starting-style` +
+      `allow-discrete`); unsupported browsers get the old snap
+- [x] `ContactHub` — 6 items, quote row is `hydro` not `signal` (**R2**)
+- [x] "Chat with AI" opens an honest placeholder panel, not a dead or
+      greyed-out row; VENDOR SWAP POINT comment carried onto it
+- [x] `ChatLauncher` + `StickyQuoteRail` deleted; no references left in code
+      or docs
+- [x] Escape closes the hub and refocuses the trigger; click-outside closes
+      without yanking focus; arrow keys move between items
+- [x] Nudge: 24s / 60% scroll dual trigger, `sessionStorage`-gated, suppressed
+      on `/quote` and `/contact`, `aria-live="polite"`, never takes focus
+- [x] Safe-area insets on `ContactHub`, `StickyCallBar` and `<body>` padding,
+      all three offsetting against one `--callbar-height`
+- [x] 44×44px minimum on every new interactive element
+- [x] `-webkit-tap-highlight-color` cleared on elements that have their own
+      press state (was not reset anywhere before this)
+- [~] `prefers-reduced-motion` toggled at the OS level — verified by reading
+      the emitted CSS, not on a real OS toggle
+- [~] Screen-reader pass on the hub and nudge — no AT in this environment
+- [~] Lighthouse / CLS check on `/` and a long page — no Lighthouse here
+- [~] Real-device pass (iOS Safari + Android Chrome) for safe-area insets and
+      the nudge — emulators are unreliable for `env(safe-area-inset-*)`
+- [~] Fast-flick / slow-scroll / scroll-back-up feel on the deck, and tuning
+      `--stack-step` (currently `40dvh`) — needs a human scrolling it
+
+**GATE 14 ⚠️ PARTIAL** — Everything verifiable without a browser or device is
+verified: production build clean, emitted CSS inspected rule by rule. The five
+`[~]` items above all need a real browser on real hardware.
+
+---
+
 ## Open decisions to resolve
 
 From `SECTIONS.md` §4. Each blocks the phase listed.

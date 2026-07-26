@@ -40,7 +40,7 @@ export const site = {
     phoneHref: "+18033683600",
     /**
      * Digits only, used for the wa.me deep link in `StickyCallBar` and
-     * `ChatLauncher`.
+     * `ContactHub`.
      *
      * UNCONFIRMED — set to the same line as `phone` because that is the only
      * number supplied. wa.me does not fail gracefully: if this number has no

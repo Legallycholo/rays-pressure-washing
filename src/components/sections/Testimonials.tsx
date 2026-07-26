@@ -6,6 +6,7 @@ import { Stars } from "@/components/ui/Rating";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { ScrollRail } from "@/components/ScrollRail";
+import { Reveal } from "@/components/Reveal";
 import { formatDate } from "@/lib/utils";
 
 export function TestimonialCard({ t }: { t: Testimonial }) {
@@ -66,34 +67,38 @@ export function Testimonials({
 
   return (
     <Section tone={tone}>
-      <SectionHeading
-        {...(heading ?? {
-          eyebrow: "In their words",
-          title: "What the neighbours say",
-        })}
-      />
-      {layout === "carousel" ? (
-        <ScrollRail label="Customer reviews" className="mt-12 sm:mt-16">
-          {shown.map((t) => (
-            <li
-              key={t.id}
-              // Basis, not width: flex items must not shrink, or six cards
-              // compress to fit instead of overflowing into a scroll.
-              className="w-[85%] shrink-0 snap-start sm:w-[48%] lg:w-[31.5%]"
-            >
-              <TestimonialCard t={t} />
-            </li>
-          ))}
-        </ScrollRail>
-      ) : (
-        <ul className="mt-12 grid items-stretch gap-6 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
-          {shown.map((t) => (
-            <li key={t.id}>
-              <TestimonialCard t={t} />
-            </li>
-          ))}
-        </ul>
-      )}
+      <Reveal>
+        <SectionHeading
+          {...(heading ?? {
+            eyebrow: "In their words",
+            title: "What the neighbours say",
+          })}
+        />
+      </Reveal>
+      <Reveal delay={100} className="mt-12 sm:mt-16">
+        {layout === "carousel" ? (
+          <ScrollRail label="Customer reviews">
+            {shown.map((t) => (
+              <li
+                key={t.id}
+                // Basis, not width: flex items must not shrink, or six cards
+                // compress to fit instead of overflowing into a scroll.
+                className="w-[85%] shrink-0 snap-start sm:w-[48%] lg:w-[31.5%]"
+              >
+                <TestimonialCard t={t} />
+              </li>
+            ))}
+          </ScrollRail>
+        ) : (
+          <ul className="grid items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {shown.map((t) => (
+              <li key={t.id}>
+                <TestimonialCard t={t} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </Reveal>
       {showAllLink && (
         <div className="mt-10 text-center">
           <Button href="/reviews" variant="ghost">

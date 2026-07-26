@@ -31,9 +31,14 @@ const sizes: Record<Size, string> = {
 // overflows narrow viewports (and grid tracks, whose items are min-width:auto).
 // Labels should be short enough not to wrap; when one does, wrapping beats
 // breaking the page.
+// `active:scale-[0.97]` is the highest-leverage bit of feedback on this whole
+// site: most traffic is mobile, hover doesn't exist there, and without a press
+// state a tap on a slow connection looks like nothing happened. Compositor-only
+// (transform), and it composes with the translate above rather than replacing
+// it — Tailwind's transform utilities each own their own variable.
 const base =
-  "inline-flex max-w-full items-center justify-center rounded-pill text-center transition-all duration-200 " +
-  "hover:-translate-y-0.5 active:translate-y-0 " +
+  "no-tap-flash inline-flex max-w-full items-center justify-center rounded-pill text-center transition-all duration-200 " +
+  "hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] " +
   "disabled:opacity-50 disabled:pointer-events-none";
 
 type Props = {

@@ -390,9 +390,18 @@ Numbered circle (`bg-ink-900 text-white`, `font-display`), icon above or beside,
 |---|---|
 | base | Vertical. 2px `ink-100` rail down the left through the number circles |
 | `sm` | 2×2 grid, no connecting line |
-| `lg` | 4 across, horizontal 2px `ink-100` line behind the circles, running between them only — must not overhang the first or last |
+| `lg` | Scroll-linked stacking deck (`StackingCards`) — each step is a full `sand-50` card that pins under the header while the next one slides over it and the one beneath scales and dims |
 
-**Don't** Add a fifth step. Number them with anything other than 1–4.
+The `lg` deck replaced the 4-across row with the connecting line. This is the
+one section on the site whose content is genuinely sequential, which is the
+whole argument for stacking it: the cards land in the order the customer lives
+the steps. Same markup at every breakpoint — the deck is CSS on top of the
+list, not a second copy of the DOM — and the scroll listener never attaches
+below `lg` or under `prefers-reduced-motion`. See `STRUCTURE.md` §10.4.
+
+**Don't** Add a fifth step (four cards is already most of a screen of scroll
+runway on the deck). Number them with anything other than 1–4. Extend the deck
+to mobile.
 
 ---
 

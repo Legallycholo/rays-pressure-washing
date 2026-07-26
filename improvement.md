@@ -251,6 +251,13 @@ renders no countdown (and ideally isn't `activeCampaign` at all).
 
 ## Phase 6 — Desktop sticky quote rail
 
+> **Superseded.** `StickyQuoteRail` was merged into
+> `src/components/ContactHub.tsx` and deleted (see `ANIMATIONS.md` §5). The
+> record below stands as history; the rail's two actions, its **R2** hydro-not-
+> signal rule, and its desktop conversion path all live in the hub now. What
+> did not survive: the hover-to-expand labels (invisible on touch) and the
+> hide-past-hero/hide-near-footer gating (the hub is always visible).
+
 `StickyCallBar` (`src/components/layout/StickyCallBar.tsx`) is mobile-only
 by design. Desktop has no persistent conversion path once the hero scrolls
 away.
@@ -310,6 +317,14 @@ Keyboard-scrollable via native scroll-snap focus behaviour. No new
 ---
 
 ## Phase 8 — Live chat entry point (structural only)
+
+> **Superseded.** `ChatLauncher` was merged into
+> `src/components/ContactHub.tsx` and deleted (see `ANIMATIONS.md` §5). The
+> record below stands as history. Everything structural about it carried over
+> — the working no-vendor fallback menu, the VENDOR SWAP POINT comment (now on
+> the hub's "Chat with AI" row), the a11y behaviour — except the corner: the
+> hub is bottom-**right** at every breakpoint, because there is no longer a
+> separate rail for it to avoid.
 
 Same constraint as Phase 7: a real chat widget (Intercom, Tidio, Crisp, etc)
 is a third-party script — new dependency, and it also means live-chatting
@@ -477,7 +492,7 @@ still need confirming:
 - **The WhatsApp number is an assumption.** `site.contact.whatsapp` was set to
   the same line as the phone because that is the only number given. `wa.me`
   does not degrade gracefully — if that number has no WhatsApp account, both
-  the `StickyCallBar` and `ChatLauncher` entry points open an error page.
+  the `StickyCallBar` and `ContactHub` entry points open an error page.
   Confirm, or remove the two WhatsApp entry points.
 - **The area code doesn't match the service area.** 803 is South Carolina;
   the site says Springfield, FL / "Central Florida", and `site.address` and

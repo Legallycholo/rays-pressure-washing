@@ -112,7 +112,7 @@ export function Header() {
 
       <header
         className={cn(
-          "sticky top-0 z-50 border-b transition-all duration-300",
+          "sticky top-0 z-50 border-b transition-all duration-300 ease-out-expo",
           scrolled
             ? "border-ink-900/10 bg-white/90 shadow-card backdrop-blur-lg"
             : "border-transparent bg-white",
@@ -138,7 +138,7 @@ export function Header() {
 
                 {/* Mega menu. CSS-driven so there's no JS state to get wrong;
                     focus-within keeps it keyboard-operable. */}
-                <div className="invisible absolute left-1/2 top-full w-[46rem] -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                <div className="invisible absolute left-1/2 top-full w-[46rem] -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 ease-out-expo group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                   <div className="grid grid-cols-2 gap-6 rounded-2xl bg-white p-6 shadow-lift ring-1 ring-ink-900/10">
                     <div>
                       <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-hydro-600">

@@ -127,8 +127,12 @@ export function GalleryLightbox({ projects }: { projects: Project[] }) {
           step(-1);
         }
       }}
+      // `dialog-pop` is the open/close transition (globals.css). It has to be
+      // plain CSS rather than Tailwind utilities because it needs
+      // `@starting-style` and `allow-discrete`, neither of which a utility
+      // class can express.
       className={
-        "m-auto w-[calc(100vw-1.5rem)] max-w-3xl rounded-card bg-white p-0 text-ink-800 shadow-lift " +
+        "dialog-pop m-auto w-[calc(100vw-1.5rem)] max-w-3xl rounded-card bg-white p-0 text-ink-800 shadow-lift " +
         "max-h-[calc(100dvh-1.5rem)] overflow-y-auto " +
         "backdrop:bg-ink-950/80 backdrop:backdrop-blur-sm"
       }
