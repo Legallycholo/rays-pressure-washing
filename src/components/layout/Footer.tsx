@@ -41,7 +41,9 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           {/* Identity + NAP. Keep this exactly consistent with every directory
               listing — inconsistent NAP data actively hurts local ranking. */}
-          <div className="lg:col-span-2">
+          {/* min-w-0 on every grid child: grid items default to min-width:auto,
+              so one long unbreakable string (the email) widens the whole track. */}
+          <div className="min-w-0 lg:col-span-2">
             <div className="flex items-center gap-2.5">
               <span className="grid h-10 w-10 place-items-center rounded-xl bg-hydro-500 text-white">
                 <Icon name="droplet" filled className="h-5 w-5" />
@@ -80,8 +82,8 @@ export function Footer() {
                 href={`mailto:${site.contact.email}`}
                 className="flex items-center gap-2.5 transition-colors hover:text-white"
               >
-                <Icon name="mail" className="h-4 w-4 text-hydro-400" />
-                {site.contact.email}
+                <Icon name="mail" className="h-4 w-4 shrink-0 text-hydro-400" />
+                <span className="min-w-0 [overflow-wrap:anywhere]">{site.contact.email}</span>
               </a>
               <p className="flex items-start gap-2.5">
                 <Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-hydro-400" />

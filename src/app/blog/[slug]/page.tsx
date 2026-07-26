@@ -1,0 +1,146 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { getPost, postSlugs, posts } from "@/content/posts";
+import { getService } from "@/content/services";
+import { getLocation } from "@/content/locations";
+import { Hero } from "@/components/sections/Hero";
+import { PostCard } from "@/components/sections/BlogPreview";
+import { CtaBand } from "@/components/sections/CtaBand";
+import { Section } from "@/components/ui/Section";
+import { Badge } from "@/components/ui/Badge";
+import { Icon } from "@/components/ui/Icon";
+import { JsonLd } from "@/components/JsonLd";
+import { articleSchema, breadcrumbSchema } from "@/lib/schema";
+import { formatDate } from "@/lib/utils";
+
+export function generateStaticParams() {
+  return postSlugs.map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const post = getPost((await params).slug);
+  if (!post) return {};
+  return {
+    title: post.title,
+    description: post.excerpt,
+    alternates: { canonical: `/blog/${post.slug}` },
+  };
+}
+
+export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const post = getPost((await params).slug);
+  if (!post) notFound();
+
+  const crumbs = [
+    { name: "Home", href: "/" },
+    { name: "Guides", href: "/blog" },
+    { name: post.title, href: `/blog/${post.slug}` },
+  ];
+  const relatedServices = post.relatedServices.map(getService).filter((s): s is NonNullable<typeof s> => Boolean(s));
+  const relatedCities = (post.relatedCities ?? []).map(getLocation).filter((l): l is NonNullable<typeof l> => Boolean(l));
+  const morePosts = posts.filter((p) => p.slug !== post.slug && p.category === post.category).slice(0, 3);
+
+  return (
+    <>
+      <JsonLd data={[articleSchema(post), breadcrumbSchema(crumbs)]} />
+      <Hero
+        variant="page"
+        breadcrumbs={crumbs.slice(0, 2)}
+        title={post.title}
+        lede={post.excerpt}
+        extras={
+          <>
+            <Badge tone="onDark">{post.category}</Badge>
+            <Badge tone="onDark">
+              <Icon name="clock" className="h-3.5 w-3.5" />
+              {post.readMinutes} min read
+            </Badge>
+            <Badge tone="onDark">{formatDate(post.date)}</Badge>
+          </>
+        }
+      />
+
+      <Section tone="light">
+        <div className="grid gap-12 lg:grid-cols-12">
+          {/* Long-form shell (§3.2): prose column + sticky related rail */}
+          <article className="mx-auto w-full max-w-2xl lg:col-span-8">
+            {post.sections.map((s) => (
+              <section key={s.heading} className="mt-10 scroll-mt-28 first:mt-0">
+                <h2 className="font-display text-2xl text-ink-900">{s.heading}</h2>
+                <p className="mt-3 leading-relaxed text-ink-600">{s.body}</p>
+              </section>
+            ))}
+            <p className="mt-10 border-t border-ink-100 pt-5 text-sm text-ink-400">
+              By {post.author} · {formatDate(post.updated ?? post.date)}
+            </p>
+          </article>
+
+          <aside className="lg:col-span-4">
+            <div className="flex flex-col gap-6 lg:sticky lg:top-28">
+              {relatedServices.length > 0 && (
+                <div className="rounded-card bg-sand-50 p-6 ring-1 ring-ink-900/5">
+                  <h2 className="font-display text-lg text-ink-900">Related services</h2>
+                  <ul className="mt-3 space-y-2">
+                    {relatedServices.map((s) => (
+                      <li key={s.slug}>
+                        <Link
+                          href={`/services/${s.slug}`}
+                          className="flex items-center gap-2.5 text-sm font-medium text-ink-700 hover:text-hydro-700"
+                        >
+                          <Icon name={s.icon} className="h-4 w-4 text-hydro-500" />
+                          {s.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {relatedCities.length > 0 && (
+                <div className="rounded-card bg-sand-50 p-6 ring-1 ring-ink-900/5">
+                  <h2 className="font-display text-lg text-ink-900">In your area</h2>
+                  <ul className="mt-3 space-y-2">
+                    {relatedCities.map((l) => (
+                      <li key={l.slug}>
+                        <Link
+                          href={`/service-areas/${l.slug}`}
+                          className="flex items-center gap-2.5 text-sm font-medium text-ink-700 hover:text-hydro-700"
+                        >
+                          <Icon name="pin" className="h-4 w-4 text-hydro-500" />
+                          {l.city}, {l.region}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </aside>
+        </div>
+      </Section>
+
+      <CtaBand
+        variant="inline"
+        title="Reading done. Problem still there?"
+        lede="Free quote, same-day response."
+      />
+
+      {morePosts.length > 0 && (
+        <Section tone="sand">
+          <h2 className="mb-8 text-center font-display text-2xl text-ink-900">More like this</h2>
+          <ul className="grid items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {morePosts.map((p) => (
+              <li key={p.slug}>
+                <PostCard post={p} />
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
+    </>
+  );
+}

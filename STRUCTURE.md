@@ -1,42 +1,140 @@
 # STRUCTURE.md — Implementation Plan
 
 **Project:** Ryan's Pressure Washing — marketing website
-**Status:** Foundation built. Routes not yet implemented.
+**Status:** Built. All 84 routes implemented and verified. Phase 13 (real
+business data) is the only work remaining before launch.
 **Audience:** the implementer building the pages (Fable 5).
+
+## Document map
+
+Three documents, read in this order:
+
+| Document | Answers | Read when |
+|---|---|---|
+| **`STRUCTURE.md`** ← you are here | *What* goes on each page and *why* | First, all of it |
+| **`SECTIONS.md`** | What each section *looks like* at every breakpoint | Before writing any component |
+| **`CHECKLIST.md`** | *In what order*, and how to prove it's done | Continuously — tick as you go |
+
+`CHECKLIST.md` is the working document. It has 14 phases, 14 gates and 173
+checkboxes, and it's designed so nothing can be skipped silently.
 
 ---
 
 ## 0. Read this first
 
-This repo contains a **finished foundation and an unfinished app**. The design
-system, content model, component primitives and site chrome all exist and
-typecheck cleanly. **No routes exist yet**, which means:
+This repo contains a **built site on placeholder data**. The design system,
+content model, component primitives, site chrome and all routes are implemented.
 
-> ⚠️ `npm run build` currently fails — a Next.js app requires at least
-> `src/app/page.tsx`. That is expected. Creating the routes in §6 is the first
-> implementation task, and the build goes green as soon as `page.tsx` exists.
+> ✅ `npm run build` prerenders 84 static routes. `npx tsc --noEmit` passes.
+> Verified: 0 broken internal links, 0 orphan pages, exactly one `<h1>` per
+> page, and no horizontal overflow across 19 pages × 7 viewport widths.
 
-`npx tsc --noEmit` passes today. Keep it passing.
+See `CHECKLIST.md` for the live gate-by-gate status.
 
-**The governing constraint: this is a structure-first build.** Every value in
-`src/content/` is placeholder data and every piece of copy is draft. Do not
-spend effort perfecting words. Spend it on layout, hierarchy, component
-contracts and route architecture — the things that are expensive to change
-after content lands.
+**Structure-first build.** Every value in `src/content/` is placeholder and every
+piece of copy is draft. Don't perfect words. Perfect layout, hierarchy,
+component contracts and route architecture — the things that are expensive to
+change once real content lands.
 
 ---
 
-## 1. Reference site analysis
+# PART ONE — THE BUSINESS
+
+Sections 1–3 are the part that makes this site different from a generic
+brochure. Read them before writing any page.
+
+## 1. What this business actually sells
+
+Pressure washing looks like a single-service trade and isn't. A site that only
+lists services and a phone number leaves most of the available revenue on the
+table. There are **three revenue engines**, and the site has to serve all three:
+
+| Engine | What it is | Why it matters | Data |
+|---|---|---|---|
+| **Single service** | One surface, one visit | Entry point. Lowest value, highest volume | `services.ts` |
+| **Bundles** | Several surfaces, one visit | **The biggest lever.** Truck, crew, setup and drive are already paid for — every extra surface on the same visit is near-pure margin | `packages.ts` → `bundles` |
+| **Maintenance plans** | Scheduled recurring work | Turns a seasonal, re-sell-every-time business into a predictable one. Routes efficiently, removes the sale | `packages.ts` → `maintenancePlans` |
+
+**Implication for the build:** a bundle must be reachable from every service
+page, and the maintenance plan must be reachable from every result the customer
+is about to admire. Someone looking at a clean driveway is the single best
+audience for "keep it that way."
+
+## 2. How customers actually buy
+
+Four behaviours that should drive layout decisions:
+
+**They don't know the vocabulary.** Nobody searches "soft washing." They search
+*"green stuff on my siding"* and *"black streaks on roof."* This is why
+`services.ts` carries a `symptoms` array and why the homepage needs a
+**SymptomChecker** — it maps a problem the visitor recognises onto the service
+that fixes it. Leading with method names loses people who don't have them.
+
+**They're comparing three quotes.** Almost nobody hires the first company. The
+site's job is to be the one that felt straight with them: published price
+ranges, an honest disclaimer, a named guarantee, real before/afters. The
+reference site hides pricing entirely — that's the gap we walk through.
+
+**They're on a phone, and often outside looking at the problem.** Hence
+`StickyCallBar`, WhatsApp as a first-class channel, and photo upload in the
+quote wizard. Photos are the single best quote-accuracy input there is.
+
+**They're buying a result, not a process.** Before/after imagery outperforms
+every other asset in this trade. It's the hero, not a gallery afterthought.
+
+## 3. Seasonality
+
+Demand is strongly seasonal and the site should not look identical in February
+and June. `packages.ts` → `seasonalCampaigns` carries five campaigns keyed to
+months, with exactly one marked `active`.
+
+| Window | Campaign | What gets promoted |
+|---|---|---|
+| Feb–Apr | Spring reset — books out first | House wash, driveway, roof |
+| Apr–Jun | Pool season | Pool deck, patio, fence |
+| Jun–Sep | Storm recovery | Gutters, roof, house wash |
+| Oct–Nov | Holiday-ready | Driveway, windows, gutters |
+| Dec–Jan | Off-season rates | Roof, fence, deck |
+
+**Implementation:** a dismissible seasonal banner below the header, and
+`activeCampaign.promoteServices` reordering the homepage service grid. Keep
+exactly one campaign `active` — two competing banners and the signal dies.
+
+Off-season is the one worth building for properly. Winter is when this trade
+starves, and discounted roof work is the standard answer.
+
+## 4. Trust, and the claims that carry legal weight
+
+Local services convert on trust signals more than on design. Already modelled:
+licensing and insurance (`site.credentials`), the named **Spotless Guarantee**
+(`site.guarantee`), star ratings, and method transparency (`service.method`).
+
+Three warnings, because these are legal claims, not copy:
+
+1. **`testimonials.ts` is fabricated placeholder text.** Publishing invented
+   reviews on a live commercial site is an FTC violation. Every one must be
+   replaced with a genuine attributable review before launch, and
+   `site.rating` must reflect real counts.
+2. **Every entry in `site.credentials` is a claim** — "licensed", "insured",
+   "$2M coverage", "background-checked". Verify or delete each one.
+3. **Published prices set expectations.** The estimator must always return a
+   range and always show the honesty disclaimer (`faqs.ts` → `quote-accuracy`).
+   The credibility gained by publishing prices at all is lost the first time a
+   final invoice lands outside the quoted range.
+
+---
+
+# PART TWO — THE SITE
+
+## 5. Reference site analysis
 
 The brief was "like [fullpowerwash.com](https://fullpowerwash.com/), but
-different." That site was analysed via search-index data — it returned HTTP 403
-to direct fetching, so page structure is reconstructed from indexed metadata,
-not from source. Treat the details as high-confidence, not verified.
+different." That site returned HTTP 403 to direct fetching, so its structure is
+reconstructed from search-index data — high confidence, not verified from
+source. Worth a manual look before committing to URL patterns.
 
-**What it is:** a local-services lead-gen site whose real engine is a
-programmatic `service × city` page matrix, not the homepage.
-
-Its observed URL architecture:
+**What it is:** a lead-gen site whose real engine is a programmatic
+`service × city` page matrix, not the homepage.
 
 ```
 /                                                  homepage
@@ -46,478 +144,448 @@ Its observed URL architecture:
 /commercial-pressure-washing/building-washing-florida/kissimmee-fl/
 ```
 
-**What we deliberately copy:** the programmatic city matrix, the free-quote CTA
-repeated throughout, the satisfaction guarantee, prominent star ratings, and
-WhatsApp as a first-class contact channel (their reviews specifically praise
-the instant WhatsApp response — that's a real signal, not a vanity feature).
+**What we copy:** the city matrix, the repeated free-quote CTA, the guarantee,
+prominent ratings, and WhatsApp as a real channel (their reviews specifically
+praise the instant WhatsApp response — that's a signal, not a vanity feature).
 
-**Where we deliberately beat it:**
+**Where we beat it:**
 
 | Weakness in the reference | Our answer |
 |---|---|
-| Near-duplicate city pages — exactly what Google's helpful-content system demotes | City pages driven by genuinely distinct per-city data (§5.3) |
-| Pricing entirely hidden behind "call us" | Public estimator + real price ranges on every service page |
+| Near-duplicate city pages — what Google's helpful-content system demotes | City pages driven by genuinely distinct per-city data (§7.3) |
+| Pricing hidden behind "call us" | Public estimator + ranges on every service page |
 | One long contact form | Multi-step quote wizard with photo upload |
-| No structured before/after gallery | Before/after is the primary visual system, with a built comparison slider |
-| Three inconsistent URL patterns for services | One canonical pattern (§6) |
-
----
-
-## 2. Stack and conventions
-
-| Concern | Choice | Why |
-|---|---|---|
-| Framework | Next.js 16, App Router | `generateStaticParams` makes the city matrix nearly free |
-| Language | TypeScript, strict | Content model is typed end to end |
-| Styling | Tailwind v4, CSS-first `@theme` | Tokens live in `globals.css`, no JS config file |
-| Rendering | Fully static | Every route prerenders; no runtime data source exists |
-| Deploy target | Vercel | Zero-config for this stack |
-
-**Conventions**
-
-- Path alias `@/*` → `src/*`. Use it everywhere; no `../../..`.
-- Server Components by default. `"use client"` only where interaction demands
-  it — currently `Header` and `BeforeAfterSlider`, plus the two components in §7.
-- No new runtime dependencies without a reason recorded here. The scaffold
-  ships with exactly `next`, `react`, `react-dom` and nothing else.
-- Every section on every page goes through `<Section>` so vertical rhythm and
-  the light/dark alternation stay consistent.
-
----
-
-## 3. Design system
-
-### 3.1 The core decision
-
-Competitors in this trade are overwhelmingly white-background with mid-blue
-accents. **We invert it.** Deep marine navy (`ink`) carries the page as a
-dominant surface, a bright `hydro` blue does the brand work, and a single
-scarce orange (`signal`) is reserved *exclusively* for conversion actions.
-
-Orange-on-navy is the highest-contrast pairing available in this palette, so
-the CTA never competes with the brand colour for attention. That is the whole
-point of the system.
-
-### 3.2 Colour tokens
-
-Defined in `src/app/globals.css` under `@theme`. Full 50–950 scales exist for
-`ink` and `hydro`; partial scales for the accents.
-
-| Token | Role | Rules |
-|---|---|---|
-| `ink-*` | Deep marine navy | Dominant dark surface + all body text |
-| `hydro-*` | Brand blue | Links, icons, eyebrows, secondary buttons |
-| `signal-*` | Conversion orange | **CTA only.** Never decorative |
-| `mint-*` | "Clean" indicator | Checkmarks, after-states, the before/after divider |
-| `sand-*` | Warm neutral | Alternating light sections — stops the light bands reading sterile against all that navy |
-
-**Hard rules**
-
-1. `signal` is never used for anything that isn't a conversion action.
-2. Never two `variant="primary"` buttons in the same viewport. If everything is
-   primary, nothing is.
-3. Never two adjacent `<Section>`s with the same `tone` — the page reads as one
-   undifferentiated slab. Alternate `light → sand → ink → light`.
-
-### 3.3 Typography
-
-Currently **system font stacks**, so the scaffold builds with zero network
-dependency. Two lines in `globals.css` (`--font-display`, `--font-sans`) are
-the entire swap surface.
-
-Recommended upgrade via `next/font/google`:
-
-- **Display:** Barlow Condensed 600/700 — condensed, industrial, confident.
-  Reads as trade-professional rather than corporate-generic, and the narrow
-  width lets big headlines survive on mobile without wrapping badly.
-- **Body:** Inter 400/500/600 — neutral, high legibility at small sizes.
-
-Fluid display sizes (`--text-display-sm/md/lg`) use `clamp()` so headings scale
-continuously instead of stepping at breakpoints.
-
-### 3.4 Motion
-
-- Standard transition: 200–300ms, `--ease-out-expo`.
-- Cards lift on hover (`-translate-y-1` + shadow). Buttons lift `-translate-y-0.5`.
-- `prefers-reduced-motion` is already handled globally in `globals.css` —
-  don't add per-component guards.
-- No scroll-jacking, no parallax, no entrance animations that delay content.
-
-### 3.5 Signature motifs
-
-Use each sparingly — they stop working when they're everywhere.
-
-- `.edge-wipe-top` / `.edge-wipe-bottom` — diagonal clip echoing a surface-cleaner
-  pass. **Max two per page**, at major section boundaries.
-- `.hydro-mesh` — layered radial gradients for dark sections.
-- `.blueprint-grid` — faint grid behind dark hero/CTA bands.
-- `.img-placeholder` — deliberately obvious diagonal hatch. It must always read
-  as "image goes here", never as a finished design choice.
-
-### 3.6 Iconography
-
-`src/components/ui/Icon.tsx` — inline SVG set, 24px grid, 1.75 stroke. No icon
-library, no runtime cost, no flash. Service icons are referenced by name from
-`content/services.ts`. Add new icons to the `paths` map; unknown names fall
-back to `droplet` rather than crashing.
-
----
-
-## 4. What already exists
-
-All files below are written, typechecked and ready to build against.
-
-```
-package.json  tsconfig.json  next.config.ts  postcss.config.mjs  .gitignore
-
-src/app/
-  layout.tsx        Root shell: metadata, viewport, skip link, LocalBusiness
-                    JSON-LD, Header, Footer, StickyCallBar
-  globals.css       Complete token system + utilities
-
-src/content/        ← ALL PLACEHOLDER DATA
-  site.ts           Business identity. Single source of truth for NAP,
-                    hours, rating, credentials, guarantee, WhatsApp helper
-  services.ts       11 services (8 residential, 3 commercial) with pricing,
-                    inclusions, symptoms, cadence, FAQ ids, related slugs
-  locations.ts      8 cities with distinct housing stock, local challenge,
-                    neighbourhoods, landmarks, top services
-  faqs.ts           20 FAQs, categorised, with getFaqs(ids) resolver
-  testimonials.ts   8 reviews with service/city tagging + fallback helper
-  gallery.ts        8 before/after projects (image paths intentionally empty)
-  posts.ts          6 blog posts with section outlines
-
-src/lib/
-  utils.ts          cn, currency, formatDate, titleCase
-  schema.ts         localBusiness, service, faq, breadcrumb, article builders
-
-src/components/
-  JsonLd.tsx
-  BeforeAfterSlider.tsx        ← client, built
-  layout/Header.tsx            ← client, built (mega-menu + mobile drawer)
-  layout/Footer.tsx
-  layout/StickyCallBar.tsx     ← mobile-only persistent action bar
-  ui/Container.tsx  Section.tsx  Button.tsx  SectionHeading.tsx
-  ui/Icon.tsx  Rating.tsx  Placeholder.tsx  Accordion.tsx  Badge.tsx  Card.tsx
-```
-
-### 4.1 Primitive contracts
-
-Use these rather than reinventing. Signatures are stable.
-
-```tsx
-<Container size="narrow|prose|default|wide" />
-<Section tone="light|sand|ink|hydro" size="flush|compact|default|spacious"
-         id containerSize />
-<Button href variant="primary|secondary|outline|onDark|ghost"
-        size="sm|md|lg" fullWidth />
-<SectionHeading eyebrow title lede align="left|center" onDark as="h1|h2|h3" />
-<Icon name className filled />
-<Placeholder label ratio="1/1|4/3|3/2|16/9|3/4|21/9" tone="light|dark" icon />
-<Accordion items={[{id,question,answer}]} singleOpen groupName />
-<Badge tone="hydro|mint|signal|neutral|onDark" />
-<Card href interactive />        // href makes the whole card clickable
-<Stars value /> <RatingBadge onDark />
-<BeforeAfterSlider before after alt label ratio />
-```
-
-Two behaviours worth knowing:
-
-- **`Placeholder` is load-bearing.** It reserves the exact aspect ratio real
-  photography will occupy, so layout and CLS are final before any photo exists.
-  Swapping in `<Image>` later must change nothing around it.
-- **`BeforeAfterSlider` uses a real `<input type="range">`** laid over the
-  image. That buys keyboard support, arrow stepping, screen-reader announcement
-  and touch handling for free. Don't replace it with pointer-event handlers.
-- **`Accordion` uses native `<details>/<summary>`** — accessible, zero JS, works
-  without hydration. Keep it that way.
-
----
-
-## 5. Content model
-
-### 5.1 The principle
-
-`src/content/*.ts` is the entire data layer. **Adding a service or a city
-creates all of its pages automatically.** No page should ever hardcode a
-service name, phone number, price or city — read it from content.
-
-### 5.2 `site.ts` is the one file that matters at launch
-
-Every placeholder business detail lives here. Replacing this file updates nav,
-footer, `tel:` links, WhatsApp deep links, page metadata and schema.org output
-in one edit. Search the repo for `PLACEHOLDER` to find everything outstanding.
-
-### 5.3 The anti-thin-content strategy
-
-This is the single most important thing in the plan and the main reason to
-build this rather than clone the reference.
-
-Generating `11 services × 8 cities = 88` pages from a template is trivial. It's
-also how sites get demoted, because the pages are functionally identical. So
-every `Location` carries genuinely distinct data:
-
-```ts
-intro           // city-specific paragraph, written per city
-housingStock    // "1970s painted block" vs "new-build subdivisions"
-localChallenge  // WHY demand exists here specifically
-neighborhoods   // real long-tail and internal-link value
-landmarks       // recognisable local reference points
-topServices     // reorders the grid per city
-driveMinutes    // proximity trust signal
-```
-
-**Implementation requirement:** city pages must weave `localChallenge`,
-`housingStock` and `neighborhoods` into prose — not render them as a bare data
-table. A city with only a name must produce a visibly thinner page. That's the
-intended pressure to fill it in properly.
-
-**Scope control:** ship the 3 `priority: true` cities × ~4 services first.
-Prove they rank, then expand. 88 pages on day one is 88 pages of unproven
-template.
-
-### 5.4 Fabricated review warning
-
-`testimonials.ts` is draft placeholder copy. **Fabricated testimonials on a
-live commercial site are an FTC violation**, not just poor practice. Every one
-must be replaced with a genuine attributable review before launch, and the
-`aggregateRating` in `site.ts` must reflect real counts.
-
----
+| No structured before/after | Before/after is the primary visual system |
+| Three inconsistent service URL patterns | One canonical pattern (§6) |
+| **No bundles or recurring plans surfaced** | `/packages` and `/maintenance-plan` as first-class routes (§1) |
+| **Static year-round** | Seasonal campaign system (§3) |
 
 ## 6. Route map
 
-Canonical pattern — **one** service URL shape, unlike the reference site's three.
+One canonical service URL shape, unlike the reference's three.
 
 | Route | Type | Generation |
 |---|---|---|
 | `/` | Static | Homepage |
-| `/services` | Static | Hub, split residential/commercial |
+| `/services` | Static | Hub, residential/commercial split |
 | `/services/[service]` | SSG | `serviceSlugs` — 11 pages |
-| `/services/[service]/[city]` | SSG | service × city matrix — start with priority cities only |
+| `/services/[service]/[city]` | SSG | Matrix — priority cities first |
+| **`/packages`** | Static | **Bundles hub — §1** |
+| **`/packages/[bundle]`** | SSG | `bundleSlugs` — 6 pages |
+| **`/maintenance-plan`** | Static | **Recurring plans — §1** |
 | `/service-areas` | Static | All cities + coverage map |
 | `/service-areas/[city]` | SSG | `locationSlugs` — 8 pages |
 | `/gallery` | Static | Before/after, filterable |
 | `/pricing` | Static | Estimator + published ranges |
 | `/quote` | Static | Multi-step wizard |
-| `/reviews` | Static | Aggregated reviews |
-| `/about` | Static | Story, team, credentials |
-| `/blog` | Static | Index + category filter |
-| `/blog/[slug]` | SSG | `postSlugs` — 6 posts |
-| `/faq` | Static | All FAQs grouped by category |
-| `/contact` | Static | Form, map, hours |
-| `/privacy` `/terms` `/accessibility` | Static | Legal — footer links to these, so they must exist |
+| `/reviews` `/about` `/faq` `/contact` | Static | |
+| `/blog` + `/blog/[slug]` | SSG | `postSlugs` — 6 posts |
+| `/privacy` `/terms` `/accessibility` | Static | Footer links to these — they must exist |
 | `/sitemap.xml` `/robots.txt` | Generated | `app/sitemap.ts`, `app/robots.ts` |
 | `not-found.tsx` | Static | 404 routing back to services |
 
----
+## 7. Content model
 
-## 7. Components still to build
+### 7.1 The principle
 
-### 7.1 `QuoteWizard` — `/quote` (client)
+`src/content/*.ts` is the entire data layer. **Adding a service, city or bundle
+creates all of its pages automatically.** No page hardcodes a service name,
+phone number, price or city.
 
-**The primary conversion asset.** A four-step wizard consistently outperforms a
-single long form, because each step is a small commitment and progress is
-visible.
+### 7.2 `site.ts` is the file that matters at launch
+
+Every placeholder business detail lives here. Replacing it updates nav, footer,
+`tel:` links, WhatsApp deep links, metadata and schema.org in one edit. Search
+for `PLACEHOLDER` to find everything outstanding.
+
+### 7.3 The anti-thin-content strategy
+
+The main reason to build this rather than clone the reference.
+
+`11 services × 8 cities = 88` templated pages is trivial to generate and is how
+sites get demoted, because the pages are functionally identical. So every
+`Location` carries genuinely distinct data:
+
+```ts
+intro           // city-specific paragraph, written per city
+housingStock    // "1970s painted block" vs "new-build subdivisions"
+localChallenge  // WHY demand exists here specifically
+neighborhoods   // long-tail and internal-link value
+landmarks       // recognisable local reference points
+topServices     // reorders the grid per city
+driveMinutes    // proximity trust signal — and travel-fee input (§7.4)
+```
+
+**Requirement:** city pages must weave `localChallenge`, `housingStock` and
+`neighborhoods` into prose, not render them as a data table. A city with only a
+name must produce a visibly thinner page. That's the intended pressure.
+
+**Scope control:** ship 3 priority cities × ~4 services first. Prove they rank,
+then expand. 88 pages on day one is 88 pages of unproven template.
+
+### 7.4 `packages.ts` — the commercial layer
+
+Added because the trade's revenue model needs it, and because two shipped files
+already promised things nothing implemented:
+
+- `faqs.ts` promised *"our maintenance plan schedules it automatically at a
+  lower rate"* → now backed by `maintenancePlans`
+- `locations.ts` promised *"book alongside a neighbour and we'll take the
+  travel surcharge off both"* → now backed by `travelPolicy`
+
+Exports: `bundles` (6), `maintenancePlans` (3 tiers), `seasonalCampaigns` (5),
+`travelPolicy`. Each plan tier has `mostPopular` on exactly one entry — the
+anchor that makes the other two legible.
+
+### 7.5 Content file inventory
 
 ```
-Step 1  Service      Icon grid from services.ts. Multi-select.
-Step 2  Property     Type (house/townhouse/commercial), storeys,
-                     approximate size. Drives the estimate.
-Step 3  Photos       Optional upload + free-text problem description.
-                     Photos are the single best quote-accuracy input.
-Step 4  Contact      Name, phone, email, address, preferred timing.
+site.ts          Business identity — NAP, hours, rating, credentials, guarantee
+services.ts      11 services (8 residential, 3 commercial): pricing, includes,
+                 symptoms, method, cadence, faqIds, related
+packages.ts      Bundles, maintenance plans, seasonal campaigns, travel policy
+locations.ts     8 cities with distinct local data
+faqs.ts          20 FAQs, categorised, getFaqs(ids) resolver
+testimonials.ts  8 reviews, service/city tagged, with fallback helper
+gallery.ts       8 before/after projects (image paths intentionally empty)
+posts.ts         6 posts with section outlines
 ```
-
-Requirements:
-
-- Progress indicator across the top; back/next always available.
-- **Live running estimate visible from step 2 onward** — this is what stops
-  drop-off at the contact step, because the user now has something to lose.
-- Validate per step, never dump all errors at the end.
-- Persist state to `sessionStorage` so a refresh doesn't wipe progress.
-- Step state in URL hash (`#step-2`) so back-button behaves.
-- **No backend exists.** Submit is a stub — log the payload and render a
-  success state. Wire to a form endpoint at launch (§11).
-- Fully keyboard operable; move focus to the new step heading on advance.
-
-### 7.2 `Estimator` — `/pricing` (client)
-
-Reads `service.pricing` from `services.ts` and returns a **range**, never a
-single number.
-
-- Inputs: service, measurement (unit comes from `pricing.unit`), condition
-  modifier (light / moderate / heavy).
-- Output: `from`–`to` range, respecting `pricing.minimum`.
-- Must display the honesty disclaimer (see `faqs.ts` → `quote-accuracy`). The
-  credibility of publishing prices at all depends on not overpromising.
-- Deep-link into `/quote` carrying the selections.
-
-### 7.3 Section components
-
-Build in `src/components/sections/`, each taking props rather than reading
-content directly where reuse across pages is expected:
-
-`Hero` · `TrustBar` · `ServicesGrid` · `HowItWorks` · `BeforeAfterShowcase` ·
-`Testimonials` · `GuaranteeBand` · `ServiceAreaSection` · `FaqSection` ·
-`CtaBand` · `BlogPreview` · `StatsRow` · `SymptomChecker`
-
----
 
 ## 8. Page specifications
 
-Section order matters — it's the argument the page makes. Alternate `tone` down
-each page per §3.2.
+Section order is the argument each page makes. Alternate `<Section tone>` down
+every page per §10.2.
 
 ### 8.1 Homepage `/`
 
-1. **Hero** — `tone="ink"`, `.blueprint-grid` + `.hydro-mesh`. Headline, one-line
-   lede, primary CTA (`/quote`) + secondary (`tel:`), `RatingBadge`,
-   `BeforeAfterSlider` as the hero visual. The slider *is* the hero image —
-   it demonstrates the product in the first viewport.
-2. **TrustBar** — `tone="light"`, `size="compact"`. `site.credentials` as chips.
-3. **ServicesGrid** — `featuredServices` first, link to `/services`.
-4. **SymptomChecker** — "Is this you?" Pulls `service.symptoms`. Maps a problem
-   the visitor recognises to the service that fixes it. Nobody searches for
-   "soft washing"; they search for "green stuff on my siding."
-5. **BeforeAfterShowcase** — `tone="ink"`, `featuredProjects`.
-6. **HowItWorks** — 4 steps: quote → schedule → clean → walkthrough. Removes the
-   "what actually happens" uncertainty that stalls bookings.
-7. **GuaranteeBand** — `tone="hydro"`. `site.guarantee`.
-8. **Testimonials** — `featuredTestimonials` + link to `/reviews`.
-9. **ServiceAreaSection** — city chips linking to `/service-areas/[city]`.
-10. **FaqSection** — 5–6 highest-intent FAQs + link to `/faq`.
-11. **CtaBand** — final conversion push.
+1. **SeasonalBanner** — `activeCampaign`, dismissible. Skip if none active.
+2. **Hero** — `tone="ink"`, blueprint grid + hydro mesh. Headline, lede, primary
+   CTA to `/quote`, secondary `tel:`, `RatingBadge`. **`BeforeAfterSlider` is
+   the hero visual** — it demonstrates the product in the first viewport.
+3. **TrustBar** — `compact`. `site.credentials` as chips.
+4. **SymptomChecker** — "Is this you?" from `service.symptoms` (§2). Place this
+   *above* the service grid: recognition before vocabulary.
+5. **ServicesGrid** — `featuredServices`, reordered by
+   `activeCampaign.promoteServices`.
+6. **BundlesSection** — `tone="ink"`, `featuredBundles` with savings badges.
+   **This is the revenue lever — give it a full section, not a footnote.**
+7. **BeforeAfterShowcase** — `featuredProjects`.
+8. **HowItWorks** — quote → schedule → clean → walkthrough. Removes the "what
+   actually happens" uncertainty that stalls bookings.
+9. **GuaranteeBand** — `tone="hydro"`, `site.guarantee`.
+10. **MaintenanceTeaser** — placed directly after the results and the guarantee,
+    while "keep it this way" is the obvious next thought.
+11. **Testimonials** → **ServiceAreaSection** → **FaqSection**.
+
+> **The page ends there.** `Footer` already carries a full conversion band on
+> every route, so closing with `CtaBand` stacks two near-identical dark bands.
+> `CtaBand` is a mid-page device only — see `SECTIONS.md` §1.6.
 
 ### 8.2 Service detail `/services/[service]`
 
-Hero (name, blurb, `method` badge, price-from, CTA) → intro prose → what's
-included (`includes`) → symptoms → process steps → before/after filtered by
-service → pricing range + estimator link → service-specific FAQs (`faqIds`) →
-"available in these cities" grid linking to the `[service]/[city]` matrix →
-related services (`related`) → CTA.
+Hero (name, `method` badge, price-from, CTA) → intro → `includes` → `symptoms` →
+process → before/after filtered by service → pricing range + estimator link →
+**bundles containing this service** → service FAQs (`faqIds`) → cities grid
+linking to the matrix → `related` services. Footer band closes.
 
-Metadata: `generateMetadata` from the service. Schema: `serviceSchema` +
-`faqSchema` + `breadcrumbSchema`.
+Long service pages may carry one `CtaBand variant="inline"` mid-page — never
+within two sections of the footer.
+
+The bundle cross-sell is not optional. Someone reading about driveway cleaning
+is one sentence away from booking the whole exterior.
 
 ### 8.3 Service × city `/services/[service]/[city]`
 
-The template that must not read as generated. Required beats:
+The template that must not read as generated:
 
-- H1: `{service.name} in {city}, {region}`
-- Opening prose that **combines** `location.localChallenge` with
-  `service.name` — this sentence must be different for every city
-- `location.housingStock` woven into why the method suits local properties
-- Neighbourhoods served, as prose plus links
-- Reviews filtered via `testimonialsFor({serviceSlug, citySlug})`
-- Projects via `projectsFor({serviceSlug, citySlug})`
-- `driveMinutes` proximity signal
-- Links to: the parent service, the parent city, and sibling services in that city
+- H1 `{service.name} in {city}, {region}`
+- Opening prose **combining** `location.localChallenge` with the service —
+  a different sentence for every city
+- `housingStock` woven into why the method suits local properties
+- Neighbourhoods as prose plus links
+- `testimonialsFor({serviceSlug, citySlug})` and `projectsFor(...)`
+- `driveMinutes` proximity signal; travel note if outside `freeRadiusMinutes`
+- Links to parent service, parent city, sibling services in that city
 
-Schema: `serviceSchema(service, location)` + breadcrumbs.
+### 8.4 `/packages` and `/packages/[bundle]`
 
-### 8.4 City page `/service-areas/[city]`
+Hub: bundles as comparison cards — included services (icons from
+`services.ts`), `savingsPercent`, `duration`, `trigger` as the headline. Mark
+`mostPopular`. Split residential/commercial.
 
-Hero with `intro` → `topServices` grid (ordered per city) → local challenge
-explainer → neighbourhoods + landmarks → local reviews → local projects →
-"all services in {city}" full grid → CTA.
+Detail: what's included with each service expanded, savings maths shown
+honestly, before/after from the constituent services, "what a full day looks
+like" timeline, FAQs, CTA into `/quote` pre-selected with those services.
 
-### 8.5 Remaining pages
+### 8.5 `/maintenance-plan`
 
-- **`/services`** — hub, residential and commercial split, each service as a
-  `Card` with icon, `method` badge, blurb and price-from.
+Three tiers side by side, `mostPopular` visually anchored. `frequency`,
+`discountPercent`, `includes`, `bestFor` per tier. Then: why cadence matters
+(pull `service.cadence`), the month-to-month terms (`maintenancePlanTerms` —
+lead with it, it's the objection), and plan-specific FAQs.
+
+### 8.6 Remaining pages
+
+- **`/services`** — hub, residential/commercial split, `Card` per service with
+  icon, `method` badge, blurb, price-from.
+- **`/service-areas/[city]`** — `intro` hero → `topServices` (city-ordered) →
+  local challenge → neighbourhoods + landmarks → local reviews → local projects
+  → all services. Footer band closes.
 - **`/gallery`** — filter chips (service, city), grid of `BeforeAfterSlider`
-  cards with `summary`, duration and area stats.
-- **`/pricing`** — estimator, per-service range table read from `services.ts`,
-  "what changes a price" explainer, red-flags section, pricing FAQs.
-- **`/reviews`** — `RatingBadge`, source breakdown, filterable list, CTA to
-  leave a review.
-- **`/about`** — story, team placeholders, credentials, equipment/method,
-  service-area map, guarantee.
-- **`/blog`** + **`/blog/[slug]`** — index with category filter; post renders
-  `sections[]` as `h2` + prose, with related services/cities in a sidebar.
-- **`/faq`** — grouped by `faqCategories`, `Accordion` per group, `faqSchema`
-  over all items.
-- **`/contact`** — form, map placeholder, hours from `site.hours`, all contact
-  channels including WhatsApp.
-- **Legal pages** — real content required before launch; the footer already
-  links to all three.
+  cards with `summary`, duration, area.
+- **`/pricing`** — estimator, per-service range table from `services.ts`, bundle
+  savings, plan discounts, "what changes a price", red flags, pricing FAQs.
+- **`/reviews`** — `RatingBadge`, source breakdown, filterable list.
+- **`/about`** — story, team, credentials, equipment and method, coverage map,
+  guarantee.
+- **`/blog`**, **`/blog/[slug]`** — category filter; posts render `sections[]`
+  as `h2` + prose with related services/cities in a sidebar.
+- **`/faq`** — grouped by `faqCategories`, `Accordion` per group.
+- **`/contact`** — form, map placeholder, `site.hours`, all channels including
+  WhatsApp.
+- **Legal** — real content required before launch.
+
+## 9. Components still to build
+
+### 9.1 `QuoteWizard` — `/quote` (client)
+
+**The primary conversion asset.** Four steps beat one long form: each step is a
+small commitment and progress is visible.
+
+```
+1  Service     Icon grid from services.ts, multi-select.
+               Offer bundles when selections overlap one — "these three are
+               the Curb Appeal package, 15% less."
+2  Property    Type, storeys, approximate size. Drives the estimate.
+3  Photos      Optional upload + free-text problem description (§2).
+4  Contact     Name, phone, email, address, preferred timing.
+```
+
+- Progress indicator; back/next always available.
+- **Live running estimate visible from step 2** — this is what stops drop-off at
+  the contact step, because now there's something to lose.
+- Validate per step, never dump all errors at the end.
+- Persist to `sessionStorage`; step in URL hash (`#step-2`) so back works.
+- Accept `?services=` to arrive pre-selected from a service or bundle page.
+- **No backend exists.** Submit is a stub — log the payload, render success.
+- Keyboard operable; move focus to the new step heading on advance.
+
+### 9.2 `Estimator` — `/pricing` (client)
+
+Reads `service.pricing`. Returns a **range**, never a single number.
+
+- Inputs: service, measurement (unit from `pricing.unit`), condition modifier.
+- Respects `pricing.minimum`; adds `travelPolicy.surcharge` beyond the radius.
+- Shows bundle savings when selections qualify.
+- Must display the honesty disclaimer (§4.3).
+- Deep-links into `/quote` carrying selections.
+
+### 9.3 Section components
+
+`src/components/sections/` — take props rather than reading content directly
+where reuse is expected:
+
+`Hero` · `SeasonalBanner` · `TrustBar` · `SymptomChecker` · `ServicesGrid` ·
+`BundlesSection` · `MaintenanceTeaser` · `HowItWorks` · `BeforeAfterShowcase` ·
+`Testimonials` · `GuaranteeBand` · `ServiceAreaSection` · `FaqSection` ·
+`CtaBand` · `BlogPreview` · `StatsRow`
+
+**Each of these is fully specified in `SECTIONS.md` §2** — anatomy, props,
+responsive behaviour at every breakpoint, empty states, and the specific
+mistakes to avoid. Don't design them from this list.
 
 ---
 
-## 9. SEO
+# PART THREE — TECHNICAL REFERENCE
 
-- `generateMetadata` on **every** dynamic route. No page inherits a generic title.
-- Canonical URL on every page. The `[service]/[city]` matrix must not compete
-  with its parent `[service]` page.
-- `app/sitemap.ts` enumerating all static + generated routes from the content
-  arrays. `app/robots.ts` alongside it.
-- Schema per page type as noted in §8. Validate at validator.schema.org.
-- **`robots: { index: false }` is currently set in `layout.tsx`.** That is
-  deliberate — it keeps placeholder content out of the index. Flipping it to
-  `true` is a launch-checklist item (§11), not something to do while building.
-- Internal linking is the whole SEO strategy here: service ↔ city ↔ project ↔
-  review ↔ post. The content model already carries the relationships
-  (`related`, `relatedServices`, `topServices`, `faqIds`) — use them.
+## 10. Design system
 
----
+### 10.1 The core decision
 
-## 10. Accessibility & performance
+Competitors in this trade are overwhelmingly white-background with mid-blue
+accents. **We invert it.** Deep marine navy (`ink`) carries the page, bright
+`hydro` blue does the brand work, and a scarce orange (`signal`) is reserved
+*exclusively* for conversion actions — the highest-contrast pairing available,
+so CTAs never compete with the brand colour.
 
-Non-negotiable, and cheap if done during rather than after:
+### 10.2 Colour tokens
 
-- Skip link exists in `layout.tsx`. Keep `#main` as the target.
-- One `<h1>` per page; never skip heading levels.
-- Focus ring is defined globally — never remove it without a replacement.
-- All interactive elements reachable and operable by keyboard. The wizard in
-  particular must move focus to the new step heading on advance.
-- Colour contrast ≥ 4.5:1 for body text. `signal-400` on `ink-950` is the CTA
-  pairing and passes; `signal-400` on white does **not** — never do that.
-- Every `Placeholder` and image needs a real `alt`.
-- Target Lighthouse ≥ 95 across the board. Static rendering plus the near-zero
-  dependency footprint means the only realistic regressions are unoptimised
-  images and stray client components.
-- Use `next/image` for all real photography with explicit `width`/`height`.
-  Hero images `priority`, everything else lazy.
+In `globals.css` under `@theme`. Full 50–950 scales for `ink` and `hydro`.
 
----
+| Token | Role |
+|---|---|
+| `ink-*` | Navy — dominant dark surface + all body text |
+| `hydro-*` | Brand blue — links, icons, eyebrows, secondary buttons |
+| `signal-*` | Conversion orange — **CTA only, never decorative** |
+| `mint-*` | "Clean" indicator — checkmarks, after-states, slider divider |
+| `sand-*` | Warm neutral — alternating light sections |
 
-## 11. Launch checklist
+**Hard rules**
 
-Placeholders that must be resolved before this site goes live:
+1. `signal` never appears on anything that isn't a conversion action.
+2. Never two `variant="primary"` buttons in one viewport.
+3. Never two adjacent `<Section>`s with the same `tone`.
+4. `signal-400` on `ink-950` passes contrast; `signal-400` on white does **not**.
 
-- [ ] Replace every `PLACEHOLDER` in `src/content/site.ts` — name, phone,
-      WhatsApp, email, address, coordinates, hours, founding year
-- [ ] Replace `site.rating` with real aggregate figures
-- [ ] Verify or remove each claim in `site.credentials` — these are legal claims
-- [ ] Replace **all** testimonials with genuine attributable reviews (§5.4)
-- [ ] Real pricing in `services.ts` — every figure is invented
-- [ ] Rewrite `locations.ts` for the actual service area
-- [ ] Real photography into `/public/gallery/`, paths filled in `gallery.ts`
-- [ ] `/public/og-default.jpg` at 1200×630
-- [ ] Real logo replacing the placeholder mark in `Header` and `Footer`
-- [ ] Write the three legal pages
-- [ ] Wire quote + contact forms to a real endpoint
-- [ ] Swap fonts per §3.3
-- [ ] **Flip `robots.index` to `true` in `layout.tsx`**
-- [ ] Analytics + call tracking
-- [ ] Google Business Profile NAP matched exactly to `site.ts`
+### 10.3 Typography
 
----
+System stacks today, so the scaffold builds with no network dependency. Two
+lines in `globals.css` are the entire swap surface. Recommended:
 
-## 12. Suggested build order
+- **Display:** Barlow Condensed 600/700 — industrial, trade-professional rather
+  than corporate-generic; narrow enough that big headlines survive mobile.
+- **Body:** Inter 400/500/600.
 
-1. `app/page.tsx` — even a stub. Gets the build green immediately.
-2. `sitemap.ts`, `robots.ts`, `not-found.tsx`.
-3. Section components (§7.3) — the homepage assembles from them.
-4. Homepage.
-5. `/services` hub → `/services/[service]`.
-6. `QuoteWizard` and `/quote` — highest conversion value, build it early.
-7. `/service-areas` → `/service-areas/[city]`.
-8. `/services/[service]/[city]` — priority cities only.
-9. `/gallery`, `/reviews`, `/pricing` + `Estimator`.
-10. `/about`, `/contact`, `/faq`, `/blog`.
-11. Legal pages.
+Fluid sizes use `clamp()` so headings scale continuously.
+
+### 10.4 Motion
+
+200–300ms, `--ease-out-expo`. Cards lift `-translate-y-1`, buttons
+`-translate-y-0.5`. `prefers-reduced-motion` is handled globally — no per-component
+guards. No scroll-jacking, no parallax, no entrance animations that delay content.
+
+### 10.5 Signature motifs
+
+Sparingly — they stop working when they're everywhere.
+
+- `.edge-wipe-top` / `.edge-wipe-bottom` — diagonal clip echoing a surface-cleaner
+  pass. **Max two per page.**
+- `.hydro-mesh` — radial gradients for dark sections.
+- `.blueprint-grid` — faint grid behind dark bands.
+- `.img-placeholder` — must always read as "image goes here."
+
+### 10.6 Iconography
+
+`ui/Icon.tsx` — inline SVG, 24px grid, 1.75 stroke. No library, no runtime cost.
+Referenced by name from `services.ts`. Unknown names fall back to `droplet`.
+
+### 10.7 Layout, breakpoints and spacing
+
+Specified in full in **`SECTIONS.md` §1** — breakpoint table and what changes at
+each, container sizes, grid column counts per content type, and the spacing
+rhythm. Summary of the parts most often got wrong:
+
+- Mobile-first. Base rule unprefixed, then layer up.
+- Desktop nav appears at `xl`, not `lg` — the mega-menu genuinely doesn't fit at
+  1024px. This gap is deliberate; don't close it.
+- Bundle cards go 1-up until `lg`; they carry more content than service cards.
+- Before/after cards never go past 2-up — a small comparison slider is useless.
+- Nothing changes at `2xl`. Containers cap before it.
+
+## 11. Stack and conventions
+
+| Concern | Choice | Why |
+|---|---|---|
+| Framework | Next.js 16, App Router | `generateStaticParams` makes the matrix free |
+| Language | TypeScript strict | Content model typed end to end |
+| Styling | Tailwind v4, CSS-first `@theme` | Tokens in `globals.css`, no JS config |
+| Rendering | Fully static | No runtime data source exists |
+| Deploy | Vercel | Zero-config |
+
+- Path alias `@/*` → `src/*`. No `../../..`.
+- Server Components by default; `"use client"` only where interaction demands it
+  (currently `Header`, `BeforeAfterSlider`, plus §9.1–9.2).
+- No new runtime dependencies without recording the reason here. Ships with
+  exactly `next`, `react`, `react-dom`.
+- Every section goes through `<Section>`.
+
+## 12. What already exists
+
+```
+src/app/       layout.tsx (metadata, skip link, LocalBusiness JSON-LD, chrome)
+               globals.css (full token system + utilities)
+src/content/   site · services · packages · locations · faqs · testimonials
+               gallery · posts
+src/lib/       utils (cn, currency, formatDate, titleCase)
+               schema (localBusiness, service, faq, breadcrumb, article)
+src/components/ JsonLd · BeforeAfterSlider
+               layout/{Header, Footer, StickyCallBar}
+               ui/{Container, Section, Button, SectionHeading, Icon, Rating,
+                   Placeholder, Accordion, Badge, Card}
+```
+
+### 12.1 Primitive contracts
+
+```tsx
+<Container size="narrow|prose|default|wide" />
+<Section tone="light|sand|ink|hydro" size="flush|compact|default|spacious" id />
+<Button href variant="primary|secondary|outline|onDark|ghost" size="sm|md|lg" fullWidth />
+<SectionHeading eyebrow title lede align onDark as />
+<Icon name filled /> <Placeholder label ratio tone icon />
+<Accordion items={[{id,question,answer}]} singleOpen groupName />
+<Badge tone /> <Card href interactive />
+<Stars value /> <RatingBadge onDark />
+<BeforeAfterSlider before after alt label ratio />
+```
+
+Three behaviours to preserve:
+
+- **`Placeholder` is load-bearing** — it reserves the exact aspect ratio real
+  photography will occupy, so layout and CLS are final before any photo exists.
+- **`BeforeAfterSlider` uses a real `<input type="range">`** — that buys keyboard
+  support, arrow stepping, SR announcement and touch handling for free. Don't
+  replace it with pointer-event handlers.
+- **`Accordion` uses native `<details>/<summary>`** — accessible, zero JS.
+
+## 13. SEO
+
+- `generateMetadata` on every dynamic route. No page inherits a generic title.
+- Canonical on every page; the matrix must not compete with its parent service.
+- `app/sitemap.ts` from the content arrays; `app/robots.ts` alongside.
+- Schema: `localBusiness` (global), `serviceSchema(service, location)`,
+  `faqSchema`, `breadcrumbSchema`, `articleSchema`. **`packages.ts` needs an
+  `Offer`/`AggregateOffer` builder adding to `lib/schema.ts`** — bundles have
+  real prices and should be eligible for rich results. Validate at
+  validator.schema.org.
+- **`robots: { index: false }` is set in `layout.tsx` deliberately** — it keeps
+  placeholder content out of the index. Flipping it is a launch item, not a
+  build-time change.
+- Internal linking is the strategy: service ↔ city ↔ bundle ↔ project ↔ review
+  ↔ post. The content model already carries the relationships — use them.
+
+## 14. Accessibility and performance
+
+- Skip link exists; keep `#main` as target. One `<h1>` per page; never skip levels.
+- Focus ring is global — never remove without a replacement.
+- Everything keyboard operable. The wizard must move focus to the new step heading.
+- Body text contrast ≥ 4.5:1. See the `signal` warning in §10.2.
+- Real `alt` on every image and `Placeholder`.
+- Lighthouse ≥ 95 target. Static rendering plus near-zero dependencies means the
+  only realistic regressions are unoptimised images and stray client components.
+- `next/image` with explicit dimensions; hero `priority`, everything else lazy.
+
+## 15. Build order and checklist
+
+The full sequence lives in **`CHECKLIST.md`** — 14 phases, 14 gates, 173
+checkboxes, with acceptance criteria at every gate. Work it in order and tick as you go;
+it's the progress record, not a summary.
+
+Phase shape, for orientation:
+
+| Phase | Work | Gate |
+|---|---|---|
+| 0 | Verify the inherited foundation | Typecheck passes |
+| 1 | **Make the build green** — `page.tsx`, sitemap, robots, 404, legal stubs | `npm run build` succeeds |
+| 2 | All 16 section components | Each renders, responsive, empty states handled |
+| 3 | Homepage | No horizontal scroll at any width |
+| 4 | `/services` + 11 service pages | Every page has a bundle cross-sell |
+| 5 | **Packages + maintenance plans** | Revenue lever, built before the long tail |
+| 6 | Quote wizard | Keyboard-completable, survives refresh |
+| 7 | Service areas + city matrix | Matrix pages must not read interchangeably |
+| 8 | Gallery, reviews, pricing + estimator | Estimator never returns a single number |
+| 9 | About, contact, FAQ, blog, legal | Every route in §6 builds |
+| 10 | Internal linking | Zero orphans |
+| 11 | SEO | All schema validates |
+| 12 | Accessibility + performance | Lighthouse ≥ 95 |
+| 13 | **Pre-launch business data** | No `PLACEHOLDER` left, no invented review |
+
+Two things worth pulling out of it here:
+
+- **Phase 13 is the business's, not the implementer's.** It's gated on real
+  pricing, real reviews and verified credential claims. Shipping without it
+  isn't an incomplete launch — it's legal exposure (§4).
+- **Six open decisions** are listed in `SECTIONS.md` §4 with recommendations.
+  Each blocks a specific phase. Resolve them rather than defaulting silently.
 
 Run `npx tsc --noEmit` after each step. It passes today; it should never be the
 thing that breaks.

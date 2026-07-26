@@ -80,5 +80,16 @@ export const site = {
 /** Convenience: "Springfield, FL" */
 export const cityState = `${site.address.city}, ${site.address.region}`;
 
+/**
+ * StatsRow data (SECTIONS.md §2.16, open decision #2). Two figures derive from
+ * real fields above; the other two are PLACEHOLDER counts to replace.
+ */
+export const stats = [
+  { value: String(new Date().getFullYear() - site.foundedYear), label: "Years in business" },
+  { value: "3,400", suffix: "+", label: "Properties cleaned" }, // PLACEHOLDER
+  { value: String(site.rating.count), suffix: "+", label: "Five-star reviews" },
+  { value: "1.2M", suffix: " sq ft", label: "Cleaned last year" }, // PLACEHOLDER
+];
+
 export const waLink = (message = "Hi! I'd like a quote for exterior cleaning.") =>
   `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(message)}`;

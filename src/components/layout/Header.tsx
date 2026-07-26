@@ -89,16 +89,19 @@ export function Header() {
             className="flex h-[var(--header-height)] items-center justify-between gap-6"
             aria-label="Main"
           >
-            <Link href="/" className="flex shrink-0 items-center gap-2.5">
+            {/* min-w-0 + truncate, NOT shrink-0: the display font falls back to a
+                system sans until Barlow Condensed is wired up, and a long business
+                name at that width blows out 360px viewports otherwise. */}
+            <Link href="/" className="flex min-w-0 items-center gap-2.5">
               {/* PLACEHOLDER mark — replace with the real logo lockup. */}
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-ink-900 text-hydro-400">
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-ink-900 text-hydro-400">
                 <Icon name="droplet" filled className="h-5 w-5" />
               </span>
-              <span className="flex flex-col leading-none">
-                <span className="font-display text-xl font-bold tracking-tight text-ink-900">
+              <span className="flex min-w-0 flex-col leading-none">
+                <span className="truncate font-display text-lg font-bold tracking-tight text-ink-900 sm:text-xl">
                   {site.name}
                 </span>
-                <span className="mt-0.5 text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-hydro-600">
+                <span className="mt-0.5 hidden text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-hydro-600 sm:block">
                   Exterior Cleaning
                 </span>
               </span>
@@ -188,19 +191,21 @@ export function Header() {
               ))}
             </ul>
 
-            <div className="flex items-center gap-2">
-              <Button
-                href={`tel:${site.contact.phoneHref}`}
-                variant="outline"
-                size="sm"
-                className="hidden sm:inline-flex"
-              >
-                <Icon name="phone" className="h-4 w-4" />
-                {site.contact.phone}
-              </Button>
-              <Button href="/quote" size="sm" className="hidden sm:inline-flex">
-                Free Quote
-              </Button>
+            <div className="flex shrink-0 items-center gap-2">
+              {/* Visibility lives on wrappers: Button's own `inline-flex` beats a
+                  passed-in `hidden` in the cascade (same-specificity conflict).
+                  Phone hides again at xl — the utility bar already shows it. */}
+              <span className="hidden sm:block xl:hidden">
+                <Button href={`tel:${site.contact.phoneHref}`} variant="outline" size="sm">
+                  <Icon name="phone" className="h-4 w-4" />
+                  {site.contact.phone}
+                </Button>
+              </span>
+              <span className="hidden sm:block">
+                <Button href="/quote" size="sm">
+                  Free Quote
+                </Button>
+              </span>
 
               <button
                 type="button"
