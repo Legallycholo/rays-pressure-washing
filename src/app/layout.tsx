@@ -33,8 +33,10 @@ export const metadata: Metadata = {
     siteName: site.name,
     locale: "en_US",
     url: site.url,
-    // PLACEHOLDER — add /public/og-default.jpg at 1200×630.
-    images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: site.name }],
+    // No `images` key: `src/app/opengraph-image.tsx` is the file-convention
+    // source and Next injects it automatically. Listing one here as well would
+    // emit two og:image tags — and the old value pointed at a JPEG that was
+    // never added, so every share 404'd its own preview.
   },
   twitter: { card: "summary_large_image" },
   robots: {

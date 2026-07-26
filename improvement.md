@@ -427,16 +427,69 @@ Neither was in this backlog's scope; both were sitting in shipped code.
 
 ### Findings for Ryan — not fixed, deliberately
 
-- **Pre-existing R2 overlap, 23 scroll positions on the homepage.** The sticky
-  header's Signal "Free Quote" coexists with in-flow Signal CTAs (the hero's,
-  and `MaintenanceTeaser`'s "See what's included"). This predates the backlog,
-  and §6 above already names "the hero's and header's" as the accepted
-  baseline — so the rail was built around it rather than the header being
-  redesigned unasked. Worth a decision: either the header CTA goes `secondary`,
-  or it appears only once the hero has scrolled away (`Header` already tracks
-  a `scrolled` state, so the second option is a two-line change).
-- **`/favicon.ico` and `/og-default.jpg` both 404.** Pre-existing; `og-default`
-  is already flagged PLACEHOLDER in `layout.tsx`. Both need real brand art.
+- ~~**Pre-existing R2 overlap, 23 scroll positions on the homepage.**~~
+  **Fixed.** `Button` now emits `data-cta="primary"` on the primary variant,
+  which makes R2 enforceable at runtime instead of by eye, and `Header`
+  observes every primary outside itself and stands its own CTA down (faded +
+  `inert`) while any of them is on screen. Keyed off "is a primary visible"
+  rather than "is the hero visible" deliberately: five pages have a hero with
+  no primary at all, and blanket-hiding would have cost a conversion path on
+  those to avoid a conflict that wasn't there. Homepage, `/services/*`,
+  `/pricing` and `/faq` now hold R2 at every scroll position, at 360/768/1440.
+
+  **Three in-flow-vs-in-flow overlaps remain.** All predate this backlog, all
+  are in components this work didn't touch, so they are reported rather than
+  redesigned unasked:
+
+  1. **`/gallery` ends with `CtaBand`** — which is a straight **R4** violation
+     ("no page ends with `CtaBand`; the footer band is the closer"), and it is
+     also what puts `CtaBand`'s primary and the footer's primary on screen
+     together. Fixing R4 fixes the R2 overlap for free: drop the `CtaBand`
+     from `src/app/gallery/page.tsx` and let the footer close the page, as
+     every other page does.
+  2. **`/packages`** — the hero's primary and the bundle cards' "See what's
+     included" primaries share a viewport near the top. Cleanest fix is the
+     card CTAs going `variant="outline"`; a card grid where every card shouts
+     is a grid where none does.
+  3. **Mobile only — `StickyCallBar`'s orange "Free Quote" cell coexists with
+     the hero's primary.** Not a `Button`, so it carries no `data-cta` and the
+     header logic doesn't see it. Arguably the accepted cost of a persistent
+     mobile action bar, but it is the same rule.
+- ~~**`/favicon.ico` and `/og-default.jpg` both 404.**~~ **Fixed.**
+  `src/app/icon.svg` reuses the exact placeholder mark the `Header` already
+  renders (ink-900 tile, hydro-400 droplet), and `src/app/opengraph-image.tsx`
+  generates the social card at build time from `site.ts` via `next/og` — which
+  ships inside Next, so still no new dependency. The dangling
+  `images: ["/og-default.jpg"]` key is gone from `layout.tsx`; every share of
+  this site was 404ing its own preview image. Both are still *placeholder
+  identity* — replace them when the real logo lockup lands, and once there is
+  photography a real 1200×630 job shot will beat the typographic card.
 - **Everything added here is still placeholder-fed.** The video, the badge
   art and the press bar are all structurally complete and all still empty.
   What unblocks them is Ryan supplying assets, not more code.
+
+### Real business data received
+
+Phone and email are now live in `site.ts` and propagate everywhere — nav,
+footer, `tel:` links, the chat launcher, schema.org. Three things about them
+still need confirming:
+
+- **The WhatsApp number is an assumption.** `site.contact.whatsapp` was set to
+  the same line as the phone because that is the only number given. `wa.me`
+  does not degrade gracefully — if that number has no WhatsApp account, both
+  the `StickyCallBar` and `ChatLauncher` entry points open an error page.
+  Confirm, or remove the two WhatsApp entry points.
+- **The area code doesn't match the service area.** 803 is South Carolina;
+  the site says Springfield, FL / "Central Florida", and `site.address` and
+  `serviceRegion` are still PLACEHOLDER. Every city in `locations.ts` is
+  invented. This needs the real address and the real list of towns before
+  launch — it currently drives 40+ generated location routes.
+- **The email suggests a different business name.** `rayswindows81@gmail.com`
+  against a site titled "Ryan's Pressure Washing". If the business is Ray's,
+  or if windows are the primary trade rather than one service among twelve,
+  that changes `site.name`, the whole title/schema layer, and arguably which
+  services lead.
+
+`site.url` is still `ryanspressurewashing.example` — no domain was supplied.
+It sets canonical URLs, the sitemap and every og: tag, so it is required
+before `robots.index` is flipped to true in `layout.tsx`.

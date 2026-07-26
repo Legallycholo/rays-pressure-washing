@@ -32,6 +32,39 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /**
+   * R2 — never two Signal primaries in one viewport.
+   *
+   * The header CTA is permanent; in-flow primaries (the hero's, `CtaBand`'s,
+   * `GuaranteeBand`'s) scroll past it, and wherever they overlap there were two
+   * oranges competing. The header is the one that yields: it stands down while
+   * any in-flow primary is on screen and takes over the moment none is.
+   *
+   * Keyed off `data-cta="primary"` from `Button`, not off "is the hero
+   * visible" — five pages have a hero with no primary at all, and hiding the
+   * header CTA on those would cost a conversion path to avoid a conflict that
+   * isn't there.
+   */
+  const [inFlowPrimary, setInFlowPrimary] = useState(false);
+
+  useEffect(() => {
+    const visible = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) visible.add(e.target);
+        else visible.delete(e.target);
+      }
+      setInFlowPrimary(visible.size > 0);
+    });
+    // Every primary except the header's own. Not scoped to <main>: the footer
+    // carries the closing conversion band (R4), and scoping this to main left
+    // the header competing with it at the bottom of every page.
+    document.querySelectorAll("[data-cta='primary']").forEach((el) => {
+      if (!el.closest("header")) io.observe(el);
+    });
+    return () => io.disconnect();
+  }, [pathname]);
+
   // Close the mobile drawer on navigation.
   useEffect(() => setOpen(false), [pathname]);
 
@@ -201,7 +234,16 @@ export function Header() {
                   {site.contact.phone}
                 </Button>
               </span>
-              <span className="hidden sm:block">
+              <span
+                // Fades rather than unmounts so the header doesn't reflow on
+                // every scroll past a CTA band; `inert` keeps it out of the tab
+                // order while it's standing down.
+                inert={inFlowPrimary}
+                className={cn(
+                  "hidden transition-opacity duration-300 sm:block",
+                  inFlowPrimary ? "opacity-0" : "opacity-100",
+                )}
+              >
                 <Button href="/quote" size="sm">
                   Free Quote
                 </Button>

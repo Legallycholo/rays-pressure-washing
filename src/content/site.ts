@@ -20,12 +20,21 @@ export const site = {
 
   contact: {
     /** Human-readable. */
-    phone: "(555) 018-4400", // PLACEHOLDER
+    phone: "(803) 368-3600",
     /** E.164, used for tel: and sms: hrefs. */
-    phoneHref: "+15550184400", // PLACEHOLDER
-    /** Digits only, used for the wa.me deep link. */
-    whatsapp: "15550184400", // PLACEHOLDER
-    email: "hello@ryanspressurewashing.example", // PLACEHOLDER
+    phoneHref: "+18033683600",
+    /**
+     * Digits only, used for the wa.me deep link in `StickyCallBar` and
+     * `ChatLauncher`.
+     *
+     * UNCONFIRMED — set to the same line as `phone` because that is the only
+     * number supplied. wa.me does not fail gracefully: if this number has no
+     * WhatsApp account, the link opens an error page rather than doing
+     * nothing. Confirm the number is on WhatsApp, or remove the two WhatsApp
+     * entry points, before this goes live.
+     */
+    whatsapp: "18033683600",
+    email: "rayswindows81@gmail.com",
   },
 
   address: {

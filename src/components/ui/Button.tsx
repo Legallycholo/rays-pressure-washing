@@ -56,6 +56,12 @@ export function Button({
 }: Props) {
   const classes = cn(base, variants[variant], sizes[size], fullWidth && "w-full", className);
 
+  // R2 is "never two primaries in one viewport", which is only enforceable if
+  // primaries are findable at runtime. This marks them. `Header` uses it to
+  // stand its own CTA down while an in-flow primary is on screen, and the gate
+  // scripts use it to audit R2 without sniffing Tailwind class names.
+  const cta = variant === "primary" ? "primary" : undefined;
+
   if (href) {
     const external = href.startsWith("http") || href.startsWith("tel:") || href.startsWith("sms:");
     if (external) {
@@ -63,6 +69,7 @@ export function Button({
         <a
           href={href}
           className={classes}
+          data-cta={cta}
           {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         >
           {children}
@@ -70,14 +77,14 @@ export function Button({
       );
     }
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} className={classes} data-cta={cta}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button className={classes} {...rest}>
+    <button className={classes} data-cta={cta} {...rest}>
       {children}
     </button>
   );
