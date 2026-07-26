@@ -8,6 +8,7 @@ import { residentialServices, commercialServices } from "@/content/services";
 import { priorityLocations } from "@/content/locations";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { Logo } from "@/components/ui/Logo";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
 
@@ -122,23 +123,7 @@ export function Header() {
             className="flex h-[var(--header-height)] items-center justify-between gap-6"
             aria-label="Main"
           >
-            {/* min-w-0 + truncate, NOT shrink-0: the display font falls back to a
-                system sans until Barlow Condensed is wired up, and a long business
-                name at that width blows out 360px viewports otherwise. */}
-            <Link href="/" className="flex min-w-0 items-center gap-2.5">
-              {/* PLACEHOLDER mark — replace with the real logo lockup. */}
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-ink-900 text-hydro-400">
-                <Icon name="droplet" filled className="h-5 w-5" />
-              </span>
-              <span className="flex min-w-0 flex-col leading-none">
-                <span className="truncate font-display text-lg font-bold tracking-tight text-ink-900 sm:text-xl">
-                  {site.name}
-                </span>
-                <span className="mt-0.5 hidden text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-hydro-600 sm:block">
-                  Exterior Cleaning
-                </span>
-              </span>
-            </Link>
+            <Logo linked className="min-w-0" />
 
             {/* Desktop nav */}
             <ul className="hidden items-center gap-1 xl:flex">

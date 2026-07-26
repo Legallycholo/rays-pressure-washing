@@ -8,11 +8,26 @@
  */
 
 export const site = {
-  name: "Ryan's Pressure Washing",
-  shortName: "Ryan's",
-  tagline: "Exterior cleaning that makes the whole place look new again",
+  name: "Ray's Window Cleaning & Pressure Washing",
+  shortName: "Ray's",
+  tagline: "It's not pressure. It's precision.",
   /** Used in <title> templates and schema.org. */
-  legalName: "Ryan's Pressure Washing LLC", // PLACEHOLDER
+  legalName: "Ray's Window Cleaning and Pressure Washing LLC",
+  /**
+   * Full lockup — header, footer, and any brand placements.
+   *
+   * Both files are the supplied artwork with its black matte knocked out to
+   * real transparency, so the lockup sits on the white header and the near-
+   * black footer without a box around it. The original flattened JPEG is kept
+   * at /logo.jpg as the untouched master; nothing references it.
+   *
+   * WebP first because it is 95kB against the PNG's 163kB for identical
+   * pixels; the PNG is the fallback for anything that can't take WebP. Serve
+   * them through `<Logo>`, which handles the `<picture>` wiring.
+   */
+  logoSrc: "/logo.png",
+  logoSrcWebp: "/logo.webp",
+  logoAlt: "Ray's Window Cleaning and Pressure Washing LLC",
   foundedYear: 2016, // PLACEHOLDER
 
   /** PLACEHOLDER — canonical production origin, no trailing slash. */

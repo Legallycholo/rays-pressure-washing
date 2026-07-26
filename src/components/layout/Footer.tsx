@@ -4,6 +4,7 @@ import { residentialServices, commercialServices } from "@/content/services";
 import { locations } from "@/content/locations";
 import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
+import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { Stars } from "@/components/ui/Rating";
 
@@ -44,14 +45,10 @@ export function Footer() {
           {/* min-w-0 on every grid child: grid items default to min-width:auto,
               so one long unbreakable string (the email) widens the whole track. */}
           <div className="min-w-0 lg:col-span-2">
-            <div className="flex items-center gap-2.5">
-              <span className="grid h-10 w-10 place-items-center rounded-xl bg-hydro-500 text-white">
-                <Icon name="droplet" filled className="h-5 w-5" />
-              </span>
-              <span className="font-display text-xl font-bold text-white">{site.name}</span>
-            </div>
+            <Logo heightClass="h-11 sm:h-12" />
 
-            <p className="mt-4 max-w-sm text-sm leading-relaxed">{site.tagline}.</p>
+            {/* No trailing "." — the tagline punctuates itself. */}
+            <p className="mt-4 max-w-sm text-sm leading-relaxed">{site.tagline}</p>
 
             <div className="mt-5 flex items-center gap-2">
               <Stars value={site.rating.value} />
