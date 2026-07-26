@@ -5,6 +5,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Stars } from "@/components/ui/Rating";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { ScrollRail } from "@/components/ScrollRail";
 import { formatDate } from "@/lib/utils";
 
 export function TestimonialCard({ t }: { t: Testimonial }) {
@@ -33,18 +34,36 @@ export function TestimonialCard({ t }: { t: Testimonial }) {
   );
 }
 
-/** SECTIONS.md §2.10 — no carousel, ever. */
+/**
+ * SECTIONS.md §2.10, as amended by improvement.md Phase 7.
+ *
+ * `grid` is still the default and is right for pages *about* reviews — all of
+ * them, at once, scannable. `carousel` is a CSS scroll-snap rail for pages
+ * where reviews are one section among fifteen: it shows more of them in less
+ * vertical space, and a peeking next card says "there are more" in a way a
+ * truncated 3-up grid does not.
+ *
+ * The original rule — never carousel this — was written against auto-rotating
+ * carousels that mount one slide at a time. Neither applies here: nothing
+ * advances on a timer, and every review is in the server-rendered markup where
+ * a crawler can read it. Those two properties are the whole justification; if
+ * either is ever lost, go back to the grid.
+ */
 export function Testimonials({
   items,
   heading,
   tone = "light",
   showAllLink = true,
+  layout = "grid",
 }: {
   items: Testimonial[];
   heading?: { eyebrow?: string; title: React.ReactNode; lede?: React.ReactNode };
   tone?: "light" | "sand";
   showAllLink?: boolean;
+  layout?: "grid" | "carousel";
 }) {
+  const shown = items.slice(0, 6);
+
   return (
     <Section tone={tone}>
       <SectionHeading
@@ -53,13 +72,28 @@ export function Testimonials({
           title: "What the neighbours say",
         })}
       />
-      <ul className="mt-12 grid items-stretch gap-6 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
-        {items.slice(0, 6).map((t) => (
-          <li key={t.id}>
-            <TestimonialCard t={t} />
-          </li>
-        ))}
-      </ul>
+      {layout === "carousel" ? (
+        <ScrollRail label="Customer reviews" className="mt-12 sm:mt-16">
+          {shown.map((t) => (
+            <li
+              key={t.id}
+              // Basis, not width: flex items must not shrink, or six cards
+              // compress to fit instead of overflowing into a scroll.
+              className="w-[85%] shrink-0 snap-start sm:w-[48%] lg:w-[31.5%]"
+            >
+              <TestimonialCard t={t} />
+            </li>
+          ))}
+        </ScrollRail>
+      ) : (
+        <ul className="mt-12 grid items-stretch gap-6 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
+          {shown.map((t) => (
+            <li key={t.id}>
+              <TestimonialCard t={t} />
+            </li>
+          ))}
+        </ul>
+      )}
       {showAllLink && (
         <div className="mt-10 text-center">
           <Button href="/reviews" variant="ghost">

@@ -4,6 +4,8 @@ import { site } from "@/content/site";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { StickyCallBar } from "@/components/layout/StickyCallBar";
+import { StickyQuoteRail } from "@/components/layout/StickyQuoteRail";
+import { ChatLauncher } from "@/components/ChatLauncher";
 import { JsonLd } from "@/components/JsonLd";
 import { localBusinessSchema } from "@/lib/schema";
 
@@ -62,7 +64,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </main>
         <Footer />
+        {/* Mobile bar and desktop rail are mutually exclusive by breakpoint. */}
         <StickyCallBar />
+        <StickyQuoteRail />
+        {/* Bottom-left: the one corner the other two don't occupy. */}
+        <ChatLauncher />
       </body>
     </html>
   );

@@ -198,6 +198,40 @@ p {
   );
 }
 
+/* Coverage-map pins (CoverageMap.tsx). Each pin is an <a>, so it is keyboard
+   tabbable and needs a visible focus state as well as a hover one. Done in CSS
+   rather than JS so the map stays a server component with zero client bytes:
+   `r` is a real CSS property on SVG geometry, and `paint-order` keeps the
+   halo behind the glyph instead of over it. */
+.coverage-pin {
+  cursor: pointer;
+}
+.coverage-pin__dot,
+.coverage-pin__label {
+  transition:
+    r 150ms var(--ease-out-expo),
+    fill 150ms ease;
+}
+.coverage-pin:hover .coverage-pin__dot,
+.coverage-pin:focus-visible .coverage-pin__dot {
+  r: 7;
+}
+.coverage-pin:hover .coverage-pin__label,
+.coverage-pin:focus-visible .coverage-pin__label {
+  font-weight: 800;
+  fill: #ffffff;
+}
+/* The global :focus-visible outline can't wrap an SVG <a> usefully — draw the
+   ring on the pin itself instead. */
+.coverage-pin:focus {
+  outline: none;
+}
+.coverage-pin:focus-visible .coverage-pin__dot {
+  stroke: var(--color-hydro-300);
+  stroke-width: 3;
+  paint-order: stroke;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

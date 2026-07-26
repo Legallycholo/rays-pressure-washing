@@ -107,6 +107,14 @@ const paths: Record<string, React.ReactNode> = {
   ),
   arrow: <path d="M4 12h15m0 0-6-6m6 6-6 6" />,
   chevron: <path d="m6 9 6 6 6-6" />,
+  expand: <path d="M9 4H4v5M15 4h5v5M15 20h5v-5M9 20H4v-5" />,
+  close: <path d="M6 6l12 12M18 6 6 18" />,
+  chat: (
+    <>
+      <path d="M21 12a8 8 0 0 1-8 8H8l-5 3 1.2-4.2A8 8 0 1 1 21 12z" />
+      <path d="M8.5 11h7M8.5 14.5h4" />
+    </>
+  ),
   calendar: (
     <>
       <rect x="3" y="5" width="18" height="16" rx="2" />

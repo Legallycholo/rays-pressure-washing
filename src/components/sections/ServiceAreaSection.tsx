@@ -60,7 +60,7 @@ export function ServiceAreaSection({
             {travelPolicy.note}
           </p>
         </div>
-        <CoverageMap locations={locations} />
+        <CoverageMap locations={locations} onDark={dark} />
       </div>
     </Section>
   );

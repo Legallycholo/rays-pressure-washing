@@ -1,11 +1,13 @@
 "use client";
 
 import { useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { projects } from "@/content/gallery";
 import { services } from "@/content/services";
 import { locations } from "@/content/locations";
 import { ProjectCard } from "./BeforeAfterShowcase";
+import { GalleryLightbox } from "@/components/GalleryLightbox";
+import { replaceQuery } from "@/lib/url";
 import { cn } from "@/lib/utils";
 
 /**
@@ -14,19 +16,24 @@ import { cn } from "@/lib/utils";
  * Must render inside <Suspense> — useSearchParams requires it.
  */
 export function GalleryExplorer() {
-  const router = useRouter();
+  const pathname = usePathname();
   const params = useSearchParams();
   const serviceFilter = params.get("service") ?? "";
   const cityFilter = params.get("city") ?? "";
 
+  // `replaceQuery` rather than `router.replace` — see src/lib/url.ts. The
+  // router version silently no-ops on the exact case this feature exists for:
+  // someone opening a shared, already-filtered URL and then changing a filter.
   const setFilter = useCallback(
     (key: "service" | "city", value: string) => {
       const next = new URLSearchParams(params.toString());
       if (value && next.get(key) !== value) next.set(key, value);
       else next.delete(key);
-      router.replace(`/gallery${next.size ? `?${next}` : ""}`, { scroll: false });
+      // Changing the filter set can orphan an open lightbox — clear it too.
+      next.delete("project");
+      replaceQuery(pathname, next);
     },
-    [params, router],
+    [params, pathname],
   );
 
   const filtered = projects.filter(
@@ -34,6 +41,14 @@ export function GalleryExplorer() {
       (!serviceFilter || p.serviceSlug === serviceFilter) &&
       (!cityFilter || p.citySlug === cityFilter),
   );
+
+  // Lightbox links carry the current filters through, so closing the dialog
+  // returns to the same filtered view rather than resetting it.
+  const expandHref = (id: string) => {
+    const next = new URLSearchParams(params.toString());
+    next.set("project", id);
+    return `/gallery?${next}`;
+  };
 
   // Only offer filter values that exist in the data.
   const serviceOptions = services.filter((s) => projects.some((p) => p.serviceSlug === s.slug));
@@ -88,7 +103,7 @@ export function GalleryExplorer() {
         <ul className="mt-10 grid items-stretch gap-6 lg:grid-cols-2">
           {filtered.map((p) => (
             <li key={p.id}>
-              <ProjectCard project={p} />
+              <ProjectCard project={p} expandHref={expandHref(p.id)} />
             </li>
           ))}
         </ul>
@@ -97,13 +112,17 @@ export function GalleryExplorer() {
           <p className="font-semibold text-ink-700">No projects yet for that combination.</p>
           <button
             type="button"
-            onClick={() => router.replace("/gallery", { scroll: false })}
+            onClick={() => replaceQuery(pathname, new URLSearchParams())}
             className="mt-2 text-sm font-semibold text-hydro-700 underline underline-offset-2 hover:no-underline"
           >
             Reset filters
           </button>
         </div>
       )}
+
+      {/* Prev/next inside the dialog walks the *filtered* set, so the arrow
+          keys agree with what the grid behind the scrim is showing. */}
+      <GalleryLightbox projects={filtered} />
     </div>
   );
 }

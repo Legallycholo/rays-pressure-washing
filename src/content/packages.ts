@@ -213,6 +213,13 @@ export type SeasonalCampaign = {
   promoteServices: string[];
   ctaLabel: string;
   ctaHref: string;
+  /**
+   * Hard deadline, ISO 8601. Optional, and most campaigns should leave it
+   * unset — a maintenance-plan promo that "ends" on a date nobody enforces is
+   * a lie the countdown will tell every visitor. Set it only when the offer
+   * genuinely stops, and `SeasonalBanner` will show the time remaining.
+   */
+  endsAt?: string;
   active?: boolean;
 };
 
@@ -265,7 +272,20 @@ export const seasonalCampaigns: SeasonalCampaign[] = [
   },
 ];
 
-export const activeCampaign = seasonalCampaigns.find((c) => c.active);
+/**
+ * The one campaign currently on air. A campaign whose `endsAt` is in the past
+ * is never active regardless of its `active` flag — expiry is the primary
+ * guard, and `Countdown` refusing to render "0d 0h" is only the fallback.
+ *
+ * Evaluated at build time on a statically prerendered site, so a campaign that
+ * expires between deploys stays up until the next build. That is the right
+ * trade for a marketing banner (no per-request work, no client flash); if an
+ * offer ever needs to expire to the minute, move this check into the client
+ * component rather than making the whole page dynamic.
+ */
+export const activeCampaign = seasonalCampaigns.find(
+  (c) => c.active && (!c.endsAt || new Date(c.endsAt).getTime() > Date.now()),
+);
 
 /* ---------------------------------------------------------------------------
    4. TRAVEL / SERVICE RADIUS

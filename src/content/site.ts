@@ -81,6 +81,27 @@ export const site = {
 export const cityState = `${site.address.city}, ${site.address.region}`;
 
 /**
+ * The same four credentials as `site.credentials`, in the richer form a badge
+ * row needs. A standalone export rather than a key inside `site` because the
+ * labels are read back out of `site.credentials` — one source of truth for the
+ * claim text, so the two can never drift apart.
+ *
+ * `logoSrc` is empty until Ryan supplies the actual badge art from the issuing
+ * body. NEVER fill these with a stock BBB / Google / "insured" graphic pulled
+ * off the web: an unverified trust mark is a legal liability, not a
+ * placeholder, and the FTC warning already on `testimonials.ts` applies here
+ * in full. Empty is correct — `TrustBar` falls back to the text chip.
+ */
+export type CredentialBadge = { label: string; issuer: string; logoSrc: string };
+
+export const credentialBadges: CredentialBadge[] = [
+  { label: site.credentials[0], issuer: "State contractor licensing board", logoSrc: "" },
+  { label: site.credentials[1], issuer: "General liability insurer", logoSrc: "" },
+  { label: site.credentials[2], issuer: "Third-party screening provider", logoSrc: "" },
+  { label: site.credentials[3], issuer: `${site.address.city} business registry`, logoSrc: "" },
+];
+
+/**
  * StatsRow data (SECTIONS.md §2.16, open decision #2). Two figures derive from
  * real fields above; the other two are PLACEHOLDER counts to replace.
  */

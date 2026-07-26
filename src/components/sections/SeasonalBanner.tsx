@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { SeasonalCampaign } from "@/content/packages";
 import { Icon } from "@/components/ui/Icon";
 import { Container } from "@/components/ui/Container";
+import { Countdown } from "@/components/Countdown";
 
 /**
  * SECTIONS.md §2.1. The one sanctioned non-CTA use of `signal` — the whole
@@ -38,6 +39,12 @@ export function SeasonalBanner({ campaign }: { campaign?: SeasonalCampaign }) {
               {campaign.ctaLabel}
               <Icon name="arrow" className="h-4 w-4" />
             </Link>
+            {/* Renders nothing without an `endsAt`, so a campaign with no hard
+                deadline looks exactly as it did before this existed. */}
+            <Countdown
+              endsAt={campaign.endsAt}
+              className="inline-flex items-center gap-1.5 rounded-pill bg-ink-950/10 px-2.5 py-0.5 text-xs font-bold tabular-nums"
+            />
           </div>
           <button
             type="button"

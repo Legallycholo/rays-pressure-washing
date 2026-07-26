@@ -19,6 +19,13 @@ export type Project = {
   alt: string;
   /** Short story — what the problem was and what was done. */
   summary: string;
+  /**
+   * Optional walkthrough clip for this one job. Absent by default and
+   * placeholder-safe the same way `before`/`after` are: an empty `src` renders
+   * the placeholder frame rather than a broken player. Direct file only —
+   * a YouTube/Vimeo embed is a third-party script decision, not this field.
+   */
+  video?: { src: string; poster: string; alt: string };
   durationHours: number;
   /** Surfaced as a stat chip on the card. */
   surfaceArea?: string;

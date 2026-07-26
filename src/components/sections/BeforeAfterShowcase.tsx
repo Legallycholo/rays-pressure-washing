@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Project } from "@/content/gallery";
 import { getService } from "@/content/services";
 import { getLocation } from "@/content/locations";
@@ -8,7 +9,22 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 
-export function ProjectCard({ project }: { project: Project }) {
+/**
+ * `expandHref` turns the card title into the lightbox trigger (Phase 2). It is
+ * a plain link, not a click handler, which is what makes a single project
+ * linkable and lets a server-rendered card open a client-only dialog without
+ * dragging the whole grid across the client boundary.
+ *
+ * The inline slider stays on the card either way — the grid has to preview the
+ * motion before anyone decides to click.
+ */
+export function ProjectCard({
+  project,
+  expandHref,
+}: {
+  project: Project;
+  expandHref?: string;
+}) {
   const service = getService(project.serviceSlug);
   const city = getLocation(project.citySlug);
 
@@ -25,7 +41,25 @@ export function ProjectCard({ project }: { project: Project }) {
         <div className="flex flex-wrap items-center gap-2">
           {service && <Badge tone="hydro">{service.name}</Badge>}
         </div>
-        <h3 className="mt-3 font-display text-lg text-ink-900">{project.title}</h3>
+        <h3 className="mt-3 font-display text-lg text-ink-900">
+          {expandHref ? (
+            <Link
+              href={expandHref}
+              scroll={false}
+              data-project-trigger={project.id}
+              className="group/expand inline-flex items-start gap-1.5 hover:text-hydro-700"
+            >
+              {project.title}
+              <Icon
+                name="expand"
+                className="mt-1 h-4 w-4 shrink-0 text-ink-300 transition-colors group-hover/expand:text-hydro-600"
+              />
+              <span className="sr-only">— open full size</span>
+            </Link>
+          ) : (
+            project.title
+          )}
+        </h3>
         <p className="mt-1.5 text-sm leading-relaxed text-ink-500 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] overflow-hidden">
           {project.summary}
         </p>
@@ -83,7 +117,10 @@ export function BeforeAfterShowcase({
       <ul className="mt-12 grid items-stretch gap-6 sm:mt-16 lg:grid-cols-2">
         {projects.slice(0, 4).map((p) => (
           <li key={p.id}>
-            <ProjectCard project={p} />
+            {/* Off-gallery cards deep-link into /gallery, where the lightbox is
+                mounted — one extra navigation, and it lands people on the page
+                that shows every other job too. */}
+            <ProjectCard project={p} expandHref={`/gallery?project=${p.id}`} />
           </li>
         ))}
       </ul>

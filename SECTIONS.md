@@ -448,8 +448,18 @@ cards with the attribution row pinned to the bottom (`mt-auto`) is enough.
 **States** Fed by `testimonialsFor()`, which already falls back to featured
 reviews — so this never renders empty. Don't add a second fallback.
 
-**Don't** Carousel it. Auto-rotating testimonials are skipped by everyone and
-hide content from crawlers.
+**Don't** Auto-rotate it. Testimonials that advance on a timer are skipped by
+everyone, and a carousel that mounts one slide at a time hides the rest from
+crawlers.
+
+**Amended** (`improvement.md` Phase 7) — `layout="carousel"` is permitted and
+is what the homepage now uses. It is a CSS scroll-snap rail, which is not the
+thing this rule was written against: every review stays in the DOM and in the
+markup a crawler sees, nothing advances on a timer, and the only script is the
+prev/next buttons. `layout="grid"` remains the default and is what `/reviews`
+and the service/city pages use — a page *about* reviews should show them all
+at once. If either of the two properties above ever stops being true, this
+rule reverts in full.
 
 ---
 
