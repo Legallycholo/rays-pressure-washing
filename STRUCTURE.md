@@ -4,6 +4,19 @@
 **Status:** Foundation and content model built. Routes not yet implemented.
 **Audience:** the implementer building the pages (Fable 5).
 
+## Document map
+
+Three documents, read in this order:
+
+| Document | Answers | Read when |
+|---|---|---|
+| **`STRUCTURE.md`** ← you are here | *What* goes on each page and *why* | First, all of it |
+| **`SECTIONS.md`** | What each section *looks like* at every breakpoint | Before writing any component |
+| **`CHECKLIST.md`** | *In what order*, and how to prove it's done | Continuously — tick as you go |
+
+`CHECKLIST.md` is the working document. It has 14 phases, 14 gates and 173
+checkboxes, and it's designed so nothing can be skipped silently.
+
 ---
 
 ## 0. Read this first
@@ -262,14 +275,21 @@ every page per §10.2.
 9. **GuaranteeBand** — `tone="hydro"`, `site.guarantee`.
 10. **MaintenanceTeaser** — placed directly after the results and the guarantee,
     while "keep it this way" is the obvious next thought.
-11. **Testimonials** → **ServiceAreaSection** → **FaqSection** → **CtaBand**.
+11. **Testimonials** → **ServiceAreaSection** → **FaqSection**.
+
+> **The page ends there.** `Footer` already carries a full conversion band on
+> every route, so closing with `CtaBand` stacks two near-identical dark bands.
+> `CtaBand` is a mid-page device only — see `SECTIONS.md` §1.6.
 
 ### 8.2 Service detail `/services/[service]`
 
 Hero (name, `method` badge, price-from, CTA) → intro → `includes` → `symptoms` →
 process → before/after filtered by service → pricing range + estimator link →
 **bundles containing this service** → service FAQs (`faqIds`) → cities grid
-linking to the matrix → `related` services → CTA.
+linking to the matrix → `related` services. Footer band closes.
+
+Long service pages may carry one `CtaBand variant="inline"` mid-page — never
+within two sections of the footer.
 
 The bundle cross-sell is not optional. Someone reading about driveway cleaning
 is one sentence away from booking the whole exterior.
@@ -310,7 +330,7 @@ lead with it, it's the objection), and plan-specific FAQs.
   icon, `method` badge, blurb, price-from.
 - **`/service-areas/[city]`** — `intro` hero → `topServices` (city-ordered) →
   local challenge → neighbourhoods + landmarks → local reviews → local projects
-  → all services → CTA.
+  → all services. Footer band closes.
 - **`/gallery`** — filter chips (service, city), grid of `BeforeAfterSlider`
   cards with `summary`, duration, area.
 - **`/pricing`** — estimator, per-service range table from `services.ts`, bundle
@@ -369,6 +389,10 @@ where reuse is expected:
 `BundlesSection` · `MaintenanceTeaser` · `HowItWorks` · `BeforeAfterShowcase` ·
 `Testimonials` · `GuaranteeBand` · `ServiceAreaSection` · `FaqSection` ·
 `CtaBand` · `BlogPreview` · `StatsRow`
+
+**Each of these is fully specified in `SECTIONS.md` §2** — anatomy, props,
+responsive behaviour at every breakpoint, empty states, and the specific
+mistakes to avoid. Don't design them from this list.
 
 ---
 
@@ -434,6 +458,19 @@ Sparingly — they stop working when they're everywhere.
 
 `ui/Icon.tsx` — inline SVG, 24px grid, 1.75 stroke. No library, no runtime cost.
 Referenced by name from `services.ts`. Unknown names fall back to `droplet`.
+
+### 10.7 Layout, breakpoints and spacing
+
+Specified in full in **`SECTIONS.md` §1** — breakpoint table and what changes at
+each, container sizes, grid column counts per content type, and the spacing
+rhythm. Summary of the parts most often got wrong:
+
+- Mobile-first. Base rule unprefixed, then layer up.
+- Desktop nav appears at `xl`, not `lg` — the mega-menu genuinely doesn't fit at
+  1024px. This gap is deliberate; don't close it.
+- Bundle cards go 1-up until `lg`; they carry more content than service cards.
+- Before/after cards never go past 2-up — a small comparison slider is useless.
+- Nothing changes at `2xl`. Containers cap before it.
 
 ## 11. Stack and conventions
 
@@ -517,42 +554,38 @@ Three behaviours to preserve:
   only realistic regressions are unoptimised images and stray client components.
 - `next/image` with explicit dimensions; hero `priority`, everything else lazy.
 
-## 15. Launch checklist
+## 15. Build order and checklist
 
-- [ ] Replace every `PLACEHOLDER` in `site.ts` — name, phone, WhatsApp, email,
-      address, coordinates, hours, founding year
-- [ ] Real `site.rating` figures
-- [ ] Verify or delete each `site.credentials` claim (§4.2)
-- [ ] Replace **all** testimonials with genuine attributable reviews (§4.1)
-- [ ] Real pricing in `services.ts` — every figure is invented
-- [ ] Real bundle savings and plan discounts in `packages.ts`
-- [ ] Set the correct `active` seasonal campaign, and a reminder to rotate it
-- [ ] Confirm `travelPolicy` radius and surcharge
-- [ ] Rewrite `locations.ts` for the actual service area
-- [ ] Photography into `/public/gallery/`, paths filled in `gallery.ts`
-- [ ] `/public/og-default.jpg` at 1200×630
-- [ ] Real logo replacing the placeholder mark in `Header` and `Footer`
-- [ ] Write the three legal pages
-- [ ] Wire quote and contact forms to a real endpoint
-- [ ] Swap fonts (§10.3)
-- [ ] **Flip `robots.index` to `true`**
-- [ ] Analytics + call tracking
-- [ ] Google Business Profile NAP matched exactly to `site.ts`
+The full sequence lives in **`CHECKLIST.md`** — 14 phases, 14 gates, 173
+checkboxes, with acceptance criteria at every gate. Work it in order and tick as you go;
+it's the progress record, not a summary.
 
-## 16. Build order
+Phase shape, for orientation:
 
-1. `app/page.tsx` — even a stub. Gets the build green immediately.
-2. `sitemap.ts`, `robots.ts`, `not-found.tsx`.
-3. Section components (§9.3).
-4. Homepage.
-5. `/services` hub → `/services/[service]`.
-6. **`/packages` + `/maintenance-plan`** — revenue lever, build before the long tail.
-7. `QuoteWizard` + `/quote` — highest conversion value.
-8. `/service-areas` → `/service-areas/[city]`.
-9. `/services/[service]/[city]` — priority cities only.
-10. `/gallery`, `/reviews`, `/pricing` + `Estimator`.
-11. `/about`, `/contact`, `/faq`, `/blog`.
-12. Legal pages.
+| Phase | Work | Gate |
+|---|---|---|
+| 0 | Verify the inherited foundation | Typecheck passes |
+| 1 | **Make the build green** — `page.tsx`, sitemap, robots, 404, legal stubs | `npm run build` succeeds |
+| 2 | All 16 section components | Each renders, responsive, empty states handled |
+| 3 | Homepage | No horizontal scroll at any width |
+| 4 | `/services` + 11 service pages | Every page has a bundle cross-sell |
+| 5 | **Packages + maintenance plans** | Revenue lever, built before the long tail |
+| 6 | Quote wizard | Keyboard-completable, survives refresh |
+| 7 | Service areas + city matrix | Matrix pages must not read interchangeably |
+| 8 | Gallery, reviews, pricing + estimator | Estimator never returns a single number |
+| 9 | About, contact, FAQ, blog, legal | Every route in §6 builds |
+| 10 | Internal linking | Zero orphans |
+| 11 | SEO | All schema validates |
+| 12 | Accessibility + performance | Lighthouse ≥ 95 |
+| 13 | **Pre-launch business data** | No `PLACEHOLDER` left, no invented review |
+
+Two things worth pulling out of it here:
+
+- **Phase 13 is the business's, not the implementer's.** It's gated on real
+  pricing, real reviews and verified credential claims. Shipping without it
+  isn't an incomplete launch — it's legal exposure (§4).
+- **Six open decisions** are listed in `SECTIONS.md` §4 with recommendations.
+  Each blocks a specific phase. Resolve them rather than defaulting silently.
 
 Run `npx tsc --noEmit` after each step. It passes today; it should never be the
 thing that breaks.
