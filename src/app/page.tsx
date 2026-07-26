@@ -1,73 +1,84 @@
 import type { Metadata } from "next";
-import { site, cityState } from "@/content/site";
-import { featuredServices } from "@/content/services";
-import { Section } from "@/components/ui/Section";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Button } from "@/components/ui/Button";
-import { Icon } from "@/components/ui/Icon";
-import { RatingBadge } from "@/components/ui/Rating";
+import { site, stats } from "@/content/site";
+import { featuredServices, residentialServices } from "@/content/services";
+import { activeCampaign, featuredBundles, maintenancePlans, maintenancePlanTerms } from "@/content/packages";
+import { locations } from "@/content/locations";
+import { featuredProjects } from "@/content/gallery";
+import { featuredTestimonials } from "@/content/testimonials";
+import { getFaqs } from "@/content/faqs";
+import { featuredPosts } from "@/content/posts";
+import { SeasonalBanner } from "@/components/sections/SeasonalBanner";
+import { Hero } from "@/components/sections/Hero";
+import { TrustBar } from "@/components/sections/TrustBar";
+import { SymptomChecker } from "@/components/sections/SymptomChecker";
+import { ServicesGrid } from "@/components/sections/ServicesGrid";
+import { BundlesSection } from "@/components/sections/BundlesSection";
+import { BeforeAfterShowcase } from "@/components/sections/BeforeAfterShowcase";
+import { HowItWorks } from "@/components/sections/HowItWorks";
+import { GuaranteeBand } from "@/components/sections/GuaranteeBand";
+import { MaintenanceTeaser } from "@/components/sections/MaintenanceTeaser";
+import { StatsRow } from "@/components/sections/StatsRow";
+import { Testimonials } from "@/components/sections/Testimonials";
+import { ServiceAreaSection } from "@/components/sections/ServiceAreaSection";
+import { FaqSection } from "@/components/sections/FaqSection";
+import { BlogPreview } from "@/components/sections/BlogPreview";
 
 export const metadata: Metadata = {
   title: `Pressure Washing & Exterior Cleaning in ${site.serviceRegion}`,
   description:
     `${site.name} — soft washing, roof cleaning, driveway and concrete cleaning across ` +
-    `${site.serviceRegion}. Free same-day quotes, backed by the ${site.guarantee.title}.`,
+    `${site.serviceRegion}. Published prices, free same-day quotes, and the ${site.guarantee.title}.`,
   alternates: { canonical: "/" },
 };
 
-/**
- * PHASE 1 STUB — exists to make the build green (CHECKLIST.md Phase 1).
- * The real homepage is Phase 3 and assembles the section components from
- * STRUCTURE.md §8.1 once Phase 2 delivers them. Do not grow this file;
- * replace it.
- */
+// Highest-intent questions for the homepage FAQ slice.
+const homeFaqIds = [
+  "soft-vs-pressure",
+  "quote-accuracy",
+  "need-to-be-home",
+  "plants-safe",
+  "how-long-lasts",
+  "payment",
+];
+
+/** Assembled per STRUCTURE.md §8.1 / SECTIONS.md §1.5. Ends on FAQ — the
+ *  footer band closes every page (§1.6). */
 export default function HomePage() {
   return (
     <>
-      <Section tone="ink" size="spacious" className="blueprint-grid">
-        <div className="flex flex-col items-center gap-6 text-center">
-          <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-mint-400">
-            <Icon name="pin" className="h-4 w-4" />
-            Serving {site.serviceRegion} from {cityState}
-          </span>
-          <h1 className="max-w-3xl text-display-md text-white">{site.tagline}</h1>
-          <p className="max-w-xl text-lg text-ink-200">
-            Soft washing, pressure washing and exterior cleaning — quoted free,
-            scheduled fast, and backed by the {site.guarantee.title}.
-          </p>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Button href="/quote" size="lg">
-              Get My Free Quote
-            </Button>
-            <Button href={`tel:${site.contact.phoneHref}`} variant="onDark" size="lg">
-              <Icon name="phone" className="h-5 w-5" />
-              {site.contact.phone}
-            </Button>
-          </div>
-          <RatingBadge onDark />
-        </div>
-      </Section>
-
-      <Section tone="light">
-        <SectionHeading
-          eyebrow="What we clean"
-          title="Every exterior surface, the right way"
-          lede="Full site launching soon — these are the services we're bringing with it."
-        />
-        <ul className="mx-auto mt-12 grid max-w-3xl gap-4 sm:grid-cols-2">
-          {featuredServices.map((s) => (
-            <li
-              key={s.slug}
-              className="flex items-center gap-3 rounded-card bg-sand-50 p-4 ring-1 ring-ink-900/5"
-            >
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-hydro-50 text-hydro-600">
-                <Icon name={s.icon} className="h-5 w-5" />
-              </span>
-              <span className="font-semibold text-ink-800">{s.name}</span>
-            </li>
-          ))}
-        </ul>
-      </Section>
+      <SeasonalBanner campaign={activeCampaign} />
+      <Hero
+        eyebrow={`Serving ${site.serviceRegion}`}
+        title={site.tagline}
+        lede={`Soft washing, pressure washing and exterior cleaning done the right way for each surface — quoted free, priced openly, and backed by the ${site.guarantee.title}.`}
+        primaryCta={{ label: "Get My Free Quote", href: "/quote" }}
+        secondaryCta={{ label: site.contact.phone, href: `tel:${site.contact.phoneHref}` }}
+        project={featuredProjects[0]}
+      />
+      <TrustBar items={site.credentials} />
+      <SymptomChecker services={residentialServices} />
+      <ServicesGrid
+        services={featuredServices}
+        promote={activeCampaign?.promoteServices ?? []}
+        heading={{
+          eyebrow: "What we clean",
+          title: "Every surface, its own method",
+          lede: "Pressure where pressure works, chemistry where it doesn't. The method badge on each card tells you which.",
+        }}
+      />
+      <BundlesSection bundles={featuredBundles} />
+      <BeforeAfterShowcase projects={featuredProjects} />
+      <HowItWorks />
+      <GuaranteeBand guarantee={site.guarantee} />
+      <MaintenanceTeaser
+        plan={maintenancePlans.find((p) => p.mostPopular) ?? maintenancePlans[0]}
+        terms={maintenancePlanTerms}
+      />
+      <Testimonials items={featuredTestimonials} />
+      <ServiceAreaSection locations={locations} />
+      <FaqSection items={getFaqs(homeFaqIds)} groupName="faq-home" />
+      <StatsRow stats={stats} />
+      <BlogPreview posts={featuredPosts} />
     </>
   );
 }

@@ -27,9 +27,13 @@ const sizes: Record<Size, string> = {
   lg: "h-14 px-8 text-lg gap-2.5",
 };
 
+// No `whitespace-nowrap`: it turns a long label into a hard min-width that
+// overflows narrow viewports (and grid tracks, whose items are min-width:auto).
+// Labels should be short enough not to wrap; when one does, wrapping beats
+// breaking the page.
 const base =
-  "inline-flex items-center justify-center rounded-pill transition-all duration-200 " +
-  "hover:-translate-y-0.5 active:translate-y-0 whitespace-nowrap " +
+  "inline-flex max-w-full items-center justify-center rounded-pill text-center transition-all duration-200 " +
+  "hover:-translate-y-0.5 active:translate-y-0 " +
   "disabled:opacity-50 disabled:pointer-events-none";
 
 type Props = {

@@ -1,7 +1,8 @@
 # STRUCTURE.md — Implementation Plan
 
 **Project:** Ryan's Pressure Washing — marketing website
-**Status:** Foundation and content model built. Routes not yet implemented.
+**Status:** Built. All 84 routes implemented and verified. Phase 13 (real
+business data) is the only work remaining before launch.
 **Audience:** the implementer building the pages (Fable 5).
 
 ## Document map
@@ -21,15 +22,14 @@ checkboxes, and it's designed so nothing can be skipped silently.
 
 ## 0. Read this first
 
-This repo contains a **finished foundation and an unfinished app**. The design
-system, content model, component primitives and site chrome exist and typecheck
-cleanly. **No routes exist yet**, which means:
+This repo contains a **built site on placeholder data**. The design system,
+content model, component primitives, site chrome and all routes are implemented.
 
-> ⚠️ `npm run build` currently fails — a Next.js app requires at least
-> `src/app/page.tsx`. That is expected. Creating routes is the first
-> implementation task, and the build goes green as soon as `page.tsx` exists.
+> ✅ `npm run build` prerenders 84 static routes. `npx tsc --noEmit` passes.
+> Verified: 0 broken internal links, 0 orphan pages, exactly one `<h1>` per
+> page, and no horizontal overflow across 19 pages × 7 viewport widths.
 
-`npx tsc --noEmit` passes today. Keep it passing.
+See `CHECKLIST.md` for the live gate-by-gate status.
 
 **Structure-first build.** Every value in `src/content/` is placeholder and every
 piece of copy is draft. Don't perfect words. Perfect layout, hierarchy,

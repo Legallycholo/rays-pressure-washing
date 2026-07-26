@@ -81,6 +81,36 @@ export function serviceSchema(service: Service, location?: Location) {
   };
 }
 
+/**
+ * Bundle pages emit AggregateOffer (STRUCTURE.md §13). The low price is the
+ * discounted sum of constituent service minimums — placeholder maths on
+ * placeholder figures, same as everything else in content.
+ */
+export function bundleOfferSchema(bundle: {
+  name: string;
+  blurb: string;
+  slug: string;
+  savingsPercent: number;
+  serviceSlugs: readonly string[];
+  minimumSum: number;
+}) {
+  const low = Math.round(bundle.minimumSum * (1 - bundle.savingsPercent / 100));
+  return {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: bundle.name,
+    description: bundle.blurb,
+    provider: { "@id": `${origin}/#business` },
+    url: `${origin}/packages/${bundle.slug}`,
+    offers: {
+      "@type": "AggregateOffer",
+      priceCurrency: "USD",
+      lowPrice: low,
+      offerCount: bundle.serviceSlugs.length,
+    },
+  };
+}
+
 export function faqSchema(items: Faq[]) {
   return {
     "@context": "https://schema.org",

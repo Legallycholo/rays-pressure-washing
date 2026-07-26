@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/content/site";
 import { serviceSlugs } from "@/content/services";
-import { locationSlugs } from "@/content/locations";
+import { locationSlugs, priorityLocations } from "@/content/locations";
 import { bundleSlugs } from "@/content/packages";
 import { postSlugs, posts } from "@/content/posts";
 
@@ -9,8 +9,9 @@ import { postSlugs, posts } from "@/content/posts";
  * Enumerates every route from the content arrays, so adding a service, city,
  * bundle or post updates the sitemap automatically (STRUCTURE.md §13).
  *
- * The /services/[service]/[city] matrix is added in Phase 7 alongside the
- * pages themselves — a sitemap must never list routes that don't exist.
+ * Matrix routes cover priority cities only, matching generateStaticParams in
+ * app/services/[service]/[city]/page.tsx — the sitemap and the built pages
+ * must never disagree.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = site.url;
@@ -54,6 +55,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
+  const matrixRoutes = priorityLocations.flatMap((l) =>
+    serviceSlugs.map((slug) => ({
+      url: `${base}/services/${slug}/${l.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
+  );
+
   const locationRoutes = locationSlugs.map((slug) => ({
     url: `${base}/service-areas/${slug}`,
     lastModified: now,
@@ -71,5 +81,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
-  return [...staticRoutes, ...serviceRoutes, ...bundleRoutes, ...locationRoutes, ...postRoutes];
+  return [
+    ...staticRoutes,
+    ...serviceRoutes,
+    ...matrixRoutes,
+    ...bundleRoutes,
+    ...locationRoutes,
+    ...postRoutes,
+  ];
 }
