@@ -318,6 +318,30 @@ p {
   transform-origin: bottom right;
 }
 
+/* The assistant's "finding it" dots. Deliberately not a typing indicator: the
+   assistant states in its first line that it isn't a person, and nothing here
+   is pretending someone is at a keyboard. It marks the ~300ms between a tapped
+   question and its answer so the reply reads as a reply.
+
+   Reduced motion collapses the duration via the global rule below, which leaves
+   the three dots sitting still at their animation's `both` start value — a
+   static ellipsis. That is the right outcome, so there's no branch for it. */
+@keyframes hub-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+.hub-dot {
+  animation: hub-dot 1s ease-in-out infinite both;
+}
+
 /* Native <dialog> open/close — GalleryLightbox.tsx.
 
    `showModal()` snaps the dialog in with no transition, because the element
