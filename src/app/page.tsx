@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { site, stats, credentialBadges } from "@/content/site";
+import { site, stats, credentialBadges, cityState } from "@/content/site";
 import { featuredServices, residentialServices } from "@/content/services";
 import { maintenancePlans, maintenancePlanTerms } from "@/content/packages";
 import { locations } from "@/content/locations";
@@ -24,7 +24,7 @@ import { FaqSection } from "@/components/sections/FaqSection";
 import { BlogPreview } from "@/components/sections/BlogPreview";
 
 export const metadata: Metadata = {
-  title: `Pressure Washing & Exterior Cleaning in ${site.serviceRegion}`,
+  title: `Pressure Washing Big Lake Houses in ${cityState}`,
   description:
     `${site.name}: window cleaning, soft washing, roof cleaning and concrete cleaning for ` +
     `lake homes across ${site.serviceRegion}. Same-day availability and the ${site.guarantee.title}.`,
@@ -46,10 +46,14 @@ const homeFaqIds = [
 export default function HomePage() {
   return (
     <>
+      {/* The H1 is the search phrase, not the tagline. `site.tagline` still
+          carries the brand line in the footer and the OG card, where it has
+          room to be a slogan rather than the thing someone typed to get here.
+          The eyebrow stays the region: it renders against a map-pin icon. */}
       <Hero
         eyebrow={`Serving ${site.serviceRegion}`}
-        title={site.tagline}
-        lede={`Big houses on the water take more than a pressure washer and a ladder. We clean the glass, the siding, the roof and the driveway on lake homes around Lexington, with the method matched to each surface and backed by the ${site.guarantee.title}.`}
+        title={`Pressure washing big lake houses in ${cityState}`}
+        lede={`Big houses on the water take more than a pressure washer and a ladder. We clean the glass, the siding, the roof and the driveway on lake homes around ${site.address.city}, with the method matched to each surface and backed by the ${site.guarantee.title}.`}
         primaryCta={{ label: "Request a Callback", href: "/contact" }}
         secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
         project={featuredProjects[0]}
