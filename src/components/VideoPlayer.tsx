@@ -19,8 +19,8 @@ const ratios: Record<Ratio, string> = {
  * No player library: everything below is native browser behaviour, and a
  * dependency here would buy skinning we don't want and ship ~40kB we don't need.
  *
- * `showcase` — real content. Controls on, autoplay off, captions when supplied.
- * `background` — decorative motion only. Muted, looping, no controls, and
+ * `showcase`, real content. Controls on, autoplay off, captions when supplied.
+ * `background`, decorative motion only. Muted, looping, no controls, and
  * `aria-hidden`, because it must never be the only carrier of a message; the
  * surrounding copy says everything the clip says.
  *
@@ -66,7 +66,7 @@ export function VideoPlayer({
   if (!src) {
     return (
       <Placeholder
-        label={`VIDEO — ${alt}`}
+        label={`VIDEO: ${alt}`}
         ratio={ratio}
         tone="dark"
         icon="camera"
@@ -115,7 +115,7 @@ export function VideoPlayer({
         aria-label={alt}
         className="h-full w-full object-cover"
       >
-        {/* Rendered only when a real .vtt exists — an empty track src is a
+        {/* Rendered only when a real .vtt exists: an empty track src is a
             broken request, not a graceful fallback. */}
         {captionsSrc ? (
           <track kind="captions" src={captionsSrc} srcLang="en" label="English" default />

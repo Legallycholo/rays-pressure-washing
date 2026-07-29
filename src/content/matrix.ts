@@ -5,7 +5,7 @@ import type { Location } from "./locations";
 export { getService, serviceSlugs };
 
 /** Sibling services to cross-link on a matrix page: the city's other top
- *  services first, padded from the full catalogue, excluding the current one. */
+ *  services first, padded from the full catalog, excluding the current one. */
 export function getServicesForCityPage(loc: Location, excludeSlug: string): Service[] {
   const top = loc.topServices
     .filter((s) => s !== excludeSlug)

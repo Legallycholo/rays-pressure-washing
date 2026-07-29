@@ -29,14 +29,14 @@ export function PostCard({ post }: { post: Post }) {
   );
 }
 
-/** SECTIONS.md §2.15 — never more than three on the homepage. */
+/** SECTIONS.md §2.15, never more than three on the homepage. */
 export function BlogPreview({ posts }: { posts: Post[] }) {
   return (
     <Section tone="light">
       <SectionHeading
         eyebrow="Guides"
         title="Know what you're paying for"
-        lede="Straight answers on methods, costs and timing — written to make you a sharper buyer, whoever you hire."
+        lede="Straight answers on methods, costs and timing. Written to make you a sharper buyer, whoever you hire."
       />
       <ul className="mt-12 grid items-stretch gap-6 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
         {posts.slice(0, 3).map((p) => (

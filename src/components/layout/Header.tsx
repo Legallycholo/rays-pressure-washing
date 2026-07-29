@@ -34,7 +34,7 @@ export function Header() {
   }, []);
 
   /**
-   * R2 — never two Signal primaries in one viewport.
+   * R2: never two Signal primaries in one viewport.
    *
    * The header CTA is permanent; in-flow primaries (the hero's, `CtaBand`'s,
    * `GuaranteeBand`'s) scroll past it, and wherever they overlap there were two
@@ -42,7 +42,7 @@ export function Header() {
    * any in-flow primary is on screen and takes over the moment none is.
    *
    * Keyed off `data-cta="primary"` from `Button`, not off "is the hero
-   * visible" — five pages have a hero with no primary at all, and hiding the
+   * visible", five pages have a hero with no primary at all, and hiding the
    * header CTA on those would cost a conversion path to avoid a conflict that
    * isn't there.
    */
@@ -79,7 +79,7 @@ export function Header() {
 
   return (
     <>
-      {/* Utility bar — phone number above the fold on every page, on purpose.
+      {/* Utility bar: phone number above the fold on every page, on purpose.
           In this trade the phone call IS the conversion. */}
       <div className="hidden bg-ink-900 text-ink-200 lg:block">
         <Container size="wide">
@@ -212,7 +212,7 @@ export function Header() {
             <div className="flex shrink-0 items-center gap-2">
               {/* Visibility lives on wrappers: Button's own `inline-flex` beats a
                   passed-in `hidden` in the cascade (same-specificity conflict).
-                  Phone hides again at xl — the utility bar already shows it. */}
+                  Phone hides again at xl; the utility bar already shows it. */}
               <span className="hidden sm:block xl:hidden">
                 <Button href={`tel:${site.contact.phoneHref}`} variant="outline" size="sm">
                   <Icon name="phone" className="h-4 w-4" />
@@ -347,7 +347,7 @@ export function Header() {
                 href={`/service-areas/${l.slug}`}
                 // The rest of this drawer is `py-3.5` rows that clear 44px
                 // comfortably; these pills were the one thing in it that
-                // didn't, at 32px — in the one menu that only ever gets used
+                // didn't, at 32px, in the one menu that only ever gets used
                 // by a thumb.
                 className="inline-flex min-h-[44px] items-center rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700"
               >

@@ -8,7 +8,7 @@ import { Container } from "@/components/ui/Container";
 import { Countdown } from "@/components/Countdown";
 
 /**
- * SECTIONS.md §2.1. The one sanctioned non-CTA use of `signal` — the whole
+ * SECTIONS.md §2.1. The one sanctioned non-CTA use of `signal`, the whole
  * band is a conversion prompt. Dismissal persists per campaign slug, so a new
  * campaign reappears.
  *
@@ -18,11 +18,11 @@ import { Countdown } from "@/components/Countdown";
  * the single biggest layout shift on the site: the banner is 74px tall and
  * sits above the hero, so on every first visit the whole page jumped down a
  * banner's height about 1.5 seconds in. It measured 0.082 CLS on the homepage
- * — the homepage's entire CLS, and all of it avoidable.
+ *, the homepage's entire CLS, and all of it avoidable.
  *
  * The visibility decision has to happen before the first paint, and an effect
  * is by definition after it. So the banner now renders visible from the server
- * — the correct answer for every first-time visitor — and the script below
+ * (the correct answer for every first-time visitor) and the script below
  * runs during HTML parse to hide it again for the returning visitor who
  * already dismissed it. Neither one sees anything move.
  *
@@ -45,7 +45,7 @@ export function SeasonalBanner({ campaign }: { campaign?: SeasonalCampaign }) {
         dismissed this campaign never sees it flash.
 
         Wrapped in try/catch because Safari's private mode throws on
-        `localStorage` access outright — and a banner showing twice is a far
+        `localStorage` access outright, and a banner showing twice is a far
         smaller problem than a homepage that throws before it renders.
       */}
       <script

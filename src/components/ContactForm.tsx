@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 
 /**
- * POSTs to `/api/leads`, the same route the quote wizard uses — the difference
+ * POSTs to `/api/leads`, the same route the quote wizard uses, the difference
  * between the two is which fields are filled in, not what happens next.
  *
  * The success panel is shown only for a message that actually left. A failure
@@ -88,7 +88,7 @@ export function ContactForm() {
 
       {/*
         Honeypot. Hidden from sight, hidden from the accessibility tree, and
-        skipped by the tab order — a human has no way to reach it, so anything
+        skipped by the tab order (a human has no way to reach it), so anything
         in it came from something filling every field it found. The route
         answers 200 to those so the sender logs a success and moves on.
 
@@ -110,7 +110,7 @@ export function ContactForm() {
           <p>{error}</p>
           {failedToSend && (
             <p className="mt-2 leading-relaxed">
-              Your message is still here — try Send again, or call{" "}
+              Your message is still here. Try Send again, or call{" "}
               <a href={`tel:${site.contact.phoneHref}`} className="font-bold underline underline-offset-2">
                 {site.contact.phone}
               </a>{" "}

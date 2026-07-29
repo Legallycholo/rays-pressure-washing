@@ -7,19 +7,19 @@ import {
 } from "@/content/assistant";
 
 /**
- * The assistant's free-text endpoint — everything the chat composer in
+ * The assistant's free-text endpoint, everything the chat composer in
  * `ContactHub.tsx` says back to a visitor comes through here.
  *
  * WHY IT IS A ROUTE AND NOT A FUNCTION IN THE COMPONENT. It doesn't need to be
  * one today: the matcher below is pure and would run happily in the browser.
  * It is one so that the day a real model is wired up, the change is confined to
- * this file — the component already speaks HTTP, already renders a pending
+ * this file, the component already speaks HTTP, already renders a pending
  * state, already handles a failure. Moving the boundary later, with a live
  * site, is the expensive version of this.
  *
  * ── VENDOR SWAP POINT ───────────────────────────────────────────────────────
  * Replace the keyword matcher below with a call to Google Cloud Conversational
- * Agents (Dialogflow CX) — or Vertex AI — once the project ID, agent ID and
+ * Agents (Dialogflow CX), or Vertex AI, once the project ID, agent ID and
  * service-account credentials exist. Nothing outside this file changes.
  *
  * Three things the replacement has to keep, because the UI and the site's
@@ -29,7 +29,7 @@ import {
  *      as one bubble per string and `actions` as a link card; `followUps` are
  *      the chips it offers next.
  *   2. Ground every answer in this site's own content. The scripted tree in
- *      `content/assistant.ts` is the corpus — a model that free-associates
+ *      `content/assistant.ts` is the corpus, a model that free-associates
  *      about roof warranties is a liability, not an upgrade.
  *   3. Keep the fallback. If confidence is low, return the `other` topic and
  *      hand off to a person. "I'll get someone" is always a better answer than
@@ -55,7 +55,7 @@ const MAX_MESSAGE = 500;
    Rate limiting
 
    In-memory and per-instance, which on a serverless platform means it is a
-   speed bump rather than a guarantee — instances are reused but not shared, so
+   speed bump rather than a guarantee: instances are reused but not shared, so
    a determined flood spread across cold starts gets through. That is an
    acceptable trade here: this endpoint sends no email, costs nothing per call
    and touches no database, so the thing being protected is CPU, not spend or a
@@ -112,7 +112,7 @@ export async function POST(req: Request) {
   }
 
   // `history` is accepted and deliberately unused. The matcher is stateless, so
-  // reading it would be theatre — but the client already sends it, which means
+  // reading it would be theatre, but the client already sends it, which means
   // a conversational model can be dropped in here without a client change on
   // the same day it needs the context.
   const reply = answer(message.slice(0, MAX_MESSAGE));
@@ -122,7 +122,7 @@ export async function POST(req: Request) {
 /**
  * ── THE PART THAT GETS REPLACED ─────────────────────────────────────────────
  * Keyword scoring over the scripted tree (`matchTopic`), falling back to the
- * `other` topic — which hands off to a human — when nothing scores. Swap the
+ * `other` topic (which hands off to a human) when nothing scores. Swap the
  * body of this function; leave its signature and its fallback alone.
  */
 function answer(message: string): AssistantReply {

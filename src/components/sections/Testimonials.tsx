@@ -14,7 +14,7 @@ export function TestimonialCard({ t }: { t: Testimonial }) {
   return (
     <figure className="flex h-full flex-col rounded-card bg-white p-6 shadow-card ring-1 ring-ink-900/5">
       <Stars value={t.rating} />
-      {/* No clamp — truncating a review reads as hiding something (§2.10) */}
+      {/* No clamp: truncating a review reads as hiding something (§2.10) */}
       <blockquote className="mt-3 leading-relaxed text-ink-700">&ldquo;{t.quote}&rdquo;</blockquote>
       <figcaption className="mt-auto pt-5">
         <div className="flex items-end justify-between gap-3 border-t border-ink-100 pt-4">
@@ -38,13 +38,13 @@ export function TestimonialCard({ t }: { t: Testimonial }) {
 /**
  * SECTIONS.md §2.10, as amended by improvement.md Phase 7.
  *
- * `grid` is still the default and is right for pages *about* reviews — all of
+ * `grid` is still the default and is right for pages *about* reviews, all of
  * them, at once, scannable. `carousel` is a CSS scroll-snap rail for pages
  * where reviews are one section among fifteen: it shows more of them in less
  * vertical space, and a peeking next card says "there are more" in a way a
  * truncated 3-up grid does not.
  *
- * The original rule — never carousel this — was written against auto-rotating
+ * The original rule (never carousel this) was written against auto-rotating
  * carousels that mount one slide at a time. Neither applies here: nothing
  * advances on a timer, and every review is in the server-rendered markup where
  * a crawler can read it. Those two properties are the whole justification; if
@@ -71,7 +71,7 @@ export function Testimonials({
         <SectionHeading
           {...(heading ?? {
             eyebrow: "In their words",
-            title: "What the neighbours say",
+            title: "What the neighbors say",
           })}
         />
       </Reveal>

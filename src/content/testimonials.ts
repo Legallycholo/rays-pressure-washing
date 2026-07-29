@@ -1,5 +1,5 @@
 /**
- * Reviews. DRAFT PLACEHOLDER COPY — every one of these must be replaced with a
+ * Reviews. DRAFT PLACEHOLDER COPY: every one of these must be replaced with a
  * genuine, attributable review before launch. Fabricated testimonials on a live
  * commercial site are an FTC violation, not just bad practice.
  *

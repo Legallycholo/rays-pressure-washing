@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 /**
- * Inline SVG set — no icon library dependency, no runtime cost, no flash.
+ * Inline SVG set, no icon library dependency, no runtime cost, no flash.
  * Service icons are referenced by name from content/services.ts.
  *
  * These are functional line icons at a consistent 24px grid / 1.75 stroke.

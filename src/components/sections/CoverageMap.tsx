@@ -4,15 +4,15 @@ import { site } from "@/content/site";
 import { cn } from "@/lib/utils";
 
 /**
- * Static SVG coverage map (open decision #1) — styleable, weightless, no
- * third-party JS. Deliberately schematic: a stylised region with the home
- * base at centre and cities placed by drive-time rings, not geography.
+ * Static SVG coverage map (open decision #1), styleable, weightless, no
+ * third-party JS. Deliberately schematic: a stylized region with the home
+ * base at center and cities placed by drive-time rings, not geography.
  * Swap for a real cartographic SVG when the actual service area is known.
  *
  * Every pin is a real <a> into its city page. SVG has supported anchors since
  * forever, so this stays a server component: the hover/focus growth is pure
  * CSS (`.coverage-pin` in globals.css) and there is no JS on this section at
- * all. Considered and deliberately not done: a Google Maps / Mapbox embed —
+ * all. Considered and deliberately not done: a Google Maps / Mapbox embed,
  * that is a third-party script, an API key and a billing decision, and it buys
  * nothing here, because the useful information is "which cities" and not
  * "exactly where".
@@ -62,16 +62,16 @@ export function CoverageMap({
             strokeDasharray="3 5"
           />
         ))}
-        {/* city pins — each one a link to its own page */}
+        {/* city pins, each one a link to its own page */}
         {pts.map(({ l, x, y }) => (
           <Link key={l.slug} href={`/service-areas/${l.slug}`} className="coverage-pin">
             {/* Native SVG tooltip, and the accessible name for the link.
-                The home city is 0 drive-minutes away — "about 0 minutes" is
+                The home city is 0 drive-minutes away, and "about 0 minutes" is
                 nonsense, so say what it actually is. */}
             <title>
               {l.driveMinutes > 0
-                ? `${l.city}, ${l.region} — about ${l.driveMinutes} minutes away`
-                : `${l.city}, ${l.region} — our home base`}
+                ? `${l.city}, ${l.region}, about ${l.driveMinutes} minutes away`
+                : `${l.city}, ${l.region}, our home base`}
             </title>
             {/* Invisible hit area: a 3.5px dot is not a 44px target. */}
             <circle cx={x} cy={y} r="16" fill="transparent" />
@@ -104,7 +104,7 @@ export function CoverageMap({
           </text>
         </g>
       </svg>
-      {/* Pins being clickable is not self-evident — say so, and give the
+      {/* Pins being clickable is not self-evident, so say so and give the
           people who don't try it a plain list to go to instead. */}
       <figcaption className={cn("text-sm", onDark ? "text-ink-300" : "text-ink-500")}>
         Every pin links to that city.{" "}

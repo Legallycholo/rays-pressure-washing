@@ -1,4 +1,4 @@
-/** Minimal class-name joiner. Deliberately dependency-free — swap for clsx +
+/** Minimal class-name joiner. Deliberately dependency-free, swap for clsx +
  *  tailwind-merge if conflicting-class resolution becomes a real problem. */
 export function cn(...parts: Array<string | false | null | undefined>) {
   return parts.filter(Boolean).join(" ");
@@ -23,7 +23,7 @@ export const titleCase = (s: string) =>
 
 /**
  * Time left until an ISO deadline, as "3d 4h 20m". Returns `null` when the
- * deadline has passed, is missing, or doesn't parse — callers render nothing
+ * deadline has passed, is missing, or doesn't parse, callers render nothing
  * in that case rather than a dishonest "0d 0h 0m".
  *
  * Pure and `now`-injectable so the boundary behaviour is testable without

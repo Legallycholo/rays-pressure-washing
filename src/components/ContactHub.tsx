@@ -22,31 +22,31 @@ import { cn } from "@/lib/utils";
  * One corner, one hub. Replaces `ChatLauncher` (bottom-left) and
  * `StickyQuoteRail` (right edge, desktop only).
  *
- * Those two were solving the same problem — "give me a way to reach these
- * people from anywhere on the page" — from opposite corners, which on a phone
+ * Those two were solving the same problem, "give me a way to reach these
+ * people from anywhere on the page", from opposite corners, which on a phone
  * added up to three fixed elements competing for the same thumb. Folding the
  * rail's two actions into the launcher's menu means one launcher, one mental
  * model, at every breakpoint.
  *
  * ── WHY THE LAUNCHER OPENS THE CHAT, NOT A MENU ─────────────────────────────
  * It used to open a list of six ways to contact us, with the chat buried at the
- * bottom. That asked the visitor to make a decision — phone or email or
- * WhatsApp or form — before they'd been allowed to state their problem, and
+ * bottom. That asked the visitor to make a decision, phone or email or
+ * WhatsApp or form, before they'd been allowed to state their problem, and
  * every one of those options costs them something: a call means talking to
  * someone, an email means waiting. Faced with that bill, most people close it.
  *
  * So the launcher now opens the assistant mid-conversation instead: a question
  * is already on screen and answering it costs one tap. The six channels didn't
- * go anywhere — they moved into a second tab, and the assistant hands off to
+ * go anywhere, they moved into a second tab, and the assistant hands off to
  * the right one at the point the visitor actually needs it rather than before
  * they know which one that is.
  *
  * Two rules survive the redesign intact:
  *
- * R1 — `signal` (orange) is for conversion actions only. The chat's accents are
+ * R1: `signal` (orange) is for conversion actions only. The chat's accents are
  * hydro and mint. Even the unread dot is mint, not orange.
  *
- * R2 — the quote action here is `hydro`, never `signal`. Somewhere below the
+ * R2: the quote action here is `hydro`, never `signal`. Somewhere below the
  * fold there is almost always an in-flow Signal CTA (`CtaBand`,
  * `GuaranteeBand`, a pricing card), and a permanently-visible third orange
  * button would put two primaries in one viewport at some scroll position on
@@ -88,7 +88,7 @@ const NUDGE = {
 /**
  * The pause between the visitor's tap and the answer landing.
  *
- * Not a fake "someone is typing" — nothing is typing. It's here because
+ * Not a fake "someone is typing", nothing is typing. It's here because
  * rendering the question and its answer in the same frame reads as a page swap
  * rather than a reply, and the eye loses which bubble is new. Short enough that
  * it never feels like waiting.
@@ -110,7 +110,7 @@ const HISTORY_TURNS = 8;
  * How much keyboard has to be on screen before the hub gets out of its way.
  *
  * On iOS the software keyboard doesn't resize the layout viewport, so a
- * bottom-anchored `fixed` panel — and the composer inside it — sits underneath
+ * bottom-anchored `fixed` panel (and the composer inside it) sits underneath
  * it. `visualViewport` is the only thing that reports this. The threshold keeps
  * pinch-zoom and the Safari URL bar's few dozen pixels from nudging the panel
  * around; nothing short of an actual keyboard clears it. Android resizes the
@@ -152,7 +152,7 @@ const seedMessages = (): Msg[] => [
    ---------------------------------------------------------------------- */
 
 /**
- * The assistant's face. Hydro gradient + droplet — the brand mark, shrunk.
+ * The assistant's face. Hydro gradient + droplet, the brand mark, shrunk.
  *
  * Sizes are a closed set rather than a free `className`, because `cn` is a
  * plain joiner with no conflicting-class resolution (see `lib/utils.ts`): two
@@ -187,7 +187,7 @@ function Avatar({
 
 /**
  * One link row. Used inside chat answers and in the contact directory, so the
- * two never drift apart visually — a channel looks the same wherever the
+ * two never drift apart visually, a channel looks the same wherever the
  * visitor meets it.
  */
 function ActionRow({ action, onNavigate }: { action: AssistantAction; onNavigate: () => void }) {
@@ -262,7 +262,7 @@ export function ContactHub() {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<Tab>("chat");
   const [nudge, setNudge] = useState(false);
-  /** Survives the nudge being dismissed — the dot stays until they actually open it. */
+  /** Survives the nudge being dismissed, the dot stays until they actually open it. */
   const [unread, setUnread] = useState(false);
 
   const [messages, setMessages] = useState<Msg[]>(seedMessages);
@@ -282,7 +282,7 @@ export function ContactHub() {
   const inFlight = useRef<AbortController | null>(null);
   /**
    * Mirrors `messages` so `askFreeText` can read the transcript without taking
-   * it as a dependency — otherwise the callback is rebuilt on every bubble and
+   * it as a dependency, otherwise the callback is rebuilt on every bubble and
    * the form's `onSubmit` identity churns for the whole conversation.
    */
   const log = useRef<Msg[]>(messages);
@@ -316,7 +316,7 @@ export function ContactHub() {
     if (refocus) triggerRef.current?.focus();
   }, []);
 
-  /** Back to the opening question. The conversation isn't worth persisting —
+  /** Back to the opening question. The conversation isn't worth persisting,
    *  it's a lookup, and a stale one is just clutter on the next visit. */
   const restart = useCallback(() => {
     clearTimeout(replyTimer.current);
@@ -328,8 +328,8 @@ export function ContactHub() {
   }, []);
 
   /**
-   * The one place an answer becomes bubbles. Both entry points — a tapped chip
-   * and a typed question — end here, which is what keeps them looking like one
+   * The one place an answer becomes bubbles. Both entry points, a tapped chip
+   * and a typed question, end here, which is what keeps them looking like one
    * assistant rather than two features that happen to share a panel.
    */
   const land = useCallback(
@@ -360,7 +360,7 @@ export function ContactHub() {
       clearTimeout(replyTimer.current);
       replyTimer.current = window.setTimeout(() => {
         // Never re-offer the question just answered, and always leave a way out
-        // to a human — the tree has to bottom out somewhere useful.
+        // to a human, the tree has to bottom out somewhere useful.
         const next = (topic.followUps ?? rootTopics).filter((t) => t !== topicId);
         land(n, topic.reply, topic.actions, topicId === "other" ? next : [...next, "other"]);
       }, REPLY_MS);
@@ -369,7 +369,7 @@ export function ContactHub() {
   );
 
   /**
-   * The typed path. Same thread, same pending indicator, same chips — the only
+   * The typed path. Same thread, same pending indicator, same chips, the only
    * difference from `ask` is that the answer comes over the wire, which is
    * exactly the seam a real model plugs into (`app/api/assistant/route.ts`).
    */
@@ -389,7 +389,7 @@ export function ContactHub() {
       const controller = new AbortController();
       inFlight.current = controller;
 
-      // Sent, not used — the matcher behind the route is stateless. It's here so
+      // Sent, not used, the matcher behind the route is stateless. It's here so
       // that swapping in a conversational model is genuinely a one-file change
       // rather than one file plus a client deploy.
       const history = log.current
@@ -415,7 +415,7 @@ export function ContactHub() {
         if (controller.signal.aborted) return;
         land(n, data.reply, data.actions, data.followUps ?? rootTopics);
       } catch (err) {
-        // An abort is a reset or an unmount, not a failure — the thread it was
+        // An abort is a reset or an unmount, not a failure, the thread it was
         // going to land in no longer exists, so saying anything would be worse
         // than saying nothing.
         if ((err as Error)?.name === "AbortError") return;
@@ -423,7 +423,7 @@ export function ContactHub() {
         // on us being up. Never a silent dead input.
         land(
           n,
-          ["Sorry — that didn't go through on our end. Quickest way past me is the phone."],
+          ["Sorry, that didn't go through on our end. Quickest way past me is the phone."],
           [
             {
               label: `Call ${site.contact.phone}`,
@@ -472,7 +472,7 @@ export function ContactHub() {
 
   // Focus the panel itself rather than its first control. The first control is
   // the close button, and landing a keyboard or screen-reader user on "close"
-  // is an invitation to leave — from the container, the header introduces
+  // is an invitation to leave, from the container, the header introduces
   // itself and Tab walks forward through the conversation in reading order.
   //
   // Deliberately NOT the composer, though it is now the obvious candidate:
@@ -563,7 +563,7 @@ export function ContactHub() {
     };
 
     // Reading `scrollHeight` forces a layout, so this must not run per scroll
-    // event — on a long page on a mid-range phone that's a reflow per frame of
+    // event, on a long page on a mid-range phone that's a reflow per frame of
     // flick momentum, for a measurement that only has to be right once.
     function onScroll() {
       if (frame) return;
@@ -612,7 +612,7 @@ export function ContactHub() {
         never takes focus. Someone reading with a screen reader hears it at the
         end of the current phrase and can carry on ignoring it.
 
-        The live region is always mounted — an `aria-live` container inserted
+        The live region is always mounted: an `aria-live` container inserted
         at the same moment as its content usually doesn't announce at all.
 
         Shaped as an actual message preview rather than a speech bubble: it is
@@ -707,7 +707,7 @@ export function ContactHub() {
             ref={scrollRef}
             id={bodyId}
             role="tabpanel"
-            aria-labelledby={tab === "chat" ? chatTabId : contactTabId}
+            aria-labeledby={tab === "chat" ? chatTabId : contactTabId}
             // `overscroll-contain` rather than a body scroll lock: this is a
             // popover, not a modal. Freezing the page behind a non-modal
             // element traps someone who tapped it by accident.
@@ -719,7 +719,7 @@ export function ContactHub() {
             {tab === "chat" ? (
               <div className="flex flex-col gap-2.5" role="log" aria-live="polite">
                 {messages.map((m, i) => {
-                  // Avatar once per run of consecutive assistant messages —
+                  // Avatar once per run of consecutive assistant messages,
                   // repeating it beside every bubble turns a conversation into
                   // a list of notifications.
                   const leads = m.from === "bot" && messages[i - 1]?.from !== "bot";
@@ -773,7 +773,7 @@ export function ContactHub() {
                 )}
 
                 {/* Right-aligned, because these are the visitor's words about to
-                    become the visitor's message — they belong on the visitor's
+                    become the visitor's message, so they belong on the visitor's
                     side of the thread before they're tapped, not after. */}
                 {chips.length > 0 && !thinking && (
                   <div className="flex flex-col items-end gap-2 pt-1">
@@ -819,8 +819,8 @@ export function ContactHub() {
 
           {/* ── Composer ───────────────────────────────────────────────────
               Additive, not a replacement. The chips above stay the fast path
-              for the four questions most visitors actually have — one tap
-              beats a sentence — and this is for everything off-script.
+              for the four questions most visitors actually have (one tap
+              beats a sentence) and this is for everything off-script.
 
               Below the log and above the tab strip, which is where every chat
               app on the visitor's phone has trained them to look for it. */}
@@ -849,13 +849,13 @@ export function ContactHub() {
                 className={cn(
                   "min-h-[44px] min-w-0 flex-1 rounded-full border border-ink-200 bg-sand-50 px-4 text-ink-800",
                   // 16px on mobile, because anything smaller makes iOS Safari
-                  // zoom the page on focus — and it never zooms back out.
+                  // zoom the page on focus, and it never zooms back out.
                   //
                   // Exactly one `text-*` size across this whole list, for the
                   // reason the AVATAR table at the top of this file spells out:
                   // `cn` is a plain joiner with no conflict resolution, so a
                   // stray `text-sm` alongside this would be settled by
-                  // stylesheet order rather than by call order — and it was,
+                  // stylesheet order rather than by call order, and it was,
                   // silently, until a viewport measurement caught it.
                   "text-base sm:text-sm",
                   "placeholder:text-ink-300 focus:border-hydro-500 focus:bg-white focus:outline-none",
@@ -898,7 +898,7 @@ export function ContactHub() {
             >
               <span className="relative grid h-5 w-5 place-items-center">
                 <Icon name="chat" className="h-5 w-5" />
-                {/* Mint, the site's "smart/clean" indicator — R1 keeps signal
+                {/* Mint, the site's "smart/clean" indicator. R1 keeps signal
                     for conversion actions only. */}
                 <Icon
                   name="sparkle"

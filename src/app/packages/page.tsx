@@ -11,7 +11,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Cleaning Packages — Bundle & Save",
+  title: "Cleaning Packages: Bundle & Save",
   description:
     "Combine services onto one visit and save 12–20%. Whole-home exterior resets, curb appeal packages, listing prep and commercial programs.",
   alternates: { canonical: "/packages" },
@@ -33,8 +33,8 @@ export default function PackagesPage() {
         variant="page"
         breadcrumbs={crumbs}
         title="One visit. Several surfaces. Real savings."
-        lede="The truck, the crew and the setup are already paid for — so every surface we add to the same visit costs less than booking it alone. That's the whole idea."
-        primaryCta={{ label: "Get My Free Quote", href: "/quote" }}
+        lede="The truck, the crew and the setup are already paid for, so every surface we add to the same visit costs less than booking it alone. That's the whole idea."
+        primaryCta={{ label: "Get my free quote", href: "/quote" }}
       />
 
       <Section tone="light">

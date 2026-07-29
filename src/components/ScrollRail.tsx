@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
  * a `<dialog>`. The scrolling here is the browser's; all this component adds
  * is two buttons that call `scrollBy`.
  *
- * Children are rendered by the *server* and passed through — the client
+ * Children are rendered by the *server* and passed through, the client
  * boundary is this shell only, so the cards themselves cost nothing on the
  * wire beyond their HTML.
  *
@@ -85,11 +85,11 @@ export function ScrollRail({
     // as the right thing and isn't: an explicit role REPLACES the implicit one,
     // so the `<ul>` stopped being a list in the accessibility tree and every
     // `<li>` inside it became an orphan. Screen readers lost "list, 6 items"
-    // and the item count with it — the one piece of information a rail of
+    // and the item count with it, the one piece of information a rail of
     // horizontally-scrolled cards most needs to convey, since you can't see
     // how many there are. Lighthouse flags it as `listitem`.
     //
-    // `group` on the wrapper keeps the labelled, non-landmark region the
+    // `group` on the wrapper keeps the labeled, non-landmark region the
     // focusable scroller wants, and hands the list its semantics back.
     <div className={className} role="group" aria-label={label}>
       <ul
@@ -105,7 +105,7 @@ export function ScrollRail({
           // scrollLeft: 20 instead of 0 and the Previous button can never
           // report itself as being at the start.
           "scroll-px-5 sm:scroll-px-8",
-          // The rail itself is the scroller — hide its bar, the buttons and the
+          // The rail itself is the scroller, hide its bar, the buttons and the
           // peeking card are the affordance.
           "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
         )}
@@ -120,7 +120,7 @@ export function ScrollRail({
             type="button"
             onClick={() => scrollByPage(-1)}
             disabled={atStart}
-            aria-label={`Previous — ${label}`}
+            aria-label={`Previous: ${label}`}
             className={btn(atStart)}
           >
             <Icon name="arrow" className="h-4 w-4 rotate-180" />
@@ -129,7 +129,7 @@ export function ScrollRail({
             type="button"
             onClick={() => scrollByPage(1)}
             disabled={atEnd}
-            aria-label={`Next — ${label}`}
+            aria-label={`Next: ${label}`}
             className={btn(atEnd)}
           >
             <Icon name="arrow" className="h-4 w-4" />

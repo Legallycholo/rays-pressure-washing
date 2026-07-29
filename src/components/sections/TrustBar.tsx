@@ -4,7 +4,7 @@ import { Icon } from "@/components/ui/Icon";
 import { RatingBadge } from "@/components/ui/Rating";
 import { Reveal } from "@/components/Reveal";
 
-/** SECTIONS.md §2.3 — answers "are these people legitimate" in the first scroll. */
+/** SECTIONS.md §2.3, answers "are these people legitimate" in the first scroll. */
 export function TrustBar({
   items,
   badges,
@@ -14,7 +14,7 @@ export function TrustBar({
   /**
    * Optional richer form of the same credentials. Each entry renders as its
    * issuer's badge art when `logoSrc` is filled in, and falls back to the
-   * plain text chip when it isn't — which is the state everything ships in,
+   * plain text chip when it isn't, which is the state everything ships in,
    * because a fabricated trust mark is worse than no trust mark.
    */
   badges?: readonly CredentialBadge[];
@@ -32,7 +32,7 @@ export function TrustBar({
             <img
               key={b.label}
               src={b.logoSrc}
-              alt={`${b.label} — ${b.issuer}`}
+              alt={`${b.label}, ${b.issuer}`}
               className="h-9 w-auto max-w-[9rem] object-contain"
             />
           ))}

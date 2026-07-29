@@ -1,17 +1,17 @@
 /**
  * Everything the contact hub's assistant can say, and every channel it can hand
  * off to. Content lives here rather than inside `ContactHub.tsx` for the same
- * reason the service catalogue does: the copy is the thing that will change
+ * reason the service catalog does: the copy is the thing that will change
  * weekly, and it should be editable without reading a line of React.
  *
- * WHAT THIS IS. A scripted assistant — a decision tree with real answers, not a
+ * WHAT THIS IS. A scripted assistant, a decision tree with real answers, not a
  * language model. That distinction is load-bearing:
  *
  *   - Every answer below is written by a human and is true. A visitor asking
  *     about roof warranties gets the ARMA answer from `faqs.ts`, not a
  *     plausible-sounding paragraph.
  *   - There is a free-text composer, but it does not generate text. It runs
- *     `matchTopic()` below — keyword scoring over this same tree — and returns
+ *     `matchTopic()` below (keyword scoring over this same tree) and returns
  *     one of these hand-written answers or hands off to a human. Still nothing
  *     to hallucinate into.
  *   - It speaks in the company's voice rather than narrating its own
@@ -21,9 +21,9 @@
  * ── SWAPPING IN A REAL MODEL ────────────────────────────────────────────────
  * The seam is now `src/app/api/assistant/route.ts`, and it is one file wide.
  * `ContactHub` POSTs free text there and renders the `{ reply, actions }` that
- * comes back — the same shape a topic has. Replace the matcher inside that
+ * comes back, the same shape a topic has. Replace the matcher inside that
  * route with a Dialogflow CX / Vertex AI call and nothing in this file or in
- * the component moves. The scripted tree stays as the offline path — a chat
+ * the component moves. The scripted tree stays as the offline path, a chat
  * that answers nothing when the model is down or the key expired is worse than
  * the menu it replaced.
  *
@@ -38,7 +38,7 @@ import { locations } from "@/content/locations";
 /** A link rendered as a row inside a chat answer or the contact directory. */
 export type AssistantAction = {
   label: string;
-  /** Secondary line. Optional — omit rather than pad it with filler. */
+  /** Secondary line. Optional, omit rather than pad it with filler. */
   detail?: string;
   href: string;
   /** Name from `components/ui/Icon.tsx`. */
@@ -50,7 +50,7 @@ export type AssistantAction = {
   /**
    * The one filled row in its group.
    *
-   * R2 — filled means `hydro`, never `signal`. Orange stays reserved for the
+   * R2: filled means `hydro`, never `signal`. Orange stays reserved for the
    * in-flow CTA the visitor scrolled to; this hub is the one they didn't.
    */
   primary?: boolean;
@@ -58,7 +58,7 @@ export type AssistantAction = {
 
 export type AssistantTopic = {
   id: string;
-  /** The chip the visitor taps — and verbatim what their own bubble then says. */
+  /** The chip the visitor taps, and verbatim what their own bubble then says. */
   chip: string;
   /** One bubble per string, in order. Two is the ceiling; three is a wall of text. */
   reply: string[];
@@ -68,7 +68,7 @@ export type AssistantTopic = {
   /**
    * Free-text triggers, scored by `matchTopic`. Lowercase, no punctuation.
    *
-   * Write the words a customer would type, not the words we'd use — "how much",
+   * Write the words a customer would type, not the words we'd use, "how much",
    * "ballpark", "expensive" beat "pricing schedule". Multi-word entries are
    * matched as phrases and score higher than single words, which is what stops
    * "how long does a quote take" landing on `lasts` because of "how long".
@@ -81,7 +81,7 @@ export type AssistantTopic = {
 
    `site.hours` is the source of truth and feeds LocalBusiness schema, so a
    second hand-written copy of it in chat copy is a guaranteed future
-   contradiction — the kind nobody notices until a customer turns up on a
+   contradiction, the kind nobody notices until a customer turns up on a
    Sunday.
    ------------------------------------------------------------------------- */
 
@@ -94,7 +94,7 @@ const to12h = (t: string) => {
 const shortDays = (d: string) =>
   d.replace(/\b(Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day\b/g, (_, stem) => stem.slice(0, 3)).replace(" – ", "–");
 
-/** e.g. "Mon–Fri 7am–6pm · Sat 8am–4pm" — closed days drop out. */
+/** e.g. "Mon–Fri 7am–6pm · Sat 8am–4pm", closed days drop out. */
 export const hoursLine = site.hours
   .filter((h) => h.close)
   .map((h) => `${shortDays(h.days)} ${to12h(h.open)}–${to12h(h.close)}`)
@@ -105,7 +105,7 @@ export const hoursLine = site.hours
    ------------------------------------------------------------------------- */
 
 export const greeting =
-  `Hey — you've reached ${site.shortName}. Ask away about pricing, what we ` +
+  `Hey, you've reached ${site.shortName}. Ask away about pricing, what we ` +
   `clean, or getting on the schedule, and if you'd rather talk it through ` +
   `I'll put you straight onto the crew.`;
 
@@ -113,7 +113,7 @@ export const greeting =
 export const greetingPrompt = "What can I help with?";
 
 /**
- * The opening chips. Four, deliberately — this is the "pick one" moment and a
+ * The opening chips. Four, deliberately, this is the "pick one" moment and a
  * list long enough to need reading is a list that gets ignored. Everything else
  * in the tree is reachable as a follow-up.
  */
@@ -125,7 +125,7 @@ export const assistantTopics: AssistantTopic[] = [
     chip: "How much will it cost?",
     reply: [
       "Almost everything we do prices off measured surface area, so a number guessed from here would be worth nothing to you.",
-      "The estimator asks a few questions about your property and gives you a real range in about a minute. It's built from our own job data — if the surfaces measure up as you describe them, the final quote lands inside it.",
+      "The estimator asks a few questions about your property and gives you a real range in about a minute. It's built from our own job data. If the surfaces measure up as you describe them, the final quote lands inside it.",
     ],
     actions: [
       {
@@ -170,11 +170,11 @@ export const assistantTopics: AssistantTopic[] = [
   {
     id: "services",
     chip: "What do you clean?",
-    // Mirrors the catalogue in `services.ts`. If a service is added there and
+    // Mirrors the catalog in `services.ts`. If a service is added there and
     // this line isn't updated, this line is the one that's wrong.
     reply: [
       "Residential: roofs, siding, driveways and walkways, decks, patios, fences, gutters, windows and pool enclosures.",
-      "Commercial: building envelopes, storefronts and parking lots — usually overnight, so nothing happens during trading hours.",
+      "Commercial: building envelopes, storefronts and parking lots. Usually overnight, so nothing happens during trading hours.",
     ],
     actions: [
       { label: "Browse every service", href: "/services", icon: "spray", internal: true },
@@ -230,7 +230,7 @@ export const assistantTopics: AssistantTopic[] = [
     chip: "How soon can you come out?",
     reply: [
       `Most quotes go out same day, and typical lead time to the visit itself is a few days. We're on the phones ${hoursLine}.`,
-      "You don't need to be home — we need an outdoor spigot and access to any gated areas, that's it. Heavy rain or lightning means we reschedule, and we call you that morning rather than leave you waiting.",
+      "You don't need to be home. We need an outdoor spigot and access to any gated areas, and that's it. Heavy rain or lightning means we reschedule, and we call you that morning rather than leave you waiting.",
     ],
     actions: [
       {
@@ -275,7 +275,7 @@ export const assistantTopics: AssistantTopic[] = [
     id: "human",
     chip: "Rather talk it through?",
     reply: [
-      `Of course. Fastest is the phone — someone picks up on the truck ${hoursLine}. Outside those hours, text or WhatsApp and you'll have a reply first thing.`,
+      `Of course. Fastest is the phone: someone picks up on the truck ${hoursLine}. Outside those hours, text or WhatsApp and you'll have a reply first thing.`,
     ],
     actions: [
       {
@@ -315,7 +315,7 @@ export const assistantTopics: AssistantTopic[] = [
     // Condensed from the `soft-vs-pressure` FAQ.
     reply: [
       "Pressure removes dirt with force; soft washing removes it with chemistry, at about garden-hose pressure.",
-      "Anything alive — algae, mildew, lichen — has to be killed or it regrows in months. Anything porous or fragile gets damaged by high pressure. So: pressure on hard flatwork like concrete, soft wash on nearly everything else.",
+      "Anything alive (algae, mildew, lichen) has to be killed or it regrows in months. Anything porous or fragile gets damaged by high pressure. So: pressure on hard flatwork like concrete, soft wash on nearly everything else.",
     ],
     actions: [{ label: "Read the full FAQ", href: "/faq", icon: "chat", internal: true }],
     followUps: ["safety", "lasts", "price"],
@@ -347,8 +347,8 @@ export const assistantTopics: AssistantTopic[] = [
     chip: "Is it safe for my plants and roof?",
     // Condensed from `plants-safe`, `roof-warranty` and `wood-damage`.
     reply: [
-      "Plants: detergents are biodegradable and break down on contact with water. We saturate every bed and lawn edge before we start and rinse again at the end — dilution is what keeps them safe. Pets indoors while we work, back out once surfaces are dry.",
-      "Roofs: our no-pressure method follows the ARMA standard your shingle warranty is written against — most manufacturers require algae removal and specifically prohibit pressure washing. Timber gets the lowest pressure we run, wide fan, along the grain.",
+      "Plants: detergents are biodegradable and break down on contact with water. We saturate every bed and lawn edge before we start and rinse again at the end. Dilution is what keeps them safe. Pets indoors while we work, back out once surfaces are dry.",
+      "Roofs: our no-pressure method follows the ARMA standard your shingle warranty is written against. Most manufacturers require algae removal and specifically prohibit pressure washing. Wood gets the lowest pressure we run, wide fan, along the grain.",
     ],
     actions: [{ label: "All safety questions", href: "/faq", icon: "shield", internal: true }],
     followUps: ["lasts", "trust", "booking"],
@@ -453,7 +453,7 @@ export const assistantTopics: AssistantTopic[] = [
     id: "area",
     chip: "Do you cover my area?",
     reply: [
-      `We work across ${site.serviceRegion}. The coverage map has every city we run routes through — if you're on the edge of it, ask anyway, we'll tell you straight.`,
+      `We work across ${site.serviceRegion}. The coverage map has every city we run routes through. If you're on the edge of it, ask anyway and we'll tell you straight.`,
     ],
     actions: [{ label: "Check the coverage map", href: "/service-areas", icon: "pin", internal: true }],
     followUps: ["booking", "price", "human"],
@@ -482,7 +482,7 @@ export const assistantTopics: AssistantTopic[] = [
     id: "payment",
     chip: "When do I pay?",
     reply: [
-      "After the work is done and you've seen the result — no deposit on standard residential jobs. Card, bank transfer and the usual digital wallets, with an itemised invoice by email.",
+      "After the work is done and you've seen the result. No deposit on standard residential jobs. Card, bank transfer and the usual digital wallets, with an itemized invoice by email.",
     ],
     followUps: ["price", "booking", "trust"],
     keywords: [
@@ -507,7 +507,7 @@ export const assistantTopics: AssistantTopic[] = [
     id: "bundles",
     chip: "Is there a package deal?",
     reply: [
-      "Yes — bundling surfaces into one visit is cheaper than booking them separately, because most of the cost is getting the truck and the crew to you.",
+      "Yes. Bundling surfaces into one visit is cheaper than booking them separately, because most of the cost is getting the truck and the crew to you.",
     ],
     actions: [
       { label: "See the packages", href: "/packages", icon: "check", internal: true },
@@ -544,7 +544,7 @@ export const assistantTopics: AssistantTopic[] = [
     id: "other",
     chip: "Something else",
     reply: [
-      "Let me get you to someone who can dig into that properly — quickest is the phone, or write it out and we'll come back to you by email.",
+      "Let me get you to someone who can dig into that properly. Quickest is the phone, or write it out and we'll come back to you by email.",
     ],
     actions: [
       {
@@ -559,22 +559,22 @@ export const assistantTopics: AssistantTopic[] = [
   },
 
   /**
-   * Reachable from free text only — never offered as a chip, because nobody
+   * Reachable from free text only, never offered as a chip, because nobody
    * taps "what are you" off a menu, and putting it on one would make the whole
    * hub about itself instead of about their driveway.
    *
    * It exists because the rest of this file now speaks in the company's voice
    * with no "I am not a person" clause in it, which is a brand-voice decision,
-   * not a licence to answer this question dishonestly. Someone who asks
+   * not a license to answer this question dishonestly. Someone who asks
    * directly gets a direct answer and a route to a human in the same breath.
    * California's B.O.T. Act (Bus. & Prof. Code §17941) is the specific reason
-   * this topic is not optional — do not delete it to tidy up the tree.
+   * this topic is not optional, do not delete it to tidy up the tree.
    */
   {
     id: "identity",
     chip: "Am I talking to a person?",
     reply: [
-      "Straight answer: no — I'm the automated assistant on the website, and everything I say is written by the crew ahead of time.",
+      "Straight answer: no. I'm the automated assistant on the website, and everything I say is written by the crew ahead of time.",
       "If you'd rather have an actual person, that's one tap away and they're quick.",
     ],
     actions: [
@@ -624,7 +624,7 @@ export const getTopic = (id: string) => assistantTopics.find((t) => t.id === id)
 
    Deliberately dumb, and that is the feature. Everything this returns is a
    topic from the array above, so the worst case is the wrong hand-written
-   answer plus a route to a human — never an invented one. See the route file
+   answer plus a route to a human, never an invented one. See the route file
    for where a real model would replace this.
    ------------------------------------------------------------------------- */
 
@@ -633,7 +633,7 @@ export const getTopic = (id: string) => assistantTopics.find((t) => t.id === id)
  *
  * The padding is what makes `includes(" cost ")` a word-boundary test: without
  * it "cost" matches inside "costume" and, worse, "ai" matches inside "rain" and
- * "paint" — which would route half the roof questions to the identity answer.
+ * "paint", which would route half the roof questions to the identity answer.
  */
 const normalize = (text: string) =>
   ` ${text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim()} `;
@@ -652,7 +652,7 @@ const scoreOf = (keyword: string) => {
 /**
  * Best topic for a free-text question, or `null` if nothing matched.
  *
- * `null` is a real answer — the caller is expected to fall back to the `other`
+ * `null` is a real answer, the caller is expected to fall back to the `other`
  * topic, which hands off to a person. Guessing at a low-confidence match would
  * trade a useful "let me get someone" for a confident irrelevance.
  */
@@ -668,7 +668,7 @@ export function matchTopic(text: string): AssistantTopic | null {
     for (const keyword of topic.keywords ?? []) {
       if (haystack.includes(` ${keyword} `)) score += scoreOf(keyword);
     }
-    // Strictly greater, so ties go to the earlier topic — which is the order
+    // Strictly greater, so ties go to the earlier topic, which is the order
     // the root chips are in, i.e. the questions we most expect.
     if (score > bestScore) {
       bestScore = score;
@@ -680,7 +680,7 @@ export function matchTopic(text: string): AssistantTopic | null {
 }
 
 /* ---------------------------------------------------------------------------
-   The contact directory — the hub's second tab
+   The contact directory, the hub's second tab
 
    Same channels the hub always offered, grouped by what the visitor is actually
    choosing between: "I want an answer now" versus "I'll leave it with you".

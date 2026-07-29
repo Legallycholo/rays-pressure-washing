@@ -4,16 +4,16 @@ import { ImageResponse } from "next/og";
 import { site } from "@/content/site";
 
 /**
- * Default social card — uses the real logo lockup from `public/logo.jpg` on the
+ * Default social card, uses the real logo lockup from `public/logo.jpg` on the
  * same hydro-mesh canvas as before so shares match the live site identity.
  */
 
-export const alt = `${site.legalName} — ${site.tagline}`;
+export const alt = `${site.legalName} · ${site.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function OpengraphImage() {
-  // The de-matted PNG, not the flattened JPEG — otherwise the lockup sits in a
+  // The de-matted PNG, not the flattened JPEG: otherwise the lockup sits in a
   // black box on the mesh canvas.
   const logoData = await readFile(join(process.cwd(), "public/logo.png"));
   const logoSrc = `data:image/png;base64,${logoData.toString("base64")}`;

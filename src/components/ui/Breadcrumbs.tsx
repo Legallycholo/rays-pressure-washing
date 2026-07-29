@@ -23,7 +23,7 @@ export function Breadcrumbs({ crumbs, onDark = false }: { crumbs: Crumb[]; onDar
                 // because the crumbs sit in a horizontal row: vertical
                 // expansion is free real estate, and expanding the box itself
                 // would push a breadcrumb bar to 44px tall on every page.
-                // Vertical only — horizontal would overlap the next crumb and
+                // Vertical only, horizontal would overlap the next crumb and
                 // hand taps to the wrong link.
                 <Link
                   href={c.href}

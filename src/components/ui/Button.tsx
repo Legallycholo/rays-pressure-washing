@@ -6,7 +6,7 @@ type Size = "sm" | "md" | "lg";
 
 /**
  * `primary` is Signal orange and is reserved for the main conversion action.
- * Never put two primaries in the same viewport — if everything is primary,
+ * Never put two primaries in the same viewport, if everything is primary,
  * nothing is.
  */
 const variants: Record<Variant, string> = {
@@ -35,7 +35,7 @@ const sizes: Record<Size, string> = {
 // site: most traffic is mobile, hover doesn't exist there, and without a press
 // state a tap on a slow connection looks like nothing happened. Compositor-only
 // (transform), and it composes with the translate above rather than replacing
-// it — Tailwind's transform utilities each own their own variable.
+// it, Tailwind's transform utilities each own their own variable.
 const base =
   "no-tap-flash inline-flex max-w-full items-center justify-center rounded-pill text-center transition-all duration-200 " +
   "hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] " +

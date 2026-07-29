@@ -78,8 +78,8 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
             </Badge>
           </>
         }
-        primaryCta={{ label: "Get My Free Quote", href: `/quote?services=${service.slug}` }}
-        secondaryCta={{ label: site.contact.phone, href: `tel:${site.contact.phoneHref}` }}
+        primaryCta={{ label: "Get my free quote", href: `/quote?services=${service.slug}` }}
+        secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
       />
 
       {/* Intro + what's included */}
@@ -149,7 +149,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
           heading={{
             eyebrow: "While we're there",
             title: `${service.name} pairs well with…`,
-            lede: "The setup's already done — adding surfaces to the same visit is the cheapest they'll ever be.",
+            lede: "The setup's already done, so adding surfaces to the same visit is the cheapest they'll ever be.",
           }}
         />
       )}
@@ -164,7 +164,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
         variant="inline"
         title={`Ready for ${service.name.toLowerCase()}?`}
         lede="Free quote, usually same-day."
-        primaryCta={{ label: "Start My Quote", href: `/quote?services=${service.slug}` }}
+        primaryCta={{ label: "Start my quote", href: `/quote?services=${service.slug}` }}
       />
 
       {serviceFaqs.length > 0 && (
@@ -175,7 +175,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
         />
       )}
 
-      {/* Cities + related — the internal-linking block */}
+      {/* Cities + related: the internal-linking block */}
       <Section tone="light">
         <SectionHeading
           eyebrow="Where"

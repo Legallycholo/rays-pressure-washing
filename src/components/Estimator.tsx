@@ -74,7 +74,7 @@ export function Estimator() {
           >
             {services.map((s) => (
               <option key={s.slug} value={s.slug}>
-                {s.name} — from {currency(s.pricing.from)}/{s.pricing.unit}
+                {s.name}, from {currency(s.pricing.from)}/{s.pricing.unit}
               </option>
             ))}
           </select>
@@ -116,8 +116,8 @@ export function Estimator() {
           </div>
         </fieldset>
 
-        {/* The label is the tap target — clicking anywhere in it toggles the
-            box — so the row, not the 18px checkbox, is what has to clear 44px.
+        {/* The label is the tap target (clicking anywhere in it toggles the
+            box) so the row, not the 18px checkbox, is what has to clear 44px.
             The box itself still grows a little: someone aiming at it rather
             than at the words deserves to hit it. */}
         <label className="flex min-h-[44px] items-center gap-2.5 py-1 text-sm text-ink-600 sm:col-span-2">
@@ -128,7 +128,7 @@ export function Estimator() {
             className="h-5 w-5 shrink-0 rounded accent-hydro-600"
           />
           I&apos;m more than {travelPolicy.freeRadiusMinutes} minutes from town (+
-          {currency(travelPolicy.surcharge)} travel, waived when a neighbour books too)
+          {currency(travelPolicy.surcharge)} travel, waived when a neighbor books too)
         </label>
       </div>
 
@@ -138,7 +138,7 @@ export function Estimator() {
             <p className="text-xs font-bold uppercase tracking-wider text-mint-400">Your ballpark</p>
             {/* Small jobs clamp to the minimum on BOTH ends. Rendering that as
                 "$250 – $250" reads like a broken widget, so show it as a floor
-                instead — still not a point estimate, which is the rule that
+                instead, still not a point estimate, which is the rule that
                 matters (STRUCTURE.md §9.2). */}
             {range.low === range.high ? (
               <>
@@ -146,7 +146,7 @@ export function Estimator() {
                 <p className="mt-1.5 text-xs text-ink-300">
                   A job that size lands on our{" "}
                   {currency(service.pricing.minimum)} minimum call-out for{" "}
-                  {service.name.toLowerCase()} — it costs us the same to show up.
+                  {service.name.toLowerCase()}. It costs us the same to show up.
                 </p>
               </>
             ) : (
@@ -157,14 +157,14 @@ export function Estimator() {
           </>
         ) : (
           <p className="text-ink-200">
-            Enter a rough {service.pricing.unit === "per item" ? "count" : "size"} above — a
-            guess is fine — and the range appears here.
+            Enter a rough {service.pricing.unit === "per item" ? "count" : "size"} above, a
+            guess is fine, and the range appears here.
           </p>
         )}
-        {/* Honesty disclaimer — faqs.ts → quote-accuracy. Non-negotiable (§9.2). */}
+        {/* Honesty disclaimer: faqs.ts → quote-accuracy. Non-negotiable (§9.2). */}
         <p className="mt-3 border-t border-white/10 pt-3 text-xs leading-relaxed text-ink-300">
           A genuine ballpark, not a lead-capture trick. If your surfaces measure up as
-          described, the final quote lands inside this range — and if anything differs on
+          described, the final quote lands inside this range. If anything differs on
           site, we tell you before we start, never after.
         </p>
       </div>
@@ -173,7 +173,7 @@ export function Estimator() {
         <p className="mt-4 rounded-card bg-mint-400/10 p-3.5 text-sm text-ink-700 ring-1 ring-mint-500/25">
           <Icon name="sparkle" className="mr-1.5 inline h-4 w-4 text-mint-600" />
           Add {bundleHint.others.join(" + ")} and it becomes the{" "}
-          <strong>{bundleHint.bundle.name}</strong> package —{" "}
+          <strong>{bundleHint.bundle.name}</strong> package:{" "}
           <strong>{bundleHint.bundle.savingsPercent}% off everything</strong>.
         </p>
       )}

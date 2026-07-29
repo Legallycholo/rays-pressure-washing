@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 export type Stat = { value: string; label: string; suffix?: string };
 
 /**
- * SECTIONS.md §2.16 — no count-up animation, by rule.
+ * SECTIONS.md §2.16, no count-up animation, by rule.
  *
  * The row fades in as one block; the numbers themselves never animate. A
  * count-up delays the figure being readable and re-triggers every time the row

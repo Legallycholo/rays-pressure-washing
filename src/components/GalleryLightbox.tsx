@@ -14,7 +14,7 @@ import { replaceQuery } from "@/lib/url";
  * Full-size project viewer, built on the native <dialog>.
  *
  * `showModal()` gives us the focus trap, the inert background, `Esc`-to-close
- * and `::backdrop` for free — all of which a modal library reimplements, less
+ * and `::backdrop` for free, all of which a modal library reimplements, less
  * well, for ~15kB. There is nothing here a dependency would improve.
  *
  * State lives in `?project=<id>`, the same convention `GalleryExplorer` already
@@ -33,7 +33,7 @@ export function GalleryLightbox({ projects }: { projects: Project[] }) {
 
   // Whether this open state came from a click in the page (the trigger <Link>
   // pushed a history entry, so closing should pop it) or from someone landing
-  // on a shared ?project= URL (nothing was pushed — popping would walk them
+  // on a shared ?project= URL (nothing was pushed, popping would walk them
   // off the site). Detected from the click itself rather than inferred from
   // render order, which is not reliable: a statically prerendered page can
   // render once with empty search params before hydration fills them in, and
@@ -87,7 +87,7 @@ export function GalleryLightbox({ projects }: { projects: Project[] }) {
     if (project && !dlg.open) dlg.showModal();
     if (!project && dlg.open) dlg.close();
 
-    // showModal() blocks interaction but not scrolling — lock it ourselves.
+    // showModal() blocks interaction but not scrolling, lock it ourselves.
     document.documentElement.classList.toggle("overflow-hidden", Boolean(project));
 
     if (project) {
@@ -115,7 +115,7 @@ export function GalleryLightbox({ projects }: { projects: Project[] }) {
         if (openId) close();
       }}
       onKeyDown={(e) => {
-        // The comparison slider inside is an <input type="range"> — arrow keys
+        // The comparison slider inside is an <input type="range">, arrow keys
         // there belong to the slider, not to project navigation.
         if ((e.target as HTMLElement).tagName === "INPUT") return;
         if (e.key === "ArrowRight") {

@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Scroll-linked stacking deck — cards pin one after another, each new card
+ * Scroll-linked stacking deck, cards pin one after another, each new card
  * sliding over the last while the one underneath recedes.
  *
  * Not scroll-jacking (STRUCTURE.md §10.4). Nothing here intercepts wheel or
@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
  * `position: sticky`, and the only thing JS contributes is reading where they
  * currently are and writing a 0–1 progress number back as a CSS custom
  * property. Take the JS away and you still have a readable, correctly spaced
- * list of cards — it just stops receding as it stacks.
+ * list of cards, it just stops receding as it stacks.
  *
  * That also means the section's height is reserved by the document itself
  * before any JS runs, so there is no layout shift when the effect initialises.
@@ -31,7 +31,7 @@ import { cn } from "@/lib/utils";
  * function of scroll position.
  *
  * `--i` drives the cascading pin offset in CSS, so it has to be inline on each
- * card — it must be correct on first paint, before this component mounts.
+ * card, it must be correct on first paint, before this component mounts.
  * ───────────────────────────────────────────────────────────────────────────
  */
 
@@ -86,7 +86,7 @@ export function StackingCards({
       }
     };
 
-    // One calculation per frame, never per scroll event — a trackpad can fire
+    // One calculation per frame, never per scroll event, a trackpad can fire
     // scroll far faster than the compositor paints.
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(measure);
@@ -114,8 +114,8 @@ export function StackingCards({
     };
 
     /**
-     * Below `lg` the deck isn't a deck — it's the plain list the CSS falls back
-     * to — and under reduced motion it's plain flow at every width. In both
+     * Below `lg` the deck isn't a deck, it's the plain list the CSS falls back
+     * to, and under reduced motion it's plain flow at every width. In both
      * cases the listener has to genuinely not exist rather than merely have no
      * visible effect: an attached handler still costs work on every scroll
      * event, which on the phones this site is mostly read on is battery spent

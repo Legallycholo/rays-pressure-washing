@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 
 /**
  * SECTIONS.md §2.7. Placed after results + guarantee, while "keep it looking
- * like this" is the obvious next thought. Teaser only — the three-tier
+ * like this" is the obvious next thought. Teaser only, the three-tier
  * comparison lives on /maintenance-plan.
  */
 export function MaintenanceTeaser({ plan, terms }: { plan: MaintenancePlan; terms: string }) {
@@ -22,7 +22,7 @@ export function MaintenanceTeaser({ plan, terms }: { plan: MaintenancePlan; term
             Clean once, then keep it that way
           </h2>
           <p className="leading-relaxed text-ink-500">
-            Growth comes back on a schedule — 12 to 18 months for siding, faster in
+            Growth comes back on a schedule: 12 to 18 months for siding, faster in
             the shade. A maintenance plan puts the next visit on our calendar instead
             of your to-do list, at a lower rate than booking one-off.
           </p>
@@ -40,7 +40,7 @@ export function MaintenanceTeaser({ plan, terms }: { plan: MaintenancePlan; term
         </div>
 
         <div className="rounded-card bg-white p-8 shadow-lift ring-1 ring-ink-900/5">
-          {/* Terms lead — "cancel any time" is the objection, answer it first */}
+          {/* Terms lead: "cancel any time" is the objection, answer it first */}
           <Badge tone="mint">Month-to-month · cancel any time</Badge>
           <h3 className="mt-4 font-display text-2xl text-ink-900">{plan.name}</h3>
           <p className="mt-1 text-sm font-semibold uppercase tracking-wide text-ink-400">

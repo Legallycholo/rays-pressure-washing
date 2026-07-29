@@ -28,7 +28,7 @@ import { BlogPreview } from "@/components/sections/BlogPreview";
 export const metadata: Metadata = {
   title: `Pressure Washing & Exterior Cleaning in ${site.serviceRegion}`,
   description:
-    `${site.name} — soft washing, roof cleaning, driveway and concrete cleaning across ` +
+    `${site.name}: soft washing, roof cleaning, driveway and concrete cleaning across ` +
     `${site.serviceRegion}. Published prices, free same-day quotes, and the ${site.guarantee.title}.`,
   alternates: { canonical: "/" },
 };
@@ -43,7 +43,7 @@ const homeFaqIds = [
   "payment",
 ];
 
-/** Assembled per STRUCTURE.md §8.1 / SECTIONS.md §1.5. Ends on FAQ — the
+/** Assembled per STRUCTURE.md §8.1 / SECTIONS.md §1.5. Ends on FAQ: the
  *  footer band closes every page (§1.6). */
 export default function HomePage() {
   return (
@@ -52,9 +52,9 @@ export default function HomePage() {
       <Hero
         eyebrow={`Serving ${site.serviceRegion}`}
         title={site.tagline}
-        lede={`Soft washing, pressure washing and exterior cleaning done the right way for each surface — quoted free, priced openly, and backed by the ${site.guarantee.title}.`}
-        primaryCta={{ label: "Get My Free Quote", href: "/quote" }}
-        secondaryCta={{ label: site.contact.phone, href: `tel:${site.contact.phoneHref}` }}
+        lede={`Soft washing, pressure washing and exterior cleaning done the right way for each surface. Quoted free, priced openly, and backed by the ${site.guarantee.title}.`}
+        primaryCta={{ label: "Get my free quote", href: "/quote" }}
+        secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
         project={featuredProjects[0]}
       />
       <TrustBar items={site.credentials} badges={credentialBadges} />
@@ -78,10 +78,10 @@ export default function HomePage() {
         plan={maintenancePlans.find((p) => p.mostPopular) ?? maintenancePlans[0]}
         terms={maintenancePlanTerms}
       />
-      {/* Carousel on the homepage only — /reviews and the detail pages keep the
+      {/* Carousel on the homepage only. /reviews and the detail pages keep the
           grid, where seeing every review at once is the point (SECTIONS.md §2.10). */}
       <Testimonials items={featuredTestimonials} layout="carousel" />
-      {/* Renders nothing until there is real press coverage — see content/press.ts. */}
+      {/* Renders nothing until there is real press coverage. See content/press.ts. */}
       <PressBar />
       <ServiceAreaSection locations={locations} />
       <FaqSection items={getFaqs(homeFaqIds)} groupName="faq-home" />

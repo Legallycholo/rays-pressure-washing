@@ -3,12 +3,12 @@ import { pressMentions, type PressMention } from "@/content/press";
 import { Section } from "@/components/ui/Section";
 
 /**
- * "As seen in" row. Fails closed: with no mentions it renders nothing — not an
+ * "As seen in" row. Fails closed: with no mentions it renders nothing, not an
  * empty band, not placeholder logos. See `src/content/press.ts` for why that
  * is the only acceptable empty state for this particular section.
  *
  * `tone="sand"` keeps R3 intact between `Testimonials` (light) and
- * `ServiceAreaSection` (ink) — and when the array is empty those two simply
+ * `ServiceAreaSection` (ink), and when the array is empty those two simply
  * sit next to each other exactly as they did before, so this phase is a no-op
  * on the live page until there is something true to put here.
  */

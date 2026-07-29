@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 /**
  * Filterable gallery (SECTIONS.md §2.9). Filter state lives in the URL query
  * (open decision #3) so a filtered view is linkable and shareable.
- * Must render inside <Suspense> — useSearchParams requires it.
+ * Must render inside <Suspense>, useSearchParams requires it.
  */
 export function GalleryExplorer() {
   const pathname = usePathname();
@@ -21,7 +21,7 @@ export function GalleryExplorer() {
   const serviceFilter = params.get("service") ?? "";
   const cityFilter = params.get("city") ?? "";
 
-  // `replaceQuery` rather than `router.replace` — see src/lib/url.ts. The
+  // `replaceQuery` rather than `router.replace`, see src/lib/url.ts. The
   // router version silently no-ops on the exact case this feature exists for:
   // someone opening a shared, already-filtered URL and then changing a filter.
   const setFilter = useCallback(
@@ -29,7 +29,7 @@ export function GalleryExplorer() {
       const next = new URLSearchParams(params.toString());
       if (value && next.get(key) !== value) next.set(key, value);
       else next.delete(key);
-      // Changing the filter set can orphan an open lightbox — clear it too.
+      // Changing the filter set can orphan an open lightbox, clear it too.
       next.delete("project");
       replaceQuery(pathname, next);
     },

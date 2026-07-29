@@ -9,7 +9,7 @@ import { VideoPlayer } from "@/components/VideoPlayer";
  * Motion proof, sitting directly after photo proof.
  *
  * Photos answer "can they get it clean". Video answers the question photos
- * can't: "what is it like having these people on my property". It is additive —
+ * can't: "what is it like having these people on my property". It is additive,
  * the hero's `BeforeAfterSlider` stays exactly where it is.
  *
  * Server component. The only client boundary is `VideoPlayer` itself.
@@ -44,7 +44,7 @@ export function VideoShowcase({
               </li>
             ))}
           </ul>
-          {/* onDark, never primary — the hero already owns the one Signal CTA
+          {/* onDark, never primary: the hero already owns the one Signal CTA
               in play at this point (R1/R2). */}
           <Button href="/quote" variant="onDark">
             Get My Free Quote

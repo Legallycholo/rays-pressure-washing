@@ -4,17 +4,17 @@ import { useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * Entrance reveal — the site's one general-purpose scroll animation.
+ * Entrance reveal, the site's one general-purpose scroll animation.
  *
  * Deliberately the *only* client boundary a section needs to opt in. Almost
  * every section here is a Server Component; wrapping a group in `<Reveal>`
  * keeps it that way, because its children arrive already rendered and this
- * component never touches them — it only observes its own wrapper element and
+ * component never touches them, it only observes its own wrapper element and
  * toggles a class. No section has to become a client component to fade in.
  *
  * Progressive enhancement is the whole design (STRUCTURE.md §10.4): the hidden
  * base state lives behind `[data-reveal-ready]`, which only exists once the
- * bootstrap in `layout.tsx` has run. No JS means no attribute means no hiding —
+ * bootstrap in `layout.tsx` has run. No JS means no attribute means no hiding,
  * the content is plainly visible, just without the fade. See `globals.css`.
  *
  * Usage: wrap 2–4 *groups* per section, not every card. Staggering fifteen
@@ -40,7 +40,7 @@ function sharedObserver() {
       }
     },
     // Start slightly before the element is fully in view so the transition is
-    // already underway when it lands — anticipatory rather than laggy.
+    // already underway when it lands, anticipatory rather than laggy.
     { rootMargin: "0px 0px -10% 0px" },
   );
   return shared;

@@ -21,7 +21,7 @@ import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/schema";
 import { currency } from "@/lib/utils";
 
 /**
- * The service × city matrix — PRIORITY CITIES ONLY for now (STRUCTURE.md §7.3
+ * The service × city matrix, PRIORITY CITIES ONLY for now (STRUCTURE.md §7.3
  * scope control: prove these rank before expanding to all 88).
  */
 export function generateStaticParams() {
@@ -43,7 +43,7 @@ export async function generateMetadata({
   if (!service || !loc) return {};
   return {
     title: `${service.name} in ${loc.city}, ${loc.region}`,
-    description: `${service.name} for ${loc.city} homes — ${loc.localChallenge.toLowerCase()} ${service.blurb}`,
+    description: `${service.name} for ${loc.city} homes. ${loc.localChallenge} ${service.blurb}`,
     alternates: { canonical: `/services/${service.slug}/${loc.slug}` },
   };
 }
@@ -79,7 +79,7 @@ export default async function ServiceCityPage({
         breadcrumbs={crumbs}
         title={`${service.name} in ${loc.city}, ${loc.region}`}
         // The one sentence that must differ per city: local challenge × service.
-        lede={`${loc.localChallenge} It's the single biggest reason ${loc.city} homes call us for ${service.name.toLowerCase()} — and it's a problem we plan for before the truck leaves the yard.`}
+        lede={`${loc.localChallenge} It's the single biggest reason ${loc.city} homes call us for ${service.name.toLowerCase()}, and it's a problem we plan for before the truck leaves the yard.`}
         extras={
           <>
             <Badge tone="onDark">{service.method}</Badge>
@@ -90,11 +90,11 @@ export default async function ServiceCityPage({
             </Badge>
           </>
         }
-        primaryCta={{ label: "Get My Free Quote", href: `/quote?services=${service.slug}` }}
-        secondaryCta={{ label: site.contact.phone, href: `tel:${site.contact.phoneHref}` }}
+        primaryCta={{ label: "Get my free quote", href: `/quote?services=${service.slug}` }}
+        secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
       />
 
-      {/* Local rationale — housingStock woven into the method argument */}
+      {/* Local rationale: housingStock woven into the method argument */}
       <Section tone="light" containerSize="narrow">
         <SectionHeading
           eyebrow={`${loc.city} specifics`}
@@ -106,14 +106,14 @@ export default async function ServiceCityPage({
             That matters for {service.name.toLowerCase()}: {service.intro}
           </p>
           <p>
-            We work {loc.city} street by street —{" "}
+            We work {loc.city} street by street:{" "}
             {loc.neighborhoods.slice(0, -1).join(", ")} and {loc.neighborhoods.at(-1)} are
             all regular stops
             {loc.driveMinutes === 0
               ? ", and being based here means no travel charge and short lead times."
               : beyondRadius
-                ? `. At ${loc.driveMinutes} minutes out a flat travel fee applies, waived when a neighbour books the same route.`
-                : `, ${loc.driveMinutes} minutes from our shop — inside the free-travel ring.`}
+                ? `. At ${loc.driveMinutes} minutes out a flat travel fee applies, waived when a neighbor books the same route.`
+                : `, ${loc.driveMinutes} minutes from our shop, inside the free-travel ring.`}
           </p>
           <ul className="!mt-7 space-y-2.5 rounded-card bg-sand-50 p-6 ring-1 ring-ink-900/5">
             {service.includes.slice(0, 4).map((item) => (

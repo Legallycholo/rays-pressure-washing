@@ -4,7 +4,7 @@ import { site } from "@/content/site";
 /**
  * PHASE 1 STUB shared by the three legal pages, so the footer links resolve
  * (CHECKLIST.md Phase 1). Real legal content is a Phase 9/13 item and must be
- * reviewed by the business — do not draft binding legal text here.
+ * reviewed by the business, do not draft binding legal text here.
  */
 export function LegalPageStub({ title, summary }: { title: string; summary: string }) {
   return (

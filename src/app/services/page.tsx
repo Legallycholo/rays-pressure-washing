@@ -14,7 +14,7 @@ import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "Pressure Washing & Exterior Cleaning Services",
-  description: `Every exterior cleaning service we offer across ${site.serviceRegion} — residential and commercial, with published starting prices.`,
+  description: `Every exterior cleaning service we offer across ${site.serviceRegion}. Residential and commercial, with published starting prices.`,
   alternates: { canonical: "/services" },
 };
 
@@ -32,7 +32,7 @@ export default function ServicesPage() {
         breadcrumbs={crumbs}
         title="Every surface, its own method"
         lede="Pressure washing where pressure belongs, soft washing where it doesn't, and honest starting prices on all of it."
-        primaryCta={{ label: "Get My Free Quote", href: "/quote" }}
+        primaryCta={{ label: "Get my free quote", href: "/quote" }}
       />
       <Section tone="light">
         <ServicesTabs residential={residentialServices} commercial={commercialServices} />
@@ -42,7 +42,7 @@ export default function ServicesPage() {
         heading={{
           eyebrow: "Better together",
           title: "Most people book two or three at once",
-          lede: "Bundling services onto one visit is cheaper for you and easier for us — that's the whole trick.",
+          lede: "Bundling services onto one visit is cheaper for you and easier for us. That's the whole trick.",
         }}
       />
       <HowItWorks />

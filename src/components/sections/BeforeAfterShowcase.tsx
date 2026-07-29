@@ -15,7 +15,7 @@ import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
  * linkable and lets a server-rendered card open a client-only dialog without
  * dragging the whole grid across the client boundary.
  *
- * The inline slider stays on the card either way — the grid has to preview the
+ * The inline slider stays on the card either way, the grid has to preview the
  * motion before anyone decides to click.
  */
 export function ProjectCard({
@@ -58,7 +58,7 @@ export function ProjectCard({
                 name="expand"
                 className="mt-1 h-4 w-4 shrink-0 text-ink-300 transition-colors group-hover/expand:text-hydro-600"
               />
-              <span className="sr-only">— open full size</span>
+              <span className="sr-only">, open full size</span>
             </Link>
           ) : (
             project.title
@@ -91,7 +91,7 @@ export function ProjectCard({
 }
 
 /**
- * SECTIONS.md §2.9 — server version for homepage/service/city pages.
+ * SECTIONS.md §2.9, server version for homepage/service/city pages.
  * The filterable /gallery variant is GalleryExplorer (client).
  * Never more than 2-up: a small comparison slider is useless.
  */
@@ -122,7 +122,7 @@ export function BeforeAfterShowcase({
         {projects.slice(0, 4).map((p) => (
           <li key={p.id}>
             {/* Off-gallery cards deep-link into /gallery, where the lightbox is
-                mounted — one extra navigation, and it lands people on the page
+                mounted: one extra navigation, and it lands people on the page
                 that shows every other job too. */}
             <ProjectCard project={p} expandHref={`/gallery?project=${p.id}`} />
           </li>

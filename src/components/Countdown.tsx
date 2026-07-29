@@ -13,7 +13,7 @@ import { timeRemaining } from "@/lib/utils";
  * Renders nothing until after mount: the server has no idea what time it is in
  * the reader's timezone, and a server/client disagreement about a clock is a
  * hydration mismatch by construction. Renders nothing once the deadline passes
- * either — a expired campaign should have been filtered out upstream by
+ * either, a expired campaign should have been filtered out upstream by
  * `activeCampaign`, and this is the belt to that pair of braces.
  */
 export function Countdown({ endsAt, className }: { endsAt?: string; className?: string }) {

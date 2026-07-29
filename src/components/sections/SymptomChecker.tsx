@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { Icon } from "@/components/ui/Icon";
 
 /**
- * SECTIONS.md §2.4 — the vocabulary bridge. One symptom per service, phrased
+ * SECTIONS.md §2.4, the vocabulary bridge. One symptom per service, phrased
  * as what the visitor sees, never as the method that fixes it.
  */
 export function SymptomChecker({ services, limit = 6 }: { services: Service[]; limit?: number }) {

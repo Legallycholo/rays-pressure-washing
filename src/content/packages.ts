@@ -3,9 +3,9 @@
  *
  * This file exists because exterior cleaning does not actually make its money
  * one driveway at a time. It makes it three ways:
- *   1. BUNDLES      — raising average job value on a visit already being made
- *   2. MAINTENANCE  — converting a one-off customer into recurring revenue
- *   3. SEASONAL     — concentrating demand into the windows that convert best
+ *   1. BUNDLES      raising average job value on a visit already being made
+ *   2. MAINTENANCE  converting a one-off customer into recurring revenue
+ *   3. SEASONAL     concentrating demand into the windows that convert best
  *
  * All figures are PLACEHOLDER.
  */
@@ -15,8 +15,8 @@ import type { Segment } from "./services";
 /* ---------------------------------------------------------------------------
    1. BUNDLES
    The single highest-leverage upsell in this trade. The truck, the crew, the
-   setup and the drive are already paid for — every additional surface cleaned
-   on the same visit is almost pure margin. Price bundles below the sum of
+   setup and the drive are already paid for, so every additional surface
+   cleaned on the same visit is almost pure margin. Price bundles below the sum of
    their parts and both sides win.
    ------------------------------------------------------------------------ */
 
@@ -35,7 +35,7 @@ export type Bundle = {
   duration: string;
   /** Ordering on the /packages page and homepage. */
   featured?: boolean;
-  /** Most businesses need exactly one "most popular" — it anchors the others. */
+  /** Most businesses need exactly one "most popular". It anchors the others. */
   mostPopular?: boolean;
 };
 
@@ -43,7 +43,7 @@ export const bundles: Bundle[] = [
   {
     slug: "whole-home-exterior",
     name: "Whole Home Exterior",
-    trigger: "Everything at once, once a year — the default for most homeowners.",
+    trigger: "Everything at once, once a year. The default for most homeowners.",
     blurb:
       "House, roof, driveway, walkways and gutters in a single visit. The complete reset, and the best value we offer because we're only setting up once.",
     segment: "residential",
@@ -70,7 +70,7 @@ export const bundles: Bundle[] = [
     name: "Listing Ready",
     trigger: "Selling. Photography is booked and the exterior has to hold up.",
     blurb:
-      "Full exterior plus windows, scheduled around your photographer. Turnaround prioritised — we work to the listing date, not our calendar.",
+      "Full exterior plus windows, scheduled around your photographer. We work to the listing date, not our calendar.",
     segment: "residential",
     serviceSlugs: ["house-washing", "roof-cleaning", "driveway-concrete", "window-cleaning"],
     savingsPercent: 18,
@@ -82,7 +82,7 @@ export const bundles: Bundle[] = [
     name: "Pool Season Ready",
     trigger: "Before the pool goes back into daily use.",
     blurb:
-      "Enclosure, screens, deck and surrounding fence together — the only way it stays clean, since spores overhead reseed a deck cleaned on its own.",
+      "Deck, enclosure, screens and surrounding fence together. It is the only way it stays clean, since spores overhead reseed a deck cleaned on its own.",
     segment: "residential",
     serviceSlugs: ["pool-deck", "fence-cleaning", "deck-patio"],
     savingsPercent: 15,
@@ -91,7 +91,7 @@ export const bundles: Bundle[] = [
   {
     slug: "storefront-refresh",
     name: "Storefront Refresh",
-    trigger: "The three metres either side of your front door.",
+    trigger: "The ten feet either side of your front door.",
     blurb:
       "Entry glass, awning and walkway degreased overnight. Priced as a recurring visit because doing it once achieves nothing.",
     segment: "commercial",
@@ -148,7 +148,7 @@ export const maintenancePlans: MaintenancePlan[] = [
     blurb: "The minimum that keeps organic growth from ever getting established.",
     includes: [
       "One scheduled house wash per year",
-      "Booked automatically — no chasing",
+      "Booked automatically, no chasing",
       "Locked-in pricing for 12 months",
       "Priority rescheduling after weather delays",
     ],
@@ -160,15 +160,15 @@ export const maintenancePlans: MaintenancePlan[] = [
     frequency: "2 visits per year",
     discountPercent: 15,
     blurb:
-      "Spring and autumn visits — the cadence that actually matches how fast growth returns in a humid climate.",
+      "Spring and fall visits. It is the cadence that actually matches how fast growth returns in a humid climate.",
     includes: [
       "Two scheduled visits per year",
       "House wash plus driveway each visit",
-      "Gutter clear included in the autumn visit",
+      "Gutter clear included in the fall visit",
       "Free spot-treatment call-outs between visits",
       "Locked-in pricing for 12 months",
     ],
-    bestFor: "Most homes — especially anything with shade on one elevation",
+    bestFor: "Most homes, especially anything with shade on one elevation",
     mostPopular: true,
   },
   {
@@ -186,11 +186,11 @@ export const maintenancePlans: MaintenancePlan[] = [
       "First call after storms",
       "Locked-in pricing for 24 months",
     ],
-    bestFor: "Heavily shaded properties, waterfront homes, and HOA communities with strict standards",
+    bestFor: "Heavily shaded properties, lakefront homes, and HOA communities with strict standards",
   },
 ];
 
-/** Terms are month-to-month by design — see faqs.ts → `contracts`. */
+/** Terms are month-to-month by design. See faqs.ts → `contracts`. */
 export const maintenancePlanTerms =
   "Month-to-month. Cancel any time. We'd rather keep the work by doing it well than by locking you in.";
 
@@ -215,7 +215,7 @@ export type SeasonalCampaign = {
   ctaHref: string;
   /**
    * Hard deadline, ISO 8601. Optional, and most campaigns should leave it
-   * unset — a maintenance-plan promo that "ends" on a date nobody enforces is
+   * unset. A maintenance-plan promo that "ends" on a date nobody enforces is
    * a lie the countdown will tell every visitor. Set it only when the offer
    * genuinely stops, and `SeasonalBanner` will show the time remaining.
    */
@@ -237,7 +237,7 @@ export const seasonalCampaigns: SeasonalCampaign[] = [
     slug: "pool-season",
     months: [4, 5, 6],
     headline: "Pool season starts in two weeks",
-    body: "Cage, screens and deck together, before the pool goes back into daily use.",
+    body: "Deck, coping and enclosure together, before the pool goes back into daily use.",
     promoteServices: ["pool-deck", "deck-patio", "fence-cleaning"],
     ctaLabel: "Get pool-season ready",
     ctaHref: "/packages/pool-season-ready",
@@ -246,7 +246,7 @@ export const seasonalCampaigns: SeasonalCampaign[] = [
   {
     slug: "storm-recovery",
     months: [6, 7, 8, 9],
-    headline: "Storm cleanup — priority scheduling",
+    headline: "Storm cleanup, priority scheduling",
     body: "Debris, staining and blown-in grime after a storm. Maintenance plan customers get first call.",
     promoteServices: ["gutter-cleaning", "roof-cleaning", "house-washing"],
     ctaLabel: "Request storm cleanup",
@@ -274,11 +274,11 @@ export const seasonalCampaigns: SeasonalCampaign[] = [
 
 /**
  * The one campaign currently on air. A campaign whose `endsAt` is in the past
- * is never active regardless of its `active` flag — expiry is the primary
+ * is never active regardless of its `active` flag, expiry is the primary
  * guard, and `Countdown` refusing to render "0d 0h" is only the fallback.
  *
  * Evaluated at build time on a statically prerendered site, so a campaign that
- * expires between deploys stays up until the next build. That is the right
+ * expires between deploys stays up until the next build. That is the correct
  * trade for a marketing banner (no per-request work, no client flash); if an
  * offer ever needs to expire to the minute, move this check into the client
  * component rather than making the whole page dynamic.
@@ -289,7 +289,7 @@ export const activeCampaign = seasonalCampaigns.find(
 
 /* ---------------------------------------------------------------------------
    4. TRAVEL / SERVICE RADIUS
-   locations.ts already promises a neighbour discount on the furthest route.
+   locations.ts already promises a neighbor discount on the furthest route.
    This is the rule behind it.
    ------------------------------------------------------------------------ */
 
@@ -298,7 +298,7 @@ export const travelPolicy = {
   freeRadiusMinutes: 30,
   /** Flat surcharge beyond the free radius. PLACEHOLDER. */
   surcharge: 45,
-  /** Waived when neighbouring jobs are booked on the same route. */
+  /** Waived when neighboring jobs are booked on the same route. */
   neighborWaiver: true,
-  note: "Book alongside a neighbour on the same street and the travel fee comes off both invoices — two jobs in one trip genuinely costs us less.",
+  note: "Book alongside a neighbor on the same street and the travel fee comes off both invoices. Two jobs in one trip genuinely costs us less.",
 };

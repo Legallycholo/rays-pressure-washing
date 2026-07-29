@@ -1,5 +1,5 @@
 /**
- * The service catalogue. This array drives:
+ * The service catalog. This array drives:
  *   - the /services hub grid
  *   - every /services/[service] detail page
  *   - every /services/[service]/[city] programmatic SEO page
@@ -16,17 +16,17 @@ export type Service = {
   /** Short label for nav and chips. */
   navLabel: string;
   segment: Segment;
-  /** One-line value proposition — used on cards and meta descriptions. */
+  /** One-line value proposition, used on cards and meta descriptions. */
   blurb: string;
   /** 2–3 sentence intro for the service page hero. */
   intro: string;
   /** Name of the icon in components/ui/Icon.tsx */
   icon: string;
-  /** Method badge shown on the card — a genuine differentiator vs competitors. */
+  /** Method badge shown on the card: a genuine differentiator vs competitors. */
   method: "Soft wash" | "Pressure wash" | "Surface clean" | "Hand detail";
   /** Bullet list of what's included. */
   includes: string[];
-  /** Problems this solves — used for the "is this you?" symptom checker. */
+  /** Problems this solves, used for the "is this you?" symptom checker. */
   symptoms: string[];
   /** Drives the pricing estimator. All PLACEHOLDER numbers. */
   pricing: {
@@ -38,7 +38,7 @@ export type Service = {
     /** Typical job duration, human readable. */
     duration: string;
   };
-  /** How often it should be repeated — powers the maintenance-plan upsell. */
+  /** How often it should be repeated. Powers the maintenance-plan upsell. */
   cadence: string;
   /** Service-specific FAQ ids, resolved against content/faqs.ts */
   faqIds: string[];
@@ -56,7 +56,7 @@ export const services: Service[] = [
     blurb:
       "A low-pressure soft wash that strips algae, mildew and road film off siding without forcing water behind it.",
     intro:
-      "Most of what makes a house look tired isn't dirt — it's organic growth feeding on the surface. We treat it chemically at low pressure so the siding, seals and paint stay exactly where they belong. The green comes off; the house doesn't.",
+      "Most of what makes a house look tired isn't dirt. It's organic growth feeding on the surface. We treat it chemically at low pressure so the siding, seals and paint stay exactly where they belong. The green comes off; the house doesn't.",
     icon: "home",
     method: "Soft wash",
     includes: [
@@ -83,7 +83,7 @@ export const services: Service[] = [
     navLabel: "Roof Cleaning",
     segment: "residential",
     blurb:
-      "No-pressure treatment that kills the black streak algae shingles collect — without walking granules off your roof.",
+      "No-pressure treatment that kills the black streak algae shingles collect, without walking granules off your roof.",
     intro:
       "Those black streaks are a living organism eating the limestone filler in your shingles. Pressure would blast the protective granules straight into the gutter. We apply a treatment that kills it at the root and let the weather rinse it clean.",
     icon: "roof",
@@ -96,8 +96,8 @@ export const services: Service[] = [
     ],
     symptoms: [
       "Black streaks running down from the ridge",
-      "Green or grey lichen patches",
-      "Neighbours' roofs look newer than yours",
+      "Green or gray lichen patches",
+      "Neighbors' roofs look newer than yours",
     ],
     pricing: { unit: "sq ft", from: 0.2, to: 0.45, minimum: 399, duration: "3–5 hours" },
     cadence: "Every 2–3 years",
@@ -111,7 +111,7 @@ export const services: Service[] = [
     navLabel: "Driveways & Concrete",
     segment: "residential",
     blurb:
-      "Surface-cleaner passes that lift years of grey out of concrete evenly — no zebra stripes, no wand marks.",
+      "Surface-cleaner passes that lift years of gray out of concrete evenly. No zebra stripes, no wand marks.",
     intro:
       "Concrete is where a rushed job shows forever. A pressure wand leaves stripes you'll see every time you pull in. We use a rotating surface cleaner for an even lift, then hand-detail the edges and expansion joints.",
     icon: "driveway",
@@ -124,8 +124,8 @@ export const services: Service[] = [
       "Optional sealing quoted separately",
     ],
     symptoms: [
-      "Concrete has gone grey or green",
-      "Dark tyre marks and oil stains",
+      "Concrete has gone gray or green",
+      "Dark tire marks and oil stains",
       "Previous cleaning left visible stripes",
     ],
     pricing: { unit: "sq ft", from: 0.12, to: 0.25, minimum: 179, duration: "1–3 hours" },
@@ -140,7 +140,7 @@ export const services: Service[] = [
     navLabel: "Decks & Patios",
     segment: "residential",
     blurb:
-      "Pressure dialled to the material — wood, composite, pavers or stone all get a different setting.",
+      "Pressure dialed to the material: wood, composite, pavers and stone each get a different setting.",
     intro:
       "Wood, composite, travertine and pavers each fail in a different way under the wrong nozzle. We match pressure and chemistry to the material, so the surface comes back clean rather than furred, etched or stripped.",
     icon: "deck",
@@ -153,7 +153,7 @@ export const services: Service[] = [
     ],
     symptoms: [
       "Boards feel slick or slippery underfoot",
-      "Grey, weathered timber",
+      "Gray, weathered wood",
       "Moss growing in the paver joints",
     ],
     pricing: { unit: "sq ft", from: 0.2, to: 0.4, minimum: 199, duration: "2–4 hours" },
@@ -167,9 +167,9 @@ export const services: Service[] = [
     navLabel: "Fences",
     segment: "residential",
     blurb:
-      "Vinyl, wood or aluminium — both sides, top rail to bottom, with the green line at the base gone.",
+      "Vinyl, wood or aluminum. Both sides, top rail to bottom, with the green line at the base gone.",
     intro:
-      "Fences collect the worst of it: soil splash at the base, algae on the shaded face, mildew in the grain. We clean both sides at a pressure the material can take, and we don't skip the neighbour-facing side.",
+      "Fences collect the worst of it: soil splash at the base, algae on the shaded face, mildew in the grain. We clean both sides at a pressure the material can take, and we don't skip the neighbor-facing side.",
     icon: "fence",
     method: "Soft wash",
     includes: [
@@ -180,8 +180,8 @@ export const services: Service[] = [
     ],
     symptoms: [
       "Green stripe along the bottom of the panels",
-      "Grey, dull vinyl",
-      "Black mildew spotting on timber",
+      "Gray, dull vinyl",
+      "Black mildew spotting on wood",
     ],
     pricing: { unit: "linear ft", from: 2.5, to: 5, minimum: 179, duration: "1–3 hours" },
     cadence: "Every 12–18 months",
@@ -220,15 +220,17 @@ export const services: Service[] = [
     name: "Window Cleaning",
     navLabel: "Windows",
     segment: "residential",
-    blurb: "Pure-water pole system — spot-free glass with no ladders leaning on your gutters.",
+    blurb:
+      "Pure-water pole system that leaves glass to dry spot-free, with no ladders leaning on your gutters.",
     intro:
-      "We filter the minerals out of the water before it touches the glass, so it dries without spots and there's nothing left to squeegee. Reaching second-storey windows from the ground also means no ladder feet in your flowerbeds.",
+      "We filter the minerals out of the water before it ever touches the glass, so it dries clear on its own and there is nothing left behind to squeegee or towel off. Reaching second-story windows from the ground means no ladder feet in your flowerbeds and nobody standing on your roofline. Frames, sills and screens get cleaned in the same visit, because clean glass in a dirty frame still reads as dirty.",
     icon: "window",
     method: "Hand detail",
     includes: [
       "Exterior glass, frames and sills",
-      "Pure-water deionised system",
-      "Screens rinsed",
+      "Pure-water deionized system, no detergent residue",
+      "Screens removed, rinsed and refitted",
+      "Cobwebs cleared from frames and corners",
       "Interior glass available as an add-on",
     ],
     symptoms: [
@@ -247,9 +249,9 @@ export const services: Service[] = [
     navLabel: "Pool Decks",
     segment: "residential",
     blurb:
-      "Cage, screens and deck done together — the algae comes back fast when you only do one of them.",
+      "Deck, coping and any screen enclosure cleaned in one visit, because algae reseeds whatever you leave out.",
     intro:
-      "Pool cages hold moisture, and moisture grows everything. Cleaning the deck alone means the spores overhead reseed it within a season. We do the enclosure frame, the screens and the deck as one job so it actually stays clean.",
+      "A pool sits in shade and standing humidity all summer, and a screened enclosure holds both. Cleaning the deck on its own means the spores overhead reseed it inside a season. We do the deck, the coping and the enclosure frame and screens as one job so it actually stays clean.",
     icon: "pool",
     method: "Soft wash",
     includes: [
@@ -274,7 +276,7 @@ export const services: Service[] = [
     navLabel: "Building Washing",
     segment: "commercial",
     blurb:
-      "Scheduled exterior maintenance for offices, retail and multi-family — done outside trading hours.",
+      "Scheduled exterior maintenance for offices, retail and multi-family, done outside trading hours.",
     intro:
       "A tired building costs you tenants and foot traffic. We work to a fixed schedule, outside your operating hours, with the documentation your property manager or insurer needs on file.",
     icon: "building",
@@ -300,16 +302,16 @@ export const services: Service[] = [
     name: "Storefront & Awning Cleaning",
     navLabel: "Storefronts",
     segment: "commercial",
-    blurb: "Entryways, glass and awnings on a recurring schedule — before your doors open.",
+    blurb: "Entryways, glass and awnings on a recurring schedule, before your doors open.",
     intro:
-      "The three metres either side of your front door does more for your brand than most of your marketing. We keep the glass, the awning and the entry concrete looking maintained on a schedule you never have to think about.",
+      "The ten feet either side of your front door does more for your brand than most of your marketing. We keep the glass, the awning and the entry concrete looking maintained on a schedule you never have to think about.",
     icon: "storefront",
     method: "Pressure wash",
     includes: [
       "Entry glass and door frames",
       "Awning and signage cleaning",
       "Entry concrete degreased",
-      "Weekly, fortnightly or monthly plans",
+      "Weekly, biweekly or monthly plans",
     ],
     symptoms: [
       "Gum and grime tracked across the entry",
@@ -329,7 +331,7 @@ export const services: Service[] = [
     blurb:
       "Degreasing, gum removal and reclaimed-water flatwork that keeps you compliant with runoff rules.",
     intro:
-      "Large-area flatwork isn't just a bigger driveway — there are wastewater rules about where the runoff goes. We capture and reclaim, degrease the oil-drop zones, and remove gum with heat rather than brute pressure.",
+      "Large-area flatwork isn't just a bigger driveway. There are wastewater rules about where the runoff goes. We capture and reclaim, degrease the oil-drop zones, and remove gum with heat rather than brute pressure.",
     icon: "parking",
     method: "Surface clean",
     includes: [

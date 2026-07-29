@@ -10,12 +10,12 @@ export type Step = { icon: string; title: string; body: string };
 export const defaultSteps: Step[] = [
   { icon: "calendar", title: "Get your quote", body: "Four questions online, or one phone call. Same-day in most cases." },
   { icon: "clock", title: "Pick your date", body: "We confirm a window that works and call ahead on the day." },
-  { icon: "spray", title: "We clean", body: "The right method for each surface — you don't even need to be home." },
+  { icon: "spray", title: "We clean", body: "The right method for each surface, and you don't even need to be home." },
   { icon: "check", title: "Walk it with us", body: "You inspect the result before we leave. That's the guarantee in action." },
 ];
 
 /**
- * SECTIONS.md §2.8 — four steps, no more.
+ * SECTIONS.md §2.8, four steps, no more.
  *
  * The one section on this site whose content is genuinely sequential, which is
  * why it's the one that gets the stacking deck (`StackingCards`) rather than a
@@ -23,7 +23,7 @@ export const defaultSteps: Step[] = [
  * the steps. Desktop only. On phones a four-card deck would need most of the
  * page's scroll budget to say what a vertical list with a connecting rail
  * already says in one screen, so below `lg` this stays exactly the layout it
- * has always been — same markup, different CSS, no duplicated DOM.
+ * has always been, same markup, different CSS, no duplicated DOM.
  */
 export function HowItWorks({ steps = defaultSteps }: { steps?: Step[] }) {
   return (
@@ -55,7 +55,7 @@ export function HowItWorks({ steps = defaultSteps }: { steps?: Step[] }) {
             <div
               className={cn(
                 "stack-card__inner flex gap-4 sm:flex-col sm:items-center sm:gap-3 sm:text-center",
-                // lg: the step becomes a real card surface — the deck needs an
+                // lg: the step becomes a real card surface, the deck needs an
                 // edge and a shadow to read as one card landing on another.
                 // Sand rather than white so the recede-into-the-page dimming
                 // is visible against this section's white background.

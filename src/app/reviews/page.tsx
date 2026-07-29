@@ -36,7 +36,7 @@ export default function ReviewsPage() {
         variant="page"
         breadcrumbs={crumbs}
         title={`${site.rating.value.toFixed(1)} stars, ${site.rating.count} reviews`}
-        lede="Unfiltered and attributed — neighbourhood included, because local word of mouth is the whole business."
+        lede="Unfiltered and attributed, neighborhood included, because local word of mouth is the whole business."
         extras={
           <>
             <span className="inline-flex items-center gap-2 rounded-pill bg-white/10 px-4 py-2 ring-1 ring-white/15">
@@ -50,7 +50,7 @@ export default function ReviewsPage() {
             ))}
           </>
         }
-        primaryCta={{ label: "Get My Free Quote", href: "/quote" }}
+        primaryCta={{ label: "Get my free quote", href: "/quote" }}
       />
       <Section tone="light">
         <ul className="grid items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">

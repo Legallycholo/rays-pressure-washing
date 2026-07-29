@@ -10,7 +10,7 @@ import { postSlugs, posts } from "@/content/posts";
  * bundle or post updates the sitemap automatically (STRUCTURE.md §13).
  *
  * Matrix routes cover priority cities only, matching generateStaticParams in
- * app/services/[service]/[city]/page.tsx — the sitemap and the built pages
+ * app/services/[service]/[city]/page.tsx, the sitemap and the built pages
  * must never disagree.
  */
 export default function sitemap(): MetadataRoute.Sitemap {

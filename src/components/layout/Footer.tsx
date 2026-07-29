@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
  * the very bottom of the page where the thumb has the least precision. Every
  * one of them failed the 44px floor.
  *
- * Fixed by making the row itself the target rather than the words in it —
+ * Fixed by making the row itself the target rather than the words in it,
  * full-width, 44px tall, no gaps needed between them because the padding is the
  * rhythm. Reverted at `lg`, where there is a cursor and the original density is
  * the better-looking layout. Pair it with `footerList`, which drops the
@@ -33,7 +33,7 @@ export function Footer() {
 
   return (
     <footer className="bg-ink-950 text-ink-300">
-      {/* Final conversion band — the last thing before the link farm. */}
+      {/* Final conversion band: the last thing before the link farm. */}
       <div className="border-b border-white/10 bg-ink-900 hydro-mesh">
         <Container size="wide" className="py-14">
           <div className="flex flex-col items-center gap-6 text-center lg:flex-row lg:justify-between lg:text-left">
@@ -61,13 +61,13 @@ export function Footer() {
       <Container size="wide" className="py-14">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           {/* Identity + NAP. Keep this exactly consistent with every directory
-              listing — inconsistent NAP data actively hurts local ranking. */}
+              listing. Inconsistent NAP data actively hurts local ranking. */}
           {/* min-w-0 on every grid child: grid items default to min-width:auto,
               so one long unbreakable string (the email) widens the whole track. */}
           <div className="min-w-0 lg:col-span-2">
             <Logo heightClass="h-11 sm:h-12" />
 
-            {/* No trailing "." — the tagline punctuates itself. */}
+            {/* No trailing "." because the tagline punctuates itself. */}
             <p className="mt-4 max-w-sm text-sm leading-relaxed">{site.tagline}</p>
 
             <div className="mt-5 flex items-center gap-2">
@@ -223,7 +223,7 @@ export function Footer() {
         </div>
 
         {/* ink-300, not ink-400. On the ink-950 footer, ink-400 measures 3.3:1
-            against the background — under the 4.5:1 floor for body text, and
+            against the background, under the 4.5:1 floor for body text, and
             this row is the smallest text on the site. ink-300 is 6.1:1. */}
         <div className="mt-8 flex flex-col gap-4 text-xs text-ink-300 sm:flex-row sm:items-center sm:justify-between">
           <p>

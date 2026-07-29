@@ -3,7 +3,7 @@ import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 
 /**
- * SECTIONS.md §2.11 — the only use of tone="hydro" on the site, which is what
+ * SECTIONS.md §2.11, the only use of tone="hydro" on the site, which is what
  * makes it land. No fine print here, by rule.
  */
 export function GuaranteeBand({ guarantee }: { guarantee: { title: string; body: string } }) {

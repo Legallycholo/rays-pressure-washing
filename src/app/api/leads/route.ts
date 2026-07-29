@@ -5,7 +5,7 @@ import { getService } from "@/content/services";
 import { getBundle } from "@/content/packages";
 
 /**
- * Every lead the site produces leaves through here — the quote wizard's final
+ * Every lead the site produces leaves through here, the quote wizard's final
  * step and the contact page's message form. One route rather than two because
  * the difference between them is which fields are filled in, not what happens
  * next: both become an email to the business, and both need the same
@@ -15,7 +15,7 @@ import { getBundle } from "@/content/packages";
  * `from` defaults to Resend's shared sandbox sender, which can only deliver to
  * the address the Resend account was signed up with. That is deliberate: it
  * needs no DNS records, so lead capture works the day the API key is pasted in
- * rather than the day a domain finishes verifying. It is also a hard ceiling —
+ * rather than the day a domain finishes verifying. It is also a hard ceiling,
  * nothing else will ever receive mail from it.
  *
  * Once a domain is verified in Resend, set `LEADS_FROM_EMAIL` to an address on
@@ -24,7 +24,7 @@ import { getBundle } from "@/content/packages";
  *
  * ── WHAT THIS DOES NOT DO ───────────────────────────────────────────────────
  * Photos from the wizard are still discarded client-side (STRUCTURE.md open
- * decision #4) — the count travels, the files don't. Attaching them means an
+ * decision #4), the count travels, the files don't. Attaching them means an
  * upload path and a storage bucket, which is a bigger decision than this route.
  * The email says how many were attached so nobody wonders where they went.
  */
@@ -46,13 +46,13 @@ const MAX = { name: 120, email: 200, phone: 40, address: 300, message: 5_000, no
    Rate limiting
 
    Stricter than `/api/assistant`, because the thing on the other side of this
-   one is a person's inbox. A flood there doesn't just cost CPU — it buries real
+   one is a person's inbox. A flood there doesn't just cost CPU, it buries real
    leads underneath junk, which is the actual damage.
 
    Still per-instance and therefore still best-effort on serverless. It stops
    the naive case (a script hammering one endpoint) and the common accident (an
-   impatient double-tap on Send). A distributed spam run needs a shared store —
-   Upstash Redis via the Vercel Marketplace is the small version of that — and
+   impatient double-tap on Send). A distributed spam run needs a shared store;
+   Upstash Redis via the Vercel Marketplace is the small version of that, and
    is worth adding the first time this is actually abused, not before.
    ------------------------------------------------------------------------- */
 
@@ -83,7 +83,7 @@ const clientIp = (req: Request) =>
 /* ---------------------------------------------------------------------------
    Validation
 
-   Deliberately shallow. This is the second line — both forms validate before
+   Deliberately shallow. This is the second line: both forms validate before
    they get here, and the point of repeating it server-side is that the client
    is not a security boundary, not that we know better than the visitor what
    their address looks like. Anything stricter starts rejecting real customers:
@@ -135,7 +135,7 @@ function parse(body: Record<string, unknown>): { lead: Lead } | { error: string 
     if (!phone) return { error: "A phone number is required." };
     if (!address) return { error: "A property address is required." };
 
-    // Slugs are checked against the catalogue rather than trusted: they are
+    // Slugs are checked against the catalog rather than trusted: they are
     // rendered into the email, and an unknown slug is either a stale client or
     // someone poking at the endpoint. Either way it isn't a service.
     const services = Array.isArray(body.services)
@@ -218,8 +218,8 @@ function rowsFor(lead: Lead): [string, string][] {
     ["Email", lead.email],
     ["Address", lead.address],
     ["Services", lead.services.map((s) => getService(s)?.name ?? s).join(", ") || "Not specified"],
-    ["Property", [lead.propertyType, `${lead.storeys} storey${lead.storeys > 1 ? "s" : ""}`].filter(Boolean).join(" · ") || "—"],
-    ["Size", SIZE_LABEL[lead.size] ?? lead.size ?? "—"],
+    ["Property", [lead.propertyType, `${lead.storeys} floor${lead.storeys > 1 ? "s" : ""}`].filter(Boolean).join(" · ") || "n/a"],
+    ["Size", SIZE_LABEL[lead.size] ?? lead.size ?? "n/a"],
     ["Timing", TIMING_LABEL[lead.timing] ?? "No preference"],
   ];
 
@@ -228,13 +228,13 @@ function rowsFor(lead: Lead): [string, string][] {
   if (lead.estimate) {
     rows.push([
       "Estimate they saw",
-      `${money(lead.estimate.low)} – ${money(lead.estimate.high)} — quote against this, they will`,
+      `${money(lead.estimate.low)} – ${money(lead.estimate.high)}. Quote against this, they will`,
     ]);
   }
   if (lead.photoCount) {
     rows.push([
       "Photos",
-      `${lead.photoCount} attached in the browser and not uploaded — ask for them by reply`,
+      `${lead.photoCount} attached in the browser and not uploaded, ask for them by reply`,
     ]);
   }
   if (lead.notes) rows.push(["Notes", lead.notes]);
@@ -270,12 +270,12 @@ function render(lead: Lead) {
 
   // Sent alongside the HTML, not instead of it. Plenty of trade inboxes read
   // plain text by default, and a lead nobody can read is a lead nobody calls.
-  const text = [`${heading} — ${site.name}`, "", ...rows.map(([l, v]) => `${l}: ${v}`)].join("\n");
+  const text = [`${heading} · ${site.name}`, "", ...rows.map(([l, v]) => `${l}: ${v}`)].join("\n");
 
   const subject =
     lead.kind === "quote"
-      ? `New quote request — ${lead.name}, ${lead.address}`
-      : `Website message — ${lead.name}`;
+      ? `New quote request: ${lead.name}, ${lead.address}`
+      : `Website message: ${lead.name}`;
 
   return { subject, html, text };
 }
@@ -310,11 +310,11 @@ export async function POST(req: Request) {
   const { apiKey, from, to } = config();
   if (!apiKey) {
     // Loud on the server, honest to the browser. The form shows the phone
-    // number rather than a success state it can't back up — a lead that
+    // number rather than a success state it can't back up, a lead that
     // silently evaporates is worse than one that was never submitted, because
     // the customer stops waiting for a call that isn't coming.
     console.error(
-      "[api/leads] RESEND_API_KEY is not set — lead NOT delivered. See .env.example.",
+      "[api/leads] RESEND_API_KEY is not set. Lead NOT delivered. See .env.example.",
     );
     return NextResponse.json(
       { error: "Our form isn't reaching us right now." },
@@ -325,7 +325,7 @@ export async function POST(req: Request) {
   const { subject, html, text } = render(lead);
   const resend = new Resend(apiKey);
 
-  // Same payload inside 24h is the same lead — a double-tapped Send button or a
+  // Same payload inside 24h is the same lead, a double-tapped Send button or a
   // retry after a flaky connection. The digest is the entity id because there
   // is no database to take one from.
   const idempotencyKey = `lead-${lead.kind}/${await digest(JSON.stringify(lead))}`;
@@ -359,7 +359,7 @@ export async function POST(req: Request) {
   }
 }
 
-/** Short, stable hash of the payload. Not security — just an identity for the key. */
+/** Short, stable hash of the payload. Not security, just an identity for the key. */
 async function digest(input: string) {
   const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(input));
   return Array.from(new Uint8Array(bytes).slice(0, 12))

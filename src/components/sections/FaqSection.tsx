@@ -4,7 +4,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Accordion } from "@/components/ui/Accordion";
 import { Button } from "@/components/ui/Button";
 
-/** SECTIONS.md §2.13 — sticky heading rail at lg, native-details accordion. */
+/** SECTIONS.md §2.13, sticky heading rail at lg, native-details accordion. */
 export function FaqSection({
   items,
   limit = 6,
@@ -30,7 +30,7 @@ export function FaqSection({
                 title: "Questions we hear every week",
               })}
             />
-            <p className="text-ink-500">Still not sure? Ask a human — no obligation, no hard sell.</p>
+            <p className="text-ink-500">Still not sure? Ask a human. No obligation, no hard sell.</p>
             <Button href={showAllLink ? "/faq" : "/contact"} variant="ghost">
               {showAllLink ? "See every question" : "Get in touch"}
             </Button>

@@ -6,7 +6,7 @@ import { ServiceCard } from "./ServicesGrid";
 import { cn } from "@/lib/utils";
 
 /**
- * Residential/commercial toggle for the /services hub — tabs, not routes
+ * Residential/commercial toggle for the /services hub, tabs, not routes
  * (open decision #6: two routes split link equity for no benefit).
  */
 export function ServicesTabs({

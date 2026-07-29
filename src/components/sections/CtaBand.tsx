@@ -6,14 +6,14 @@ import { Icon } from "@/components/ui/Icon";
 type Cta = { label: string; href: string };
 
 /**
- * SECTIONS.md §2.14 — MID-PAGE conversion break only. Never a page closer
+ * SECTIONS.md §2.14, MID-PAGE conversion break only. Never a page closer
  * (the Footer band is the closer, §1.6) and never within two sections of it.
  */
 export function CtaBand({
   title,
   lede,
-  primaryCta = { label: "Get My Free Quote", href: "/quote" },
-  secondaryCta = { label: site.contact.phone, href: `tel:${site.contact.phoneHref}` },
+  primaryCta = { label: "Get my free quote", href: "/quote" },
+  secondaryCta = { label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` },
   variant = "full",
 }: {
   title: React.ReactNode;
