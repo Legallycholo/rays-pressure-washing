@@ -38,6 +38,9 @@ export const metadata: Metadata = {
     // never added, so every share 404'd its own preview.
   },
   twitter: { card: "summary_large_image" },
+  verification: {
+    google: "-G-b-F6PaBVkTb_Ns5yMUL6JD_0weuqYgIsT5LopW5s",
+  },
   robots: {
     // NOTE: flip to true once real content and real business details are in.
     index: false,
