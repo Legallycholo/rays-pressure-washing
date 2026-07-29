@@ -16,7 +16,7 @@ import { breadcrumbSchema } from "@/lib/schema";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Maintenance Plans — Set It and Forget It",
+  title: "Maintenance Plans: Set It and Forget It",
   description:
     "Scheduled exterior cleaning at 10–25% below one-off rates. Month-to-month, cancel any time.",
   alternates: { canonical: "/maintenance-plan" },
@@ -35,7 +35,7 @@ export default function MaintenancePlanPage() {
         variant="page"
         breadcrumbs={crumbs}
         title="Never think about it again"
-        // Terms lead — "am I locked in?" is the objection, so answer it first
+        // Terms lead, "am I locked in?" is the objection, so answer it first
         lede={maintenancePlanTerms}
         primaryCta={{ label: "Start a Plan", href: "/quote" }}
       />
@@ -79,7 +79,7 @@ export default function MaintenancePlanPage() {
                     <span className="font-semibold text-ink-800">Best for:</span> {plan.bestFor}
                   </p>
                   <div className="mt-auto pt-6">
-                    {/* R2: one primary per viewport — anchor card only */}
+                    {/* R2: one primary per viewport, anchor card only */}
                     <Button
                       href={`/quote?plan=${plan.slug}`}
                       variant={plan.mostPopular ? "primary" : "secondary"}

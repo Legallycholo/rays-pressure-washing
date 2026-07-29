@@ -30,7 +30,7 @@ export async function generateMetadata({
   const bundle = getBundle((await params).bundle);
   if (!bundle) return {};
   return {
-    title: `${bundle.name} Package — Save ${bundle.savingsPercent}%`,
+    title: `${bundle.name} Package: Save ${bundle.savingsPercent}%`,
     description: bundle.blurb,
     alternates: { canonical: `/packages/${bundle.slug}` },
   };
@@ -76,8 +76,8 @@ export default async function BundlePage({ params }: { params: Promise<{ bundle:
             </Badge>
           </>
         }
-        primaryCta={{ label: "Quote This Package", href: quoteHref }}
-        secondaryCta={{ label: site.contact.phone, href: `tel:${site.contact.phoneHref}` }}
+        primaryCta={{ label: "Quote this package", href: quoteHref }}
+        secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
       />
 
       {/* What's included, each service expanded */}
@@ -133,7 +133,7 @@ export default async function BundlePage({ params }: { params: Promise<{ bundle:
             </div>
           </dl>
           <p className="mt-5 border-t border-ink-100 pt-4 text-sm leading-relaxed text-ink-400">
-            Starting figures based on minimum charges — your quote depends on your
+            Starting figures based on minimum charges. Your quote depends on your
             property&apos;s actual measurements. What never changes: the package
             price is always {bundle.savingsPercent}% below the same services booked
             separately.
@@ -149,7 +149,7 @@ export default async function BundlePage({ params }: { params: Promise<{ bundle:
             { time: "Arrival", body: "Walkthrough with you (or photos if you're out), plants soaked, surfaces pre-checked." },
             ...services.map((s) => ({
               time: s.pricing.duration,
-              body: `${s.name} — ${s.blurb}`,
+              body: `${s.name}: ${s.blurb}`,
             })),
             { time: "Wrap-up", body: "Everything rinsed and reset, final walkthrough, photo set sent. Payment only after you've seen it." },
           ].map((step, i, arr) => (
@@ -180,7 +180,7 @@ export default async function BundlePage({ params }: { params: Promise<{ bundle:
         variant="inline"
         title={`Book the ${bundle.name} package`}
         lede={bundle.trigger}
-        primaryCta={{ label: "Quote This Package", href: quoteHref }}
+        primaryCta={{ label: "Quote this package", href: quoteHref }}
       />
 
       <FaqSection

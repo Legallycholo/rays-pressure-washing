@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { site, stats } from "@/content/site";
+import { site, stats, credentialBadges } from "@/content/site";
 import { featuredServices, residentialServices } from "@/content/services";
 import { activeCampaign, featuredBundles, maintenancePlans, maintenancePlanTerms } from "@/content/packages";
 import { locations } from "@/content/locations";
@@ -14,11 +14,13 @@ import { SymptomChecker } from "@/components/sections/SymptomChecker";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { BundlesSection } from "@/components/sections/BundlesSection";
 import { BeforeAfterShowcase } from "@/components/sections/BeforeAfterShowcase";
+import { VideoShowcase } from "@/components/sections/VideoShowcase";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { GuaranteeBand } from "@/components/sections/GuaranteeBand";
 import { MaintenanceTeaser } from "@/components/sections/MaintenanceTeaser";
 import { StatsRow } from "@/components/sections/StatsRow";
 import { Testimonials } from "@/components/sections/Testimonials";
+import { PressBar } from "@/components/sections/PressBar";
 import { ServiceAreaSection } from "@/components/sections/ServiceAreaSection";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { BlogPreview } from "@/components/sections/BlogPreview";
@@ -26,7 +28,7 @@ import { BlogPreview } from "@/components/sections/BlogPreview";
 export const metadata: Metadata = {
   title: `Pressure Washing & Exterior Cleaning in ${site.serviceRegion}`,
   description:
-    `${site.name} — soft washing, roof cleaning, driveway and concrete cleaning across ` +
+    `${site.name}: soft washing, roof cleaning, driveway and concrete cleaning across ` +
     `${site.serviceRegion}. Published prices, free same-day quotes, and the ${site.guarantee.title}.`,
   alternates: { canonical: "/" },
 };
@@ -41,7 +43,7 @@ const homeFaqIds = [
   "payment",
 ];
 
-/** Assembled per STRUCTURE.md §8.1 / SECTIONS.md §1.5. Ends on FAQ — the
+/** Assembled per STRUCTURE.md §8.1 / SECTIONS.md §1.5. Ends on FAQ: the
  *  footer band closes every page (§1.6). */
 export default function HomePage() {
   return (
@@ -50,12 +52,12 @@ export default function HomePage() {
       <Hero
         eyebrow={`Serving ${site.serviceRegion}`}
         title={site.tagline}
-        lede={`Soft washing, pressure washing and exterior cleaning done the right way for each surface — quoted free, priced openly, and backed by the ${site.guarantee.title}.`}
-        primaryCta={{ label: "Get My Free Quote", href: "/quote" }}
-        secondaryCta={{ label: site.contact.phone, href: `tel:${site.contact.phoneHref}` }}
+        lede={`Soft washing, pressure washing and exterior cleaning done the right way for each surface. Quoted free, priced openly, and backed by the ${site.guarantee.title}.`}
+        primaryCta={{ label: "Get my free quote", href: "/quote" }}
+        secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
         project={featuredProjects[0]}
       />
-      <TrustBar items={site.credentials} />
+      <TrustBar items={site.credentials} badges={credentialBadges} />
       <SymptomChecker services={residentialServices} />
       <ServicesGrid
         services={featuredServices}
@@ -68,13 +70,19 @@ export default function HomePage() {
       />
       <BundlesSection bundles={featuredBundles} />
       <BeforeAfterShowcase projects={featuredProjects} />
+      {/* sand → ink → light: photo proof, motion proof, then the process. */}
+      <VideoShowcase />
       <HowItWorks />
       <GuaranteeBand guarantee={site.guarantee} />
       <MaintenanceTeaser
         plan={maintenancePlans.find((p) => p.mostPopular) ?? maintenancePlans[0]}
         terms={maintenancePlanTerms}
       />
-      <Testimonials items={featuredTestimonials} />
+      {/* Carousel on the homepage only. /reviews and the detail pages keep the
+          grid, where seeing every review at once is the point (SECTIONS.md §2.10). */}
+      <Testimonials items={featuredTestimonials} layout="carousel" />
+      {/* Renders nothing until there is real press coverage. See content/press.ts. */}
+      <PressBar />
       <ServiceAreaSection locations={locations} />
       <FaqSection items={getFaqs(homeFaqIds)} groupName="faq-home" />
       <StatsRow stats={stats} />

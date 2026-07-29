@@ -6,7 +6,7 @@ type Size = "sm" | "md" | "lg";
 
 /**
  * `primary` is Signal orange and is reserved for the main conversion action.
- * Never put two primaries in the same viewport — if everything is primary,
+ * Never put two primaries in the same viewport, if everything is primary,
  * nothing is.
  */
 const variants: Record<Variant, string> = {
@@ -31,9 +31,14 @@ const sizes: Record<Size, string> = {
 // overflows narrow viewports (and grid tracks, whose items are min-width:auto).
 // Labels should be short enough not to wrap; when one does, wrapping beats
 // breaking the page.
+// `active:scale-[0.97]` is the highest-leverage bit of feedback on this whole
+// site: most traffic is mobile, hover doesn't exist there, and without a press
+// state a tap on a slow connection looks like nothing happened. Compositor-only
+// (transform), and it composes with the translate above rather than replacing
+// it, Tailwind's transform utilities each own their own variable.
 const base =
-  "inline-flex max-w-full items-center justify-center rounded-pill text-center transition-all duration-200 " +
-  "hover:-translate-y-0.5 active:translate-y-0 " +
+  "no-tap-flash inline-flex max-w-full items-center justify-center rounded-pill text-center transition-all duration-200 " +
+  "hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] " +
   "disabled:opacity-50 disabled:pointer-events-none";
 
 type Props = {
@@ -56,6 +61,12 @@ export function Button({
 }: Props) {
   const classes = cn(base, variants[variant], sizes[size], fullWidth && "w-full", className);
 
+  // R2 is "never two primaries in one viewport", which is only enforceable if
+  // primaries are findable at runtime. This marks them. `Header` uses it to
+  // stand its own CTA down while an in-flow primary is on screen, and the gate
+  // scripts use it to audit R2 without sniffing Tailwind class names.
+  const cta = variant === "primary" ? "primary" : undefined;
+
   if (href) {
     const external = href.startsWith("http") || href.startsWith("tel:") || href.startsWith("sms:");
     if (external) {
@@ -63,6 +74,7 @@ export function Button({
         <a
           href={href}
           className={classes}
+          data-cta={cta}
           {...(href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         >
           {children}
@@ -70,14 +82,14 @@ export function Button({
       );
     }
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} className={classes} data-cta={cta}>
         {children}
       </Link>
     );
   }
 
   return (
-    <button className={classes} {...rest}>
+    <button className={classes} data-cta={cta} {...rest}>
       {children}
     </button>
   );

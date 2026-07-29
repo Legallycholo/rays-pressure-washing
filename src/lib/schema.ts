@@ -5,7 +5,7 @@ import type { Faq } from "@/content/faqs";
 import type { Post } from "@/content/posts";
 
 /**
- * Structured data. For a local service business this is not optional polish —
+ * Structured data. For a local service business this is not optional polish,
  * it's what produces the star rating, the price range and the service list in
  * the search result, and it's a large part of why one competitor outranks
  * another on identical copy.
@@ -83,7 +83,7 @@ export function serviceSchema(service: Service, location?: Location) {
 
 /**
  * Bundle pages emit AggregateOffer (STRUCTURE.md §13). The low price is the
- * discounted sum of constituent service minimums — placeholder maths on
+ * discounted sum of constituent service minimums, placeholder maths on
  * placeholder figures, same as everything else in content.
  */
 export function bundleOfferSchema(bundle: {

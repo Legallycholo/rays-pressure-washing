@@ -44,8 +44,16 @@ export function Placeholder({
       role="img"
       aria-label={`Image placeholder: ${label}`}
     >
+      {/* The icon keeps its fade: it is decoration inside a labeled
+          `role="img"`, so it answers to the 3:1 non-text floor.
+
+          The label does not. At `opacity-70` this 12px text measured 3.3:1 on
+          the dark tone and 2.9:1 on the light one, both under 4.5:1. Opacity is
+          the trap: the class looks like a styling nicety, and it is silently a
+          contrast change, because what ships is the blend against whatever is
+          behind it. Set the color, don't fade the text. */}
       <Icon name={icon} className="h-7 w-7 opacity-50" />
-      <span className="max-w-[22ch] text-xs font-medium leading-snug opacity-70">{label}</span>
+      <span className="max-w-[22ch] text-xs font-medium leading-snug">{label}</span>
     </div>
   );
 }

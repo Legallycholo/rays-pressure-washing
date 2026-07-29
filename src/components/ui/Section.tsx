@@ -12,7 +12,7 @@ const tones: Record<Tone, string> = {
 
 /**
  * Every page section goes through here so vertical rhythm and the light/dark
- * alternation stay consistent. Alternate tones down the page — never two
+ * alternation stay consistent. Alternate tones down the page, never two
  * adjacent sections with the same tone, or the page reads as one long slab.
  */
 export function Section({

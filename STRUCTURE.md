@@ -440,9 +440,37 @@ Fluid sizes use `clamp()` so headings scale continuously.
 
 ### 10.4 Motion
 
-200–300ms, `--ease-out-expo`. Cards lift `-translate-y-1`, buttons
-`-translate-y-0.5`. `prefers-reduced-motion` is handled globally — no per-component
-guards. No scroll-jacking, no parallax, no entrance animations that delay content.
+**Durations/easing:** micro-interactions 150–250ms; section reveals 400–600ms;
+stacking-card transitions scrub with scroll (no fixed duration). Standard ease
+`--ease-out-expo`; `--ease-spring` (`cubic-bezier(0.34, 1.56, 0.64, 1)`) for
+playful pops (nudge bubble, hub menu open). Cards lift `-translate-y-1`, buttons
+`-translate-y-0.5` and press `active:scale-[0.97]`. `prefers-reduced-motion`
+stays handled globally — no per-component guards.
+
+**Compositor-only:** animate `transform` and `opacity` exclusively. Never animate
+`width`, `height`, `top`/`left`, `margin`, or box-shadow spread directly — use
+`transform: scale()`/`translate()` and a precomputed shadow swap instead.
+
+**LCP is sacred:** the hero image/slider and any above-the-fold text never wait on
+JS to become visible. Entrance reveals apply only to content that scrolls into view
+*after* first paint, driven by `IntersectionObserver`, and the underlying content
+must already be in the DOM (progressive enhancement — CSS-disabled or JS-failed
+should still show fully readable content, just without the fade/slide).
+
+**No JS scroll-jacking:** never intercept wheel/touch events to remap scroll
+position or speed. Native scroll-linked techniques are allowed and encouraged:
+`position: sticky`, `IntersectionObserver`-driven CSS custom properties, and (as
+progressive enhancement) the native CSS Scroll-Driven Animations spec
+(`animation-timeline: view()` / `scroll()`). The user's scrollbar and scroll speed
+are never touched.
+
+**Stacking-card sections reserve their full height up front** so there is zero
+layout shift as the effect initialises. `StackingCards` does this by construction:
+its cards are ordinary siblings in normal flow that go `position: sticky`, so the
+document reserves the runway before any JS runs.
+
+Implementations: `components/Reveal.tsx` (entrances), `components/StackingCards.tsx`
+(sticky deck), and the `.reveal` / `.stack-card` blocks in `globals.css`.
 
 ### 10.5 Signature motifs
 
@@ -498,7 +526,7 @@ src/content/   site · services · packages · locations · faqs · testimonials
                gallery · posts
 src/lib/       utils (cn, currency, formatDate, titleCase)
                schema (localBusiness, service, faq, breadcrumb, article)
-src/components/ JsonLd · BeforeAfterSlider
+src/components/ JsonLd · BeforeAfterSlider · Reveal · StackingCards · ContactHub
                layout/{Header, Footer, StickyCallBar}
                ui/{Container, Section, Button, SectionHeading, Icon, Rating,
                    Placeholder, Accordion, Badge, Card}

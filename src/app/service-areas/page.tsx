@@ -14,7 +14,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: `Service Areas — ${site.serviceRegion}`,
+  title: `Service Areas in ${site.serviceRegion}`,
   description: `Where ${site.name} works: ${locations.map((l) => l.city).join(", ")} and the surrounding ${site.serviceRegion} area.`,
   alternates: { canonical: "/service-areas" },
 };
@@ -32,8 +32,8 @@ export default function ServiceAreasPage() {
         variant="page"
         breadcrumbs={crumbs}
         title={`On the road across ${site.serviceRegion}`}
-        lede={`Based in ${site.address.city}, working everywhere below. Each area page covers what we see most in that neighbourhood — because a lakeside pool cage and a new-build driveway are different jobs.`}
-        primaryCta={{ label: "Check My Address", href: "/quote" }}
+        lede={`Based in ${site.address.city}, working everywhere below. Each area page covers what we see most in that neighborhood, because a lakefront deck and a new-build driveway are different jobs.`}
+        primaryCta={{ label: "Check my address", href: "/quote" }}
       />
 
       <Section tone="light">
@@ -71,7 +71,7 @@ export default function ServiceAreasPage() {
         <SectionHeading eyebrow="Travel" title="Outside the 30-minute ring?" />
         <p className="mt-6 text-center leading-relaxed text-ink-600">
           Within {travelPolicy.freeRadiusMinutes} minutes of {site.address.city} there&apos;s
-          never a travel charge. Beyond that a flat call-out applies — and{" "}
+          never a travel charge. Beyond that a flat call-out applies, and{" "}
           {travelPolicy.note.charAt(0).toLowerCase() + travelPolicy.note.slice(1)}
         </p>
         <p className="mt-6 text-center">

@@ -9,10 +9,10 @@ import { cn } from "@/lib/utils";
  *
  * Accessibility approach: the control is a real <input type="range"> laid over
  * the image. That gives keyboard support, arrow-key stepping, screen-reader
- * announcement and touch handling for free — all of which a div-with-pointer-
+ * announcement and touch handling for free, all of which a div-with-pointer-
  * events implementation has to reimplement badly.
  *
- * Images are optional. With empty paths it renders labelled placeholder frames,
+ * Images are optional. With empty paths it renders labeled placeholder frames,
  * so the interaction can be reviewed and signed off before photography exists.
  */
 export function BeforeAfterSlider({
@@ -42,27 +42,27 @@ export function BeforeAfterSlider({
 
   return (
     <figure className={cn("group relative overflow-hidden rounded-card bg-ink-100", ratios[ratio], className)}>
-      {/* AFTER — the full-bleed base layer. */}
+      {/* AFTER: the full-bleed base layer. */}
       <div className="absolute inset-0">
         {after ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={after} alt={`${alt} — after cleaning`} className="h-full w-full object-cover" />
+          <img src={after} alt={`${alt}, after cleaning`} className="h-full w-full object-cover" />
         ) : (
-          <Placeholder label={`AFTER — ${alt}`} ratio={ratio} className="h-full w-full rounded-none" />
+          <Placeholder label={`AFTER: ${alt}`} ratio={ratio} className="h-full w-full rounded-none" />
         )}
       </div>
 
-      {/* BEFORE — clipped from the left edge to the divider position. */}
+      {/* BEFORE: clipped from the left edge to the divider position. */}
       <div
         className="absolute inset-0 overflow-hidden"
         style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
       >
         {before ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={before} alt={`${alt} — before cleaning`} className="h-full w-full object-cover" />
+          <img src={before} alt={`${alt}, before cleaning`} className="h-full w-full object-cover" />
         ) : (
           <Placeholder
-            label={`BEFORE — ${alt}`}
+            label={`BEFORE: ${alt}`}
             ratio={ratio}
             tone="dark"
             className="h-full w-full rounded-none"
@@ -70,7 +70,7 @@ export function BeforeAfterSlider({
         )}
       </div>
 
-      {/* Divider — mint, echoing the "clean edge" motif. */}
+      {/* Divider: mint, echoing the "clean edge" motif. */}
       <div
         className="pointer-events-none absolute inset-y-0 z-10 w-0.5 bg-mint-400 shadow-[0_0_20px_rgba(63,224,191,0.6)]"
         style={{ left: `${pos}%` }}
@@ -97,7 +97,7 @@ export function BeforeAfterSlider({
       )}
 
       <label htmlFor={id} className="sr-only">
-        Reveal before and after — drag or use arrow keys
+        Reveal before and after. Drag or use arrow keys
       </label>
       <input
         id={id}
@@ -109,7 +109,7 @@ export function BeforeAfterSlider({
         aria-label={`Before and after comparison for ${alt}`}
         className={cn(
           "absolute inset-0 z-20 h-full w-full cursor-ew-resize appearance-none bg-transparent",
-          // Hide the native track/thumb — the visual divider above is the UI.
+          // Hide the native track/thumb, the visual divider above is the UI.
           "[&::-webkit-slider-thumb]:h-full [&::-webkit-slider-thumb]:w-11 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:opacity-0",
           "[&::-moz-range-thumb]:h-full [&::-moz-range-thumb]:w-11 [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:opacity-0",
         )}

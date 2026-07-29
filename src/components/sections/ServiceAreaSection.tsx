@@ -7,7 +7,7 @@ import { Icon } from "@/components/ui/Icon";
 import { CoverageMap } from "./CoverageMap";
 import { cn } from "@/lib/utils";
 
-/** SECTIONS.md §2.12 — static SVG map, never a live embed. */
+/** SECTIONS.md §2.12, static SVG map, never a live embed. */
 export function ServiceAreaSection({
   locations,
   tone = "ink",
@@ -31,7 +31,7 @@ export function ServiceAreaSection({
           </h2>
           <p className={cn("leading-relaxed", dark ? "text-ink-200" : "text-ink-500")}>
             Based in {site.address.city}, on the road across the whole region. If
-            you&apos;re near one of these, you&apos;re in our patch — and if you&apos;re not
+            you&apos;re near one of these, you&apos;re in our patch, and if you&apos;re not
             sure, ask.
           </p>
           <ul className="flex flex-wrap gap-2">
@@ -40,7 +40,7 @@ export function ServiceAreaSection({
                 <Link
                   href={`/service-areas/${l.slug}`}
                   className={cn(
-                    "inline-block rounded-pill px-4 py-1.5 text-sm transition-colors",
+                    "inline-flex min-h-[44px] items-center rounded-pill px-4 py-1.5 text-sm transition-colors",
                     l.priority ? "font-bold" : "font-medium",
                     dark
                       ? l.priority
@@ -60,7 +60,7 @@ export function ServiceAreaSection({
             {travelPolicy.note}
           </p>
         </div>
-        <CoverageMap locations={locations} />
+        <CoverageMap locations={locations} onDark={dark} />
       </div>
     </Section>
   );

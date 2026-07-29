@@ -3,7 +3,7 @@ import { Icon } from "./Icon";
 
 /**
  * Built on native <details>/<summary>: keyboard accessible, screen-reader
- * correct, and works with JavaScript disabled — no client component, no state,
+ * correct, and works with JavaScript disabled, no client component, no state,
  * no hydration cost. `name` groups items so only one opens at a time.
  */
 export function Accordion({

@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 /**
- * Inline SVG set — no icon library dependency, no runtime cost, no flash.
+ * Inline SVG set, no icon library dependency, no runtime cost, no flash.
  * Service icons are referenced by name from content/services.ts.
  *
  * These are functional line icons at a consistent 24px grid / 1.75 stroke.
@@ -107,6 +107,14 @@ const paths: Record<string, React.ReactNode> = {
   ),
   arrow: <path d="M4 12h15m0 0-6-6m6 6-6 6" />,
   chevron: <path d="m6 9 6 6 6-6" />,
+  expand: <path d="M9 4H4v5M15 4h5v5M15 20h5v-5M9 20H4v-5" />,
+  close: <path d="M6 6l12 12M18 6 6 18" />,
+  chat: (
+    <>
+      <path d="M21 12a8 8 0 0 1-8 8H8l-5 3 1.2-4.2A8 8 0 1 1 21 12z" />
+      <path d="M8.5 11h7M8.5 14.5h4" />
+    </>
+  ),
   calendar: (
     <>
       <rect x="3" y="5" width="18" height="16" rx="2" />
@@ -136,6 +144,12 @@ const paths: Record<string, React.ReactNode> = {
     </>
   ),
   droplet: <path d="M12 3s6 6.2 6 10.2A6 6 0 0 1 6 13.2C6 9.2 12 3 12 3z" />,
+  send: (
+    <>
+      <path d="M21 3 10.5 13.5" />
+      <path d="M21 3 14.5 21l-4-7.5L3 9.5z" />
+    </>
+  ),
 };
 
 export type IconName = keyof typeof paths;

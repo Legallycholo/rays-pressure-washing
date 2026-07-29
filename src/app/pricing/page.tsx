@@ -13,7 +13,7 @@ import { breadcrumbSchema } from "@/lib/schema";
 import { currency } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Pricing — Published, Not Hidden",
+  title: "Pricing: Published, Not Hidden",
   description:
     "Real price ranges for every service, an instant estimator, and the five things that legitimately change a quote.",
   alternates: { canonical: "/pricing" },
@@ -94,10 +94,10 @@ export default function PricingPage() {
             <ul className="mt-5 space-y-3.5">
               {[
                 ["Square footage", "The biggest factor, and why we quote from measurements."],
-                ["Height and access", "Second storeys, steep sites and tight access add time and rigging."],
+                ["Height and access", "Second-story work, steep sites and tight access add time and rigging."],
                 ["Surface condition", "Years of buildup takes more chemistry and more passes than annual upkeep."],
                 ["Material", "Old timber and soft brick need slower, gentler work than concrete."],
-                ["Travel", `Beyond ${30} minutes a flat call-out applies — waived when neighbours book together.`],
+                ["Travel", `Beyond ${30} minutes a flat call-out applies, waived when neighbors book together.`],
               ].map(([title, body]) => (
                 <li key={title} className="flex gap-3">
                   <Icon name="check" className="mt-1 h-5 w-5 shrink-0 text-mint-600" />

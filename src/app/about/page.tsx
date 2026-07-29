@@ -17,7 +17,7 @@ import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: `${site.name} — locally owned exterior cleaning, based in ${cityState} since ${site.foundedYear}.`,
+  description: `${site.name}: locally owned exterior cleaning, based in ${cityState} since ${site.foundedYear}.`,
   alternates: { canonical: "/about" },
 };
 
@@ -34,8 +34,8 @@ export default function AboutPage() {
         variant="page"
         breadcrumbs={crumbs}
         title={`The local crew that treats your place like the ${site.guarantee.title.toLowerCase()} depends on it`}
-        lede={`Because it does. ${site.name} has been washing ${site.serviceRegion} exteriors since ${site.foundedYear} — same owner, same standard, same trucks you see around town.`}
-        primaryCta={{ label: "Get My Free Quote", href: "/quote" }}
+        lede={`Because it does. ${site.name} has been washing ${site.serviceRegion} exteriors since ${site.foundedYear}. Same owner, same standard, same trucks you see around town.`}
+        primaryCta={{ label: "Get my free quote", href: "/quote" }}
       />
 
       <StatsRow stats={stats} tone="hydro" />
@@ -51,8 +51,8 @@ export default function AboutPage() {
             />
             <div className="mt-6 space-y-4 leading-relaxed text-ink-600">
               <p>
-                {/* DRAFT COPY — replace with the real founding story at launch */}
-                Ryan started this company in {site.foundedYear} with a trailer, a
+                {/* DRAFT COPY: replace with the real founding story at launch */}
+                Ray started this company in {site.foundedYear} with a trailer, a
                 pressure washer, and a low tolerance for the wand-stripe driveways and
                 blasted siding other outfits were leaving behind. The bet was simple:
                 learn the right method for every surface, publish honest prices, and
@@ -60,13 +60,13 @@ export default function AboutPage() {
               </p>
               <p>
                 Today it&apos;s a small crew, background-checked and trained on every
-                material we touch — but it&apos;s still the same bet. If you can see it
+                material we touch, but it&apos;s still the same bet. If you can see it
                 after we leave, we come back. That&apos;s not a slogan; it&apos;s the
                 guarantee.
               </p>
             </div>
           </div>
-          <Placeholder label="Founder / crew photo — the real people, not stock" ratio="4/3" icon="camera" />
+          <Placeholder label="Founder / crew photo: the real people, not stock" ratio="4/3" icon="camera" />
         </div>
       </Section>
 
@@ -74,7 +74,7 @@ export default function AboutPage() {
       <Section tone="sand">
         <SectionHeading eyebrow="The crew" title="Who shows up" />
         <ul className="mx-auto mt-12 grid max-w-4xl gap-6 sm:grid-cols-3">
-          {["Ryan — Owner & lead tech", "Crew member — Soft wash", "Crew member — Flatwork"].map((label) => (
+          {["Ray, owner & lead tech", "Crew member, soft wash", "Crew member, flatwork"].map((label) => (
             <li key={label} className="flex flex-col items-center gap-3 text-center">
               <Placeholder label={label} ratio="1/1" className="w-full max-w-[14rem] rounded-full" icon="camera" />
               <p className="text-sm font-semibold text-ink-700">{label}</p>

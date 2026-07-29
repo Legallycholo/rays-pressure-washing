@@ -4,6 +4,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Card } from "@/components/ui/Card";
 import { Icon } from "@/components/ui/Icon";
 import { Badge } from "@/components/ui/Badge";
+import { Reveal } from "@/components/Reveal";
 import { cn, currency } from "@/lib/utils";
 
 type HeadingProps = { eyebrow?: string; title: React.ReactNode; lede?: React.ReactNode };
@@ -66,20 +67,28 @@ export function ServicesGrid({
 
   return (
     <Section tone={tone}>
-      {heading && <SectionHeading {...heading} />}
-      <ul
-        className={cn(
-          "grid items-stretch gap-6",
-          heading && "mt-12 sm:mt-16",
-          columns === 4 ? "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "sm:grid-cols-2 lg:grid-cols-3",
-        )}
-      >
-        {sorted.map((s) => (
-          <li key={s.slug}>
-            <ServiceCard service={s} promoted={promote.includes(s.slug)} />
-          </li>
-        ))}
-      </ul>
+      {heading && (
+        <Reveal>
+          <SectionHeading {...heading} />
+        </Reveal>
+      )}
+      {/* Two groups, not one per card: the heading, then the grid a beat
+          behind it. Staggering nine cards individually would read as a slot
+          machine (STRUCTURE.md §10.4). */}
+      <Reveal delay={heading ? 100 : 0} className={cn(heading && "mt-12 sm:mt-16")}>
+        <ul
+          className={cn(
+            "grid items-stretch gap-6",
+            columns === 4 ? "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" : "sm:grid-cols-2 lg:grid-cols-3",
+          )}
+        >
+          {sorted.map((s) => (
+            <li key={s.slug}>
+              <ServiceCard service={s} promoted={promote.includes(s.slug)} />
+            </li>
+          ))}
+        </ul>
+      </Reveal>
     </Section>
   );
 }

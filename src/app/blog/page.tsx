@@ -7,8 +7,8 @@ import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Guides — Exterior Cleaning, Explained Straight",
-  description: "Methods, costs, timing and maintenance — written to make you a sharper buyer, whoever you end up hiring.",
+  title: "Guides: Exterior Cleaning, Explained Straight",
+  description: "Methods, costs, timing and maintenance. Written to make you a sharper buyer, whoever you end up hiring.",
   alternates: { canonical: "/blog" },
 };
 
@@ -19,7 +19,7 @@ const crumbs = [
 
 /**
  * Static index. Category chips are anchor links to grouped sections (keeps the
- * page fully static — open decision #5's array model doesn't warrant client
+ * page fully static, open decision #5's array model doesn't warrant client
  * filtering at 6 posts).
  */
 export default function BlogIndexPage() {
@@ -30,7 +30,7 @@ export default function BlogIndexPage() {
         variant="page"
         breadcrumbs={crumbs}
         title="Know what you're paying for"
-        lede="No fluff, no scare tactics — just how exterior cleaning actually works, what it costs, and when it's worth doing."
+        lede="No fluff, no scare tactics. Just how exterior cleaning actually works, what it costs, and when it's worth doing."
       />
       <Section tone="light">
         <nav aria-label="Categories" className="flex flex-wrap justify-center gap-2">
@@ -38,7 +38,7 @@ export default function BlogIndexPage() {
             <a
               key={cat}
               href={`#cat-${cat.replace(/\s+/g, "-").toLowerCase()}`}
-              className="rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700 transition-colors hover:bg-hydro-50 hover:text-hydro-800"
+              className="inline-flex min-h-[44px] items-center rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700 transition-colors hover:bg-hydro-50 hover:text-hydro-800"
             >
               {cat}
             </a>

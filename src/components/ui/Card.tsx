@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 /**
  * When `href` is set the whole card becomes a click target via a stretched
  * overlay link. That keeps the accessible name on a single real anchor while
- * making the entire surface clickable — better than wrapping the card in <a>,
+ * making the entire surface clickable, better than wrapping the card in <a>,
  * which would swallow any nested interactive elements.
  */
 export function Card({

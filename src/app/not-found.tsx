@@ -11,7 +11,7 @@ export default function NotFound() {
         <span className="font-display text-display-lg text-hydro-400">404</span>
         <h1 className="text-display-sm text-white">That page got washed away</h1>
         <p className="max-w-md text-ink-200">
-          The page you&apos;re after doesn&apos;t exist — but the cleaning does. Start from
+          The page you&apos;re after doesn&apos;t exist, but the cleaning does. Start from
           our services, or ask us directly.
         </p>
         <div className="flex flex-col gap-3 sm:flex-row">

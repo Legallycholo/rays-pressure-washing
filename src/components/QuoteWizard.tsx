@@ -12,10 +12,15 @@ import { cn, currency } from "@/lib/utils";
 /**
  * STRUCTURE.md §9.1 / CHECKLIST.md Phase 6.
  *
- * ⚠️ SUBMIT IS A STUB. There is no backend: submission logs the payload and
- * shows the success state. Photos are previewed client-side and DISCARDED on
- * submit (open decision #4). Wire `submitLead()` to a real endpoint before
- * launch — CHECKLIST.md Phase 13.
+ * Submission POSTs to `/api/leads`, which emails the business. Photos are still
+ * previewed client-side and DISCARDED on submit (open decision #4), only the
+ * count travels, and the email says so, so nobody on either end is left
+ * wondering where they went.
+ *
+ * The success state is only ever shown for a lead that actually left the
+ * building. A failure keeps the visitor's answers on screen and offers the
+ * phone, because the alternative (a green tick over a lead nobody received)
+ * costs them a week of waiting for a call that was never coming.
  *
  * The running estimate is a deliberate ballpark: selected services' minimum
  * charges, scaled by property size and storeys, shown as a range. The honesty
@@ -60,9 +65,24 @@ const SIZES = [
 const STORAGE_KEY = "quote-wizard-v1";
 const STEPS = ["Services", "Property", "Photos", "Contact"] as const;
 
-function submitLead(payload: object) {
-  // STUB — replace with a POST to the real form endpoint at launch.
-  console.log("[quote-wizard] lead payload (not sent anywhere):", payload);
+/**
+ * Hands the lead to `/api/leads`. Resolves only if it was actually sent,
+ * everything else throws, and the caller keeps the visitor on the form.
+ */
+async function submitLead(payload: object) {
+  const res = await fetch("/api/leads", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ kind: "quote", ...payload }),
+  });
+
+  if (!res.ok) {
+    // The route writes messages meant to be read by a customer, so prefer its
+    // wording over a generic one, it knows whether this was rate limiting, a
+    // validation problem or a dead sender.
+    const detail = await res.json().catch(() => null);
+    throw new Error(detail?.error || "That didn't send.");
+  }
 }
 
 export function QuoteWizard() {
@@ -70,6 +90,9 @@ export function QuoteWizard() {
   const [form, setForm] = useState<FormState>(EMPTY);
   const [errors, setErrors] = useState<string[]>([]);
   const [done, setDone] = useState(false);
+  const [sending, setSending] = useState(false);
+  /** Set only when the send itself failed, renders the phone fallback. */
+  const [sendFailed, setSendFailed] = useState(false);
   const [photos, setPhotos] = useState<{ name: string; url: string }[]>([]);
   const headingRef = useRef<HTMLElement | null>(null);
   // Callback ref: accepts any heading-ish element (h2/legend) without variance fights.
@@ -85,7 +108,7 @@ export function QuoteWizard() {
       const raw = sessionStorage.getItem(STORAGE_KEY);
       if (raw) restored = { ...EMPTY, ...JSON.parse(raw) };
     } catch {
-      /* corrupted storage — start fresh */
+      /* corrupted storage, start fresh */
     }
     // Read the query from location, not useSearchParams: on a statically
     // prerendered page the hook can still be empty during this mount effect,
@@ -101,7 +124,7 @@ export function QuoteWizard() {
     hydrated.current = true;
   }, []);
 
-  // Persist (photos excluded — object URLs don't survive a refresh anyway).
+  // Persist (photos excluded, object URLs don't survive a refresh anyway).
   useEffect(() => {
     if (!hydrated.current) return;
     sessionStorage.setItem(STORAGE_KEY, JSON.stringify(form));
@@ -128,6 +151,7 @@ export function QuoteWizard() {
   const set = useCallback(<K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
     setErrors([]);
+    setSendFailed(false);
   }, []);
 
   const toggleService = (slug: string) =>
@@ -156,11 +180,11 @@ export function QuoteWizard() {
 
   // ---- Validation ----------------------------------------------------------
   const validate = (s: number): string[] => {
-    if (s === 1 && form.services.length === 0) return ["Pick at least one service — or your best guess. We'll confirm on site."];
+    if (s === 1 && form.services.length === 0) return ["Pick at least one service, or your best guess. We'll confirm on site."];
     if (s === 2) {
       const errs: string[] = [];
       if (!form.propertyType) errs.push("Tell us the property type.");
-      if (!form.size) errs.push("Pick the closest size — a rough guess is fine.");
+      if (!form.size) errs.push("Pick the closest size. A rough guess is fine.");
       return errs;
     }
     if (s === 4) {
@@ -174,14 +198,34 @@ export function QuoteWizard() {
     return [];
   };
 
-  const next = () => {
+  const next = async () => {
     const errs = validate(step);
     if (errs.length) return setErrors(errs);
     if (step < 4) return setStep(step + 1);
-    // Final submit
-    submitLead({ ...form, photoCount: photos.length, estimate, bundle: matchedBundle?.slug ?? null });
+
+    // Final submit. Nothing is torn down, not the object URLs, not the saved
+    // draft, until the lead is confirmed away, so a failure leaves the visitor
+    // exactly where they were with everything they typed still in front of them.
+    setSending(true);
+    setSendFailed(false);
+    setErrors([]);
+    try {
+      await submitLead({
+        ...form,
+        photoCount: photos.length,
+        estimate,
+        bundle: matchedBundle?.slug ?? null,
+      });
+    } catch (err) {
+      setSending(false);
+      setSendFailed(true);
+      setErrors([(err as Error).message]);
+      return;
+    }
+
     photos.forEach((p) => URL.revokeObjectURL(p.url));
     sessionStorage.removeItem(STORAGE_KEY);
+    setSending(false);
     setDone(true);
   };
 
@@ -204,7 +248,7 @@ export function QuoteWizard() {
         </span>
         <h2 className="mt-5 font-display text-3xl text-ink-900">Got it, {form.name.split(" ")[0] || "thanks"}.</h2>
         <p className="mt-3 leading-relaxed text-ink-500">
-          Your quote request is in. We&apos;ll come back to you the same business day —
+          Your quote request is in. We&apos;ll come back to you the same business day,
           usually within a couple of hours. Want an answer faster?
         </p>
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
@@ -250,13 +294,13 @@ export function QuoteWizard() {
       </ol>
 
       <div className="mt-8 rounded-card bg-white p-6 shadow-card ring-1 ring-ink-900/5 sm:p-8">
-        {/* STEP 1 — services */}
+        {/* STEP 1: services */}
         {step === 1 && (
           <fieldset>
             <legend ref={captureHeading} tabIndex={-1} className="font-display text-2xl text-ink-900 outline-none">
               What needs cleaning?
             </legend>
-            <p className="mt-1.5 text-sm text-ink-500">Pick everything that applies — bundling saves money.</p>
+            <p className="mt-1.5 text-sm text-ink-500">Pick everything that applies. Bundling saves money.</p>
             <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
               {services.map((s) => {
                 const on = form.services.includes(s.slug);
@@ -283,14 +327,14 @@ export function QuoteWizard() {
             {matchedBundle && (
               <p className="mt-4 rounded-card bg-mint-400/10 p-3.5 text-sm text-ink-700 ring-1 ring-mint-500/25">
                 <Icon name="sparkle" className="mr-1.5 inline h-4 w-4 text-mint-600" />
-                That&apos;s our <strong>{matchedBundle.name}</strong> package —{" "}
+                That&apos;s our <strong>{matchedBundle.name}</strong> package:{" "}
                 <strong>{matchedBundle.savingsPercent}% off</strong> booked together. Applied automatically.
               </p>
             )}
           </fieldset>
         )}
 
-        {/* STEP 2 — property */}
+        {/* STEP 2: property */}
         {step === 2 && (
           <div>
             <h2 ref={captureHeading} tabIndex={-1} className="font-display text-2xl text-ink-900 outline-none">
@@ -318,7 +362,7 @@ export function QuoteWizard() {
               </div>
             </fieldset>
             <fieldset className="mt-5">
-              <legend className="text-sm font-bold text-ink-700">Storeys</legend>
+              <legend className="text-sm font-bold text-ink-700">Floors</legend>
               <div className="mt-2 grid grid-cols-3 gap-3">
                 {([1, 2, 3] as const).map((n) => (
                   <button
@@ -365,7 +409,7 @@ export function QuoteWizard() {
           </div>
         )}
 
-        {/* STEP 3 — photos */}
+        {/* STEP 3: photos */}
         {step === 3 && (
           <div>
             <h2 ref={captureHeading} tabIndex={-1} className="font-display text-2xl text-ink-900 outline-none">
@@ -414,18 +458,25 @@ export function QuoteWizard() {
                 onChange={(e) => set("notes", e.target.value)}
                 rows={3}
                 placeholder="Gate codes, fragile plants, that one stain that won't budge…"
-                className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-sm text-ink-800 placeholder:text-ink-300 focus:border-hydro-500"
+                className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm text-ink-800 placeholder:text-ink-300 focus:border-hydro-500"
               />
             </label>
           </div>
         )}
 
-        {/* STEP 4 — contact */}
+        {/* STEP 4: contact */}
         {step === 4 && (
           <div>
             <h2 ref={captureHeading} tabIndex={-1} className="font-display text-2xl text-ink-900 outline-none">
               Where do we send the quote?
             </h2>
+            {/* `text-base sm:text-sm` on every field below, and on every other
+                input on this site, is not a type-scale decision. iOS Safari
+                zooms the whole page when you focus an input smaller than 16px
+                and never zooms back out, so the visitor types their address
+                into a page that is now wider than their screen, and stays
+                there for the rest of the session. 16px on mobile, 14px from
+                `sm` up where the behaviour doesn't exist. */}
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               {(
                 [
@@ -443,7 +494,7 @@ export function QuoteWizard() {
                     onChange={(e) => set(key, e.target.value)}
                     placeholder={ph}
                     autoComplete={key === "address" ? "street-address" : key}
-                    className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-sm text-ink-800 placeholder:text-ink-300 focus:border-hydro-500"
+                    className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm text-ink-800 placeholder:text-ink-300 focus:border-hydro-500"
                   />
                 </label>
               ))}
@@ -452,7 +503,7 @@ export function QuoteWizard() {
                 <select
                   value={form.timing}
                   onChange={(e) => set("timing", e.target.value)}
-                  className="mt-2 w-full rounded-card border border-ink-200 bg-white p-3.5 text-sm text-ink-800 focus:border-hydro-500"
+                  className="mt-2 w-full rounded-card border border-ink-200 bg-white p-3.5 text-base sm:text-sm text-ink-800 focus:border-hydro-500"
                 >
                   <option value="">No preference</option>
                   <option value="asap">As soon as possible</option>
@@ -465,16 +516,32 @@ export function QuoteWizard() {
           </div>
         )}
 
-        {/* Errors */}
+        {/* Errors. A failed send is the same box with a way out attached: the
+            visitor has already done four steps of work and telling them it
+            didn't go through without offering an alternative wastes all of it. */}
         {errors.length > 0 && (
-          <ul role="alert" className="mt-5 space-y-1.5 rounded-card bg-signal-50 p-4 text-sm text-signal-800 ring-1 ring-signal-500/20">
-            {errors.map((e) => (
-              <li key={e}>{e}</li>
-            ))}
-          </ul>
+          <div role="alert" className="mt-5 rounded-card bg-signal-50 p-4 text-sm text-signal-800 ring-1 ring-signal-500/20">
+            <ul className="space-y-1.5">
+              {errors.map((e) => (
+                <li key={e}>{e}</li>
+              ))}
+            </ul>
+            {sendFailed && (
+              <p className="mt-2.5 border-t border-signal-500/20 pt-2.5 leading-relaxed">
+                Nothing you typed is lost. Try Send again, or skip us entirely and call{" "}
+                <a
+                  href={`tel:${site.contact.phoneHref}`}
+                  className="font-bold underline underline-offset-2"
+                >
+                  {site.contact.phone}
+                </a>
+                . Someone will take the details down.
+              </p>
+            )}
+          </div>
         )}
 
-        {/* Running estimate — visible from step 2 (§9.1) */}
+        {/* Running estimate, visible from step 2 (§9.1) */}
         {step >= 2 && estimate && (
           <aside className="mt-6 rounded-card bg-ink-900 p-5 text-white hydro-mesh">
             <div className="flex flex-wrap items-center justify-between gap-3">
@@ -487,7 +554,7 @@ export function QuoteWizard() {
               {matchedBundle && <Badge tone="onDark">{matchedBundle.name} · −{matchedBundle.savingsPercent}%</Badge>}
             </div>
             <p className="mt-2.5 text-xs leading-relaxed text-ink-300">
-              A genuine ballpark from your answers so far — not a lead-capture trick. If the
+              A genuine ballpark from your answers so far, not a lead-capture trick. If the
               property measures up as described, the final quote lands inside this range.
             </p>
           </aside>
@@ -502,8 +569,8 @@ export function QuoteWizard() {
           ) : (
             <span />
           )}
-          <Button onClick={next}>
-            {step === 4 ? "Send My Quote Request" : "Continue"}
+          <Button onClick={next} disabled={sending}>
+            {step === 4 ? (sending ? "Sending…" : "Send My Quote Request") : "Continue"}
             <Icon name="arrow" className="h-4 w-4" />
           </Button>
         </div>

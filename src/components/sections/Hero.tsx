@@ -112,7 +112,7 @@ export function Hero({
           {project && (
             <figcaption className="mt-3 text-center text-sm text-ink-300 lg:text-left">
               {project.title}
-              {projectCity && <span className="text-ink-400"> — {projectCity}</span>}
+              {projectCity && <span className="text-ink-400">, {projectCity}</span>}
             </figcaption>
           )}
         </figure>

@@ -14,7 +14,13 @@ import { Icon } from "@/components/ui/Icon";
  */
 export function StickyCallBar() {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-ink-900/95 backdrop-blur-lg lg:hidden">
+    <div
+      // The safe-area padding keeps the row of actions clear of the iOS home
+      // indicator. It's 0px everywhere else, and `--callbar-height` (globals.css)
+      // is what <body> and ContactHub both offset against, so the three stay
+      // in agreement.
+      className="no-tap-flash fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-ink-900/95 pb-[var(--safe-bottom)] backdrop-blur-lg lg:hidden"
+    >
       <div className="grid grid-cols-3 divide-x divide-white/10">
         <a
           href={`tel:${site.contact.phoneHref}`}

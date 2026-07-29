@@ -35,7 +35,7 @@ export default function ContactPage() {
         variant="page"
         breadcrumbs={crumbs}
         title="Talk to a human"
-        lede="Pick whichever channel you actually use — they all reach the same small crew, and they all get answered the same business day."
+        lede="Pick whichever channel you actually use. They all reach the same small crew, and they all get answered the same business day."
       />
 
       <Section tone="light">

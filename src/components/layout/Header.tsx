@@ -8,6 +8,7 @@ import { residentialServices, commercialServices } from "@/content/services";
 import { priorityLocations } from "@/content/locations";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
+import { Logo } from "@/components/ui/Logo";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
 
@@ -32,6 +33,39 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /**
+   * R2: never two Signal primaries in one viewport.
+   *
+   * The header CTA is permanent; in-flow primaries (the hero's, `CtaBand`'s,
+   * `GuaranteeBand`'s) scroll past it, and wherever they overlap there were two
+   * oranges competing. The header is the one that yields: it stands down while
+   * any in-flow primary is on screen and takes over the moment none is.
+   *
+   * Keyed off `data-cta="primary"` from `Button`, not off "is the hero
+   * visible", five pages have a hero with no primary at all, and hiding the
+   * header CTA on those would cost a conversion path to avoid a conflict that
+   * isn't there.
+   */
+  const [inFlowPrimary, setInFlowPrimary] = useState(false);
+
+  useEffect(() => {
+    const visible = new Set<Element>();
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) visible.add(e.target);
+        else visible.delete(e.target);
+      }
+      setInFlowPrimary(visible.size > 0);
+    });
+    // Every primary except the header's own. Not scoped to <main>: the footer
+    // carries the closing conversion band (R4), and scoping this to main left
+    // the header competing with it at the bottom of every page.
+    document.querySelectorAll("[data-cta='primary']").forEach((el) => {
+      if (!el.closest("header")) io.observe(el);
+    });
+    return () => io.disconnect();
+  }, [pathname]);
+
   // Close the mobile drawer on navigation.
   useEffect(() => setOpen(false), [pathname]);
 
@@ -45,7 +79,7 @@ export function Header() {
 
   return (
     <>
-      {/* Utility bar — phone number above the fold on every page, on purpose.
+      {/* Utility bar: phone number above the fold on every page, on purpose.
           In this trade the phone call IS the conversion. */}
       <div className="hidden bg-ink-900 text-ink-200 lg:block">
         <Container size="wide">
@@ -78,7 +112,7 @@ export function Header() {
 
       <header
         className={cn(
-          "sticky top-0 z-50 border-b transition-all duration-300",
+          "sticky top-0 z-50 border-b transition-all duration-300 ease-out-expo",
           scrolled
             ? "border-ink-900/10 bg-white/90 shadow-card backdrop-blur-lg"
             : "border-transparent bg-white",
@@ -89,23 +123,7 @@ export function Header() {
             className="flex h-[var(--header-height)] items-center justify-between gap-6"
             aria-label="Main"
           >
-            {/* min-w-0 + truncate, NOT shrink-0: the display font falls back to a
-                system sans until Barlow Condensed is wired up, and a long business
-                name at that width blows out 360px viewports otherwise. */}
-            <Link href="/" className="flex min-w-0 items-center gap-2.5">
-              {/* PLACEHOLDER mark — replace with the real logo lockup. */}
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-ink-900 text-hydro-400">
-                <Icon name="droplet" filled className="h-5 w-5" />
-              </span>
-              <span className="flex min-w-0 flex-col leading-none">
-                <span className="truncate font-display text-lg font-bold tracking-tight text-ink-900 sm:text-xl">
-                  {site.name}
-                </span>
-                <span className="mt-0.5 hidden text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-hydro-600 sm:block">
-                  Exterior Cleaning
-                </span>
-              </span>
-            </Link>
+            <Logo linked className="min-w-0" />
 
             {/* Desktop nav */}
             <ul className="hidden items-center gap-1 xl:flex">
@@ -120,7 +138,7 @@ export function Header() {
 
                 {/* Mega menu. CSS-driven so there's no JS state to get wrong;
                     focus-within keeps it keyboard-operable. */}
-                <div className="invisible absolute left-1/2 top-full w-[46rem] -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                <div className="invisible absolute left-1/2 top-full w-[46rem] -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 ease-out-expo group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                   <div className="grid grid-cols-2 gap-6 rounded-2xl bg-white p-6 shadow-lift ring-1 ring-ink-900/10">
                     <div>
                       <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-hydro-600">
@@ -194,14 +212,23 @@ export function Header() {
             <div className="flex shrink-0 items-center gap-2">
               {/* Visibility lives on wrappers: Button's own `inline-flex` beats a
                   passed-in `hidden` in the cascade (same-specificity conflict).
-                  Phone hides again at xl — the utility bar already shows it. */}
+                  Phone hides again at xl; the utility bar already shows it. */}
               <span className="hidden sm:block xl:hidden">
                 <Button href={`tel:${site.contact.phoneHref}`} variant="outline" size="sm">
                   <Icon name="phone" className="h-4 w-4" />
                   {site.contact.phone}
                 </Button>
               </span>
-              <span className="hidden sm:block">
+              <span
+                // Fades rather than unmounts so the header doesn't reflow on
+                // every scroll past a CTA band; `inert` keeps it out of the tab
+                // order while it's standing down.
+                inert={inFlowPrimary}
+                className={cn(
+                  "hidden transition-opacity duration-300 sm:block",
+                  inFlowPrimary ? "opacity-0" : "opacity-100",
+                )}
+              >
                 <Button href="/quote" size="sm">
                   Free Quote
                 </Button>
@@ -318,7 +345,11 @@ export function Header() {
               <Link
                 key={l.slug}
                 href={`/service-areas/${l.slug}`}
-                className="rounded-pill bg-sand-100 px-3 py-1.5 text-sm font-medium text-ink-700"
+                // The rest of this drawer is `py-3.5` rows that clear 44px
+                // comfortably; these pills were the one thing in it that
+                // didn't, at 32px, in the one menu that only ever gets used
+                // by a thumb.
+                className="inline-flex min-h-[44px] items-center rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700"
               >
                 {l.city}
               </Link>

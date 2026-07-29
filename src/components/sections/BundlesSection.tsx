@@ -5,6 +5,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Icon } from "@/components/ui/Icon";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { Reveal } from "@/components/Reveal";
 import { cn } from "@/lib/utils";
 
 export function BundleCard({ bundle, anchor = false }: { bundle: Bundle; anchor?: boolean }) {
@@ -40,7 +41,7 @@ export function BundleCard({ bundle, anchor = false }: { bundle: Bundle; anchor?
         </ul>
 
         <div className="mt-5 flex items-center gap-3">
-          {/* mint, not signal — the card's CTA below owns the orange (§2.6) */}
+          {/* mint, not signal: the card's CTA below owns the orange (§2.6) */}
           <Badge tone="mint">Save {bundle.savingsPercent}%</Badge>
           <span className="inline-flex items-center gap-1.5 text-sm text-ink-500">
             <Icon name="clock" className="h-4 w-4" />
@@ -49,7 +50,7 @@ export function BundleCard({ bundle, anchor = false }: { bundle: Bundle; anchor?
         </div>
 
         <div className="mt-auto pt-6">
-          {/* Only the anchor card gets the orange — R2: one primary per viewport */}
+          {/* Only the anchor card gets the orange. R2: one primary per viewport */}
           <Button
             href={`/packages/${bundle.slug}`}
             variant={bundle.mostPopular ? "primary" : "secondary"}
@@ -63,7 +64,7 @@ export function BundleCard({ bundle, anchor = false }: { bundle: Bundle; anchor?
   );
 }
 
-/** SECTIONS.md §2.6 — the revenue lever gets a full dark section. */
+/** SECTIONS.md §2.6, the revenue lever gets a full dark section. */
 export function BundlesSection({
   bundles,
   heading,
@@ -83,21 +84,27 @@ export function BundlesSection({
 
   return (
     <Section tone="ink">
-      <SectionHeading
-        onDark
-        {...(heading ?? {
-          eyebrow: "Do it once, do it all",
-          title: "Package it and save",
-          lede: "The truck's already there — every extra surface cleaned on the same visit costs less than booking it alone.",
-        })}
-      />
-      <ul className="mt-12 grid items-stretch gap-6 sm:mt-16 lg:grid-cols-3">
-        {display.map((b) => (
-          <li key={b.slug}>
-            <BundleCard bundle={b} anchor={anchorPopular} />
-          </li>
-        ))}
-      </ul>
+      <Reveal>
+        <SectionHeading
+          onDark
+          {...(heading ?? {
+            eyebrow: "Do it once, do it all",
+            title: "Package it and save",
+            lede: "The truck's already there. Every extra surface cleaned on the same visit costs less than booking it alone.",
+          })}
+        />
+      </Reveal>
+      {/* Stays a grid on purpose. Packages are bought by comparison, and a
+          linear stack works against reading three of them side by side. */}
+      <Reveal delay={100} className="mt-12 sm:mt-16">
+        <ul className="grid items-stretch gap-6 lg:grid-cols-3">
+          {display.map((b) => (
+            <li key={b.slug}>
+              <BundleCard bundle={b} anchor={anchorPopular} />
+            </li>
+          ))}
+        </ul>
+      </Reveal>
     </Section>
   );
 }

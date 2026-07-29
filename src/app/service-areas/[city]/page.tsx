@@ -75,8 +75,8 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
             </Badge>
           </>
         }
-        primaryCta={{ label: "Get My Free Quote", href: "/quote" }}
-        secondaryCta={{ label: site.contact.phone, href: `tel:${site.contact.phoneHref}` }}
+        primaryCta={{ label: "Get my free quote", href: "/quote" }}
+        secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
       />
 
       {/* Most-requested services here, city-ordered */}
@@ -100,7 +100,7 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
               <li key={s.slug}>
                 <Link
                   href={`/services/${s.slug}/${loc.slug}`}
-                  className="inline-block rounded-pill bg-hydro-50 px-4 py-1.5 text-sm font-semibold text-hydro-800 transition-colors hover:bg-hydro-100"
+                  className="inline-flex min-h-[44px] items-center rounded-pill bg-hydro-50 px-4 py-1.5 text-sm font-semibold text-hydro-800 transition-colors hover:bg-hydro-100"
                 >
                   {s.navLabel} in {loc.city} →
                 </Link>
@@ -115,7 +115,7 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
         <SectionHeading eyebrow="Local knowledge" title={`Why ${loc.city} is its own job`} />
         <div className="mt-8 space-y-5 leading-relaxed text-ink-600">
           <p>
-            Housing here is mostly {loc.housingStock.toLowerCase()} — and that shapes how
+            Housing here is mostly {loc.housingStock.toLowerCase()}, and that shapes how
             we work. {loc.localChallenge} We plan every {loc.city} visit around exactly
             that.
           </p>
@@ -124,7 +124,7 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
             {loc.neighborhoods.slice(0, -1).join(", ")} and {loc.neighborhoods.at(-1)},
             and anywhere within sight of {loc.landmarks.slice(0, 2).join(" or ")}.
             {beyondRadius && (
-              <> Being {loc.driveMinutes} minutes out, a flat travel fee applies — but {travelPolicy.note.charAt(0).toLowerCase() + travelPolicy.note.slice(1)}</>
+              <> Being {loc.driveMinutes} minutes out, a flat travel fee applies, but {travelPolicy.note.charAt(0).toLowerCase() + travelPolicy.note.slice(1)}</>
             )}
           </p>
         </div>
@@ -139,7 +139,7 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
       <Testimonials
         items={testimonialsFor({ citySlug: loc.slug })}
         tone="sand"
-        heading={{ eyebrow: "Your neighbours", title: `${loc.city} customers, in their words` }}
+        heading={{ eyebrow: "Your neighbors", title: `${loc.city} customers, in their words` }}
       />
 
       <CtaBand
@@ -148,7 +148,7 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
         lede="Free quote, usually same-day."
       />
 
-      {/* Full catalogue for the internal-link graph */}
+      {/* Full catalog for the internal-link graph */}
       <Section tone="light">
         <SectionHeading eyebrow="Everything else" title={`All services in ${loc.city}`} />
         <ul className="mt-10 grid items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

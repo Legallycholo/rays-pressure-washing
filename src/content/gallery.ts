@@ -1,11 +1,11 @@
 /**
- * Before/after project gallery — the single highest-converting asset a cleaning
+ * Before/after project gallery, the single highest-converting asset a cleaning
  * business owns, and the thing the reference site under-uses most.
  *
  * `before` and `after` are intentionally empty strings right now. Components
- * detect that and render a labelled placeholder frame at the correct aspect
+ * detect that and render a labeled placeholder frame at the correct aspect
  * ratio, so layout is final before photography exists. Drop real images into
- * /public/gallery/ and fill in the paths — nothing else needs to change.
+ * /public/gallery/ and fill in the paths, nothing else needs to change.
  */
 
 export type Project = {
@@ -17,8 +17,15 @@ export type Project = {
   before: string;
   after: string;
   alt: string;
-  /** Short story — what the problem was and what was done. */
+  /** Short story, what the problem was and what was done. */
   summary: string;
+  /**
+   * Optional walkthrough clip for this one job. Absent by default and
+   * placeholder-safe the same way `before`/`after` are: an empty `src` renders
+   * the placeholder frame rather than a broken player. Direct file only,
+   * a YouTube/Vimeo embed is a third-party script decision, not this field.
+   */
+  video?: { src: string; poster: string; alt: string };
   durationHours: number;
   /** Surfaced as a stat chip on the card. */
   surfaceArea?: string;
@@ -28,12 +35,12 @@ export type Project = {
 export const projects: Project[] = [
   {
     id: "p1",
-    title: "Two-storey vinyl with heavy north-side algae",
+    title: "Two-story vinyl with heavy north-side algae",
     serviceSlug: "house-washing",
     citySlug: "springfield",
     before: "",
     after: "",
-    alt: "Two-storey vinyl-sided home before and after soft washing",
+    alt: "Two-story vinyl-sided home before and after soft washing",
     summary:
       "Ten years of unwashed siding under heavy oak canopy. Soft washed at low pressure across two elevations, gutter faces brightened, entry detailed by hand.",
     durationHours: 4,
@@ -109,14 +116,14 @@ export const projects: Project[] = [
   },
   {
     id: "p7",
-    title: "Salt-filmed coastal glass",
+    title: "Pollen-filmed river-house glass",
     serviceSlug: "window-cleaning",
     citySlug: "port-haven",
     before: "",
     after: "",
-    alt: "Coastal home windows before and after pure water cleaning",
+    alt: "River-facing home windows before and after pure water cleaning",
     summary:
-      "Bonded salt film across 22 panes. Pure-water deionised system, frames and sills included, screens rinsed and refitted.",
+      "Baked-on spring pollen across 22 panes. Pure-water deionized system, frames and sills included, screens rinsed and refitted.",
     durationHours: 3,
   },
   {

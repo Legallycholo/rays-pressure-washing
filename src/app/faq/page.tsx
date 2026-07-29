@@ -8,8 +8,8 @@ import { JsonLd } from "@/components/JsonLd";
 import { faqSchema, breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "FAQ — Every Question We Get",
-  description: "Soft washing vs pressure washing, pricing, plants and pets, scheduling, commercial paperwork — all of it, answered straight.",
+  title: "FAQ: Every Question We Get",
+  description: "Soft washing vs pressure washing, pricing, plants and pets, scheduling, commercial paperwork. All of it, answered straight.",
   alternates: { canonical: "/faq" },
 };
 
@@ -21,7 +21,7 @@ const crumbs = [
 export default function FaqPage() {
   return (
     <>
-      {/* Full FAQPage schema over every item — the expandable rich result */}
+      {/* Full FAQPage schema over every item: the expandable rich result */}
       <JsonLd data={[faqSchema(faqs), breadcrumbSchema(crumbs)]} />
       <Hero
         variant="page"

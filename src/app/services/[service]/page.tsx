@@ -78,8 +78,8 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
             </Badge>
           </>
         }
-        primaryCta={{ label: "Get My Free Quote", href: `/quote?services=${service.slug}` }}
-        secondaryCta={{ label: site.contact.phone, href: `tel:${site.contact.phoneHref}` }}
+        primaryCta={{ label: "Get my free quote", href: `/quote?services=${service.slug}` }}
+        secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
       />
 
       {/* Intro + what's included */}
@@ -123,7 +123,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
                 </p>
                 <Link
                   href="/pricing"
-                  className="mt-3 inline-block font-semibold text-hydro-700 underline underline-offset-2 hover:no-underline"
+                  className="mt-2 inline-flex min-h-[44px] items-center font-semibold text-hydro-700 underline underline-offset-2 hover:no-underline"
                 >
                   Estimate your price
                 </Link>
@@ -149,7 +149,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
           heading={{
             eyebrow: "While we're there",
             title: `${service.name} pairs well with…`,
-            lede: "The setup's already done — adding surfaces to the same visit is the cheapest they'll ever be.",
+            lede: "The setup's already done, so adding surfaces to the same visit is the cheapest they'll ever be.",
           }}
         />
       )}
@@ -164,7 +164,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
         variant="inline"
         title={`Ready for ${service.name.toLowerCase()}?`}
         lede="Free quote, usually same-day."
-        primaryCta={{ label: "Start My Quote", href: `/quote?services=${service.slug}` }}
+        primaryCta={{ label: "Start my quote", href: `/quote?services=${service.slug}` }}
       />
 
       {serviceFaqs.length > 0 && (
@@ -175,7 +175,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
         />
       )}
 
-      {/* Cities + related — the internal-linking block */}
+      {/* Cities + related: the internal-linking block */}
       <Section tone="light">
         <SectionHeading
           eyebrow="Where"
@@ -191,7 +191,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
                     ? `/services/${service.slug}/${l.slug}`
                     : `/service-areas/${l.slug}`
                 }
-                className="inline-block rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700 transition-colors hover:bg-hydro-50 hover:text-hydro-800"
+                className="inline-flex min-h-[44px] items-center rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700 transition-colors hover:bg-hydro-50 hover:text-hydro-800"
               >
                 {service.navLabel} in {l.city}
               </Link>
