@@ -10,17 +10,22 @@
  *   - Every answer below is written by a human and is true. A visitor asking
  *     about roof warranties gets the ARMA answer from `faqs.ts`, not a
  *     plausible-sounding paragraph.
- *   - It cannot be asked something it doesn't know, because there is no free
- *     text input. Every turn is a tap. Nothing to hallucinate into.
- *   - The greeting says what it is. We are not dressing a FAQ up as a person.
+ *   - There is a free-text composer, but it does not generate text. It runs
+ *     `matchTopic()` below — keyword scoring over this same tree — and returns
+ *     one of these hand-written answers or hands off to a human. Still nothing
+ *     to hallucinate into.
+ *   - It speaks in the company's voice rather than narrating its own
+ *     architecture at someone who just wants a driveway quoted. But the
+ *     `identity` topic answers straight if anyone actually asks what it is.
  *
  * ── SWAPPING IN A REAL MODEL ────────────────────────────────────────────────
- * If a model is wired up later, this file is the seam. `ContactHub` only ever
- * calls `getTopic(id)` and renders what comes back, so the change is: add a
- * free-text composer, route it to an API route, and map the response into the
- * same `{ reply, actions }` shape. The scripted tree stays as the offline path
- * — a chat that answers nothing when the model is down or the key expired is
- * worse than the menu it replaced.
+ * The seam is now `src/app/api/assistant/route.ts`, and it is one file wide.
+ * `ContactHub` POSTs free text there and renders the `{ reply, actions }` that
+ * comes back — the same shape a topic has. Replace the matcher inside that
+ * route with a Dialogflow CX / Vertex AI call and nothing in this file or in
+ * the component moves. The scripted tree stays as the offline path — a chat
+ * that answers nothing when the model is down or the key expired is worse than
+ * the menu it replaced.
  *
  * Keep every answer grounded in something that already exists on the site
  * (`faqs.ts`, `services.ts`, `site.ts`). If an answer here contradicts a page,
@@ -28,6 +33,7 @@
  * ──────────────────────────────────────────────────────────────────────────── */
 
 import { site, waLink } from "@/content/site";
+import { locations } from "@/content/locations";
 
 /** A link rendered as a row inside a chat answer or the contact directory. */
 export type AssistantAction = {
@@ -59,6 +65,15 @@ export type AssistantTopic = {
   actions?: AssistantAction[];
   /** Chips offered after this answer. Omit to fall back to the root set. */
   followUps?: readonly string[];
+  /**
+   * Free-text triggers, scored by `matchTopic`. Lowercase, no punctuation.
+   *
+   * Write the words a customer would type, not the words we'd use — "how much",
+   * "ballpark", "expensive" beat "pricing schedule". Multi-word entries are
+   * matched as phrases and score higher than single words, which is what stops
+   * "how long does a quote take" landing on `lasts` because of "how long".
+   */
+  keywords?: readonly string[];
 };
 
 /* ---------------------------------------------------------------------------
@@ -90,8 +105,9 @@ export const hoursLine = site.hours
    ------------------------------------------------------------------------- */
 
 export const greeting =
-  `Hi — I'm ${site.shortName} assistant. I'm not a person, but I do know the ` +
-  `answers, and I'll put you through to the crew the moment you want one.`;
+  `Hey — you've reached ${site.shortName}. Ask away about pricing, what we ` +
+  `clean, or getting on the schedule, and if you'd rather talk it through ` +
+  `I'll put you straight onto the crew.`;
 
 /** Prompt above the opening chips. Mirrors what a good receptionist opens with. */
 export const greetingPrompt = "What can I help with?";
@@ -129,6 +145,26 @@ export const assistantTopics: AssistantTopic[] = [
       },
     ],
     followUps: ["payment", "bundles", "booking", "human"],
+    keywords: [
+      "how much",
+      "how much does",
+      "what does it cost",
+      "cost",
+      "price",
+      "pricing",
+      "prices",
+      "quote",
+      "estimate",
+      "ballpark",
+      "rate",
+      "rates",
+      "charge",
+      "expensive",
+      "cheap",
+      "afford",
+      "budget",
+      "per square foot",
+    ],
   },
 
   {
@@ -151,6 +187,42 @@ export const assistantTopics: AssistantTopic[] = [
       },
     ],
     followUps: ["method", "safety", "area", "price"],
+    keywords: [
+      "what do you clean",
+      "what do you do",
+      "services",
+      "service",
+      "do you clean",
+      "do you wash",
+      "do you do",
+      "roof",
+      "shingle",
+      "siding",
+      "house wash",
+      "driveway",
+      "concrete",
+      "walkway",
+      "sidewalk",
+      "patio",
+      "deck",
+      "fence",
+      "gutter",
+      "window",
+      "windows",
+      "pool cage",
+      "pool enclosure",
+      "lanai",
+      "screen",
+      "paver",
+      "brick",
+      "stucco",
+      "commercial",
+      "storefront",
+      "parking lot",
+      "dumpster",
+      "awning",
+      "solar panel",
+    ],
   },
 
   {
@@ -172,11 +244,36 @@ export const assistantTopics: AssistantTopic[] = [
       { label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}`, icon: "phone" },
     ],
     followUps: ["area", "payment", "human"],
+    keywords: [
+      "how soon",
+      "how quickly",
+      "when can you",
+      "availability",
+      "available",
+      "book",
+      "booking",
+      "schedule",
+      "appointment",
+      "next week",
+      "tomorrow",
+      "today",
+      "lead time",
+      "do i need to be home",
+      "rain",
+      "weather",
+      "reschedule",
+      "cancel",
+      "how long does it take",
+      "hours",
+      "weekend",
+      "saturday",
+      "sunday",
+    ],
   },
 
   {
     id: "human",
-    chip: "Talk to a real person",
+    chip: "Rather talk it through?",
     reply: [
       `Of course. Fastest is the phone — someone picks up on the truck ${hoursLine}. Outside those hours, text or WhatsApp and you'll have a reply first thing.`,
     ],
@@ -193,6 +290,23 @@ export const assistantTopics: AssistantTopic[] = [
       { label: "Send a message", detail: "We reply by email", href: "/contact", icon: "mail", internal: true },
     ],
     followUps: ["price", "booking", "trust"],
+    keywords: [
+      "talk to someone",
+      "speak to someone",
+      "call you",
+      "call me",
+      "phone number",
+      "number",
+      "phone",
+      "text",
+      "whatsapp",
+      "email",
+      "contact",
+      "get in touch",
+      "reach you",
+      "manager",
+      "owner",
+    ],
   },
 
   {
@@ -205,6 +319,27 @@ export const assistantTopics: AssistantTopic[] = [
     ],
     actions: [{ label: "Read the full FAQ", href: "/faq", icon: "chat", internal: true }],
     followUps: ["safety", "lasts", "price"],
+    keywords: [
+      "soft wash",
+      "soft washing",
+      "pressure wash",
+      "power wash",
+      "psi",
+      "what method",
+      "how do you clean",
+      "chemicals",
+      "chemical",
+      "detergent",
+      "bleach",
+      "sodium hypochlorite",
+      "algae",
+      "mildew",
+      "mold",
+      "lichen",
+      "moss",
+      "black streaks",
+      "green stuff",
+    ],
   },
 
   {
@@ -217,6 +352,33 @@ export const assistantTopics: AssistantTopic[] = [
     ],
     actions: [{ label: "All safety questions", href: "/faq", icon: "shield", internal: true }],
     followUps: ["lasts", "trust", "booking"],
+    keywords: [
+      "safe",
+      "safety",
+      "damage",
+      "harm",
+      "plants",
+      "garden",
+      "grass",
+      "lawn",
+      "flower",
+      "shrub",
+      "pets",
+      "dog",
+      "cat",
+      "kids",
+      "children",
+      "warranty",
+      "void",
+      "arma",
+      "shingles",
+      "paint",
+      "wood",
+      "will it strip",
+      "eco",
+      "environment",
+      "biodegradable",
+    ],
   },
 
   {
@@ -235,6 +397,19 @@ export const assistantTopics: AssistantTopic[] = [
       },
     ],
     followUps: ["price", "bundles", "booking"],
+    keywords: [
+      "how long does it last",
+      "how long will it last",
+      "last",
+      "lasts",
+      "come back",
+      "regrow",
+      "grow back",
+      "how often",
+      "frequency",
+      "every year",
+      "maintenance",
+    ],
   },
 
   {
@@ -249,6 +424,29 @@ export const assistantTopics: AssistantTopic[] = [
       { label: "About the crew", href: "/about", icon: "shield", internal: true },
     ],
     followUps: ["safety", "booking", "human"],
+    keywords: [
+      "licensed",
+      "license",
+      "insured",
+      "insurance",
+      "liability",
+      "certificate of insurance",
+      "coi",
+      "bonded",
+      "background check",
+      "reviews",
+      "review",
+      "rating",
+      "reputation",
+      "how long have you",
+      "trust",
+      "legit",
+      "guarantee",
+      "warranty on the work",
+      "if im not happy",
+      "not happy",
+      "complaint",
+    ],
   },
 
   {
@@ -259,6 +457,25 @@ export const assistantTopics: AssistantTopic[] = [
     ],
     actions: [{ label: "Check the coverage map", href: "/service-areas", icon: "pin", internal: true }],
     followUps: ["booking", "price", "human"],
+    // City names come from `locations.ts` rather than a second hand-typed list:
+    // adding a city to the coverage map should teach the matcher its name in
+    // the same commit, not the one after someone notices.
+    keywords: [
+      "do you cover",
+      "do you service",
+      "do you come out to",
+      "my area",
+      "area",
+      "service area",
+      "travel",
+      "how far",
+      "located",
+      "where are you",
+      "zip code",
+      "neighborhood",
+      site.serviceRegion.toLowerCase(),
+      ...locations.map((l) => l.city.toLowerCase()),
+    ],
   },
 
   {
@@ -268,6 +485,22 @@ export const assistantTopics: AssistantTopic[] = [
       "After the work is done and you've seen the result — no deposit on standard residential jobs. Card, bank transfer and the usual digital wallets, with an itemised invoice by email.",
     ],
     followUps: ["price", "booking", "trust"],
+    keywords: [
+      "when do i pay",
+      "pay",
+      "payment",
+      "deposit",
+      "upfront",
+      "invoice",
+      "card",
+      "credit card",
+      "cash",
+      "venmo",
+      "zelle",
+      "apple pay",
+      "financing",
+      "bank transfer",
+    ],
   },
 
   {
@@ -287,13 +520,31 @@ export const assistantTopics: AssistantTopic[] = [
       },
     ],
     followUps: ["price", "booking", "human"],
+    keywords: [
+      "package",
+      "packages",
+      "bundle",
+      "deal",
+      "discount",
+      "combo",
+      "together",
+      "everything at once",
+      "whole house",
+      "coupon",
+      "special",
+      "offer",
+      "cheaper if",
+      "subscription",
+      "plan",
+      "recurring",
+    ],
   },
 
   {
     id: "other",
     chip: "Something else",
     reply: [
-      "Then I'm the wrong thing to ask — I only know what I've been taught. Send it to a human and you'll get a proper answer.",
+      "Let me get you to someone who can dig into that properly — quickest is the phone, or write it out and we'll come back to you by email.",
     ],
     actions: [
       {
@@ -306,9 +557,127 @@ export const assistantTopics: AssistantTopic[] = [
     ],
     followUps: ["price", "services", "booking"],
   },
+
+  /**
+   * Reachable from free text only — never offered as a chip, because nobody
+   * taps "what are you" off a menu, and putting it on one would make the whole
+   * hub about itself instead of about their driveway.
+   *
+   * It exists because the rest of this file now speaks in the company's voice
+   * with no "I am not a person" clause in it, which is a brand-voice decision,
+   * not a licence to answer this question dishonestly. Someone who asks
+   * directly gets a direct answer and a route to a human in the same breath.
+   * California's B.O.T. Act (Bus. & Prof. Code §17941) is the specific reason
+   * this topic is not optional — do not delete it to tidy up the tree.
+   */
+  {
+    id: "identity",
+    chip: "Am I talking to a person?",
+    reply: [
+      "Straight answer: no — I'm the automated assistant on the website, and everything I say is written by the crew ahead of time.",
+      "If you'd rather have an actual person, that's one tap away and they're quick.",
+    ],
+    actions: [
+      {
+        label: `Call ${site.contact.phone}`,
+        detail: `Someone picks up · ${hoursLine}`,
+        href: `tel:${site.contact.phoneHref}`,
+        icon: "phone",
+        primary: true,
+      },
+      { label: "Text us", href: `sms:${site.contact.phoneHref}`, icon: "chat" },
+      { label: "Send a message", detail: "We reply by email", href: "/contact", icon: "mail", internal: true },
+    ],
+    followUps: ["price", "services", "booking"],
+    keywords: [
+      "are you a bot",
+      "are you a robot",
+      "are you human",
+      "are you a human",
+      "are you a person",
+      "are you real",
+      "am i talking to a person",
+      "am i talking to a human",
+      "am i talking to a bot",
+      "is this a bot",
+      "is this a real person",
+      "is this a human",
+      "is this automated",
+      "bot",
+      "robot",
+      "chatbot",
+      "ai",
+      "artificial intelligence",
+      "chatgpt",
+      "automated",
+      "real person",
+      "who am i talking to",
+      "what are you",
+    ],
+  },
 ];
 
 export const getTopic = (id: string) => assistantTopics.find((t) => t.id === id);
+
+/* ---------------------------------------------------------------------------
+   Free-text matching
+
+   Deliberately dumb, and that is the feature. Everything this returns is a
+   topic from the array above, so the worst case is the wrong hand-written
+   answer plus a route to a human — never an invented one. See the route file
+   for where a real model would replace this.
+   ------------------------------------------------------------------------- */
+
+/**
+ * Lowercase, punctuation to spaces, single-spaced, and padded at both ends.
+ *
+ * The padding is what makes `includes(" cost ")` a word-boundary test: without
+ * it "cost" matches inside "costume" and, worse, "ai" matches inside "rain" and
+ * "paint" — which would route half the roof questions to the identity answer.
+ */
+const normalize = (text: string) =>
+  ` ${text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim()} `;
+
+/**
+ * Phrases outscore words, quadratically. A four-word phrase is worth 16 and a
+ * bare word is worth 1, so "how long does it last" reaches `lasts` even though
+ * "how long does it take" would have put the same five words on `booking`.
+ * Without that gap the two questions are decided by array order.
+ */
+const scoreOf = (keyword: string) => {
+  const words = keyword.split(" ").length;
+  return words * words;
+};
+
+/**
+ * Best topic for a free-text question, or `null` if nothing matched.
+ *
+ * `null` is a real answer — the caller is expected to fall back to the `other`
+ * topic, which hands off to a person. Guessing at a low-confidence match would
+ * trade a useful "let me get someone" for a confident irrelevance.
+ */
+export function matchTopic(text: string): AssistantTopic | null {
+  const haystack = normalize(text);
+  if (haystack.trim().length < 2) return null;
+
+  let best: AssistantTopic | null = null;
+  let bestScore = 0;
+
+  for (const topic of assistantTopics) {
+    let score = 0;
+    for (const keyword of topic.keywords ?? []) {
+      if (haystack.includes(` ${keyword} `)) score += scoreOf(keyword);
+    }
+    // Strictly greater, so ties go to the earlier topic — which is the order
+    // the root chips are in, i.e. the questions we most expect.
+    if (score > bestScore) {
+      bestScore = score;
+      best = topic;
+    }
+  }
+
+  return best;
+}
 
 /* ---------------------------------------------------------------------------
    The contact directory — the hub's second tab

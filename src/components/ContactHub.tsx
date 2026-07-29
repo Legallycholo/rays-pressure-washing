@@ -14,6 +14,7 @@ import {
   rootTopics,
   type AssistantAction,
 } from "@/content/assistant";
+import type { AssistantReply } from "@/app/api/assistant/route";
 import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/utils";
 
@@ -87,12 +88,38 @@ const NUDGE = {
 /**
  * The pause between the visitor's tap and the answer landing.
  *
- * Not a fake "someone is typing" — nobody is, and the assistant says so in its
- * first line. It's here because rendering the question and its answer in the
- * same frame reads as a page swap rather than a reply, and the eye loses which
- * bubble is new. Short enough that it never feels like waiting.
+ * Not a fake "someone is typing" — nothing is typing. It's here because
+ * rendering the question and its answer in the same frame reads as a page swap
+ * rather than a reply, and the eye loses which bubble is new. Short enough that
+ * it never feels like waiting.
+ *
+ * It doubles as the *floor* on the free-text path: `/api/assistant` answers in
+ * single-digit milliseconds today, so without a floor the composer would feel
+ * jumpier than the chips it sits under, and the two paths would visibly be two
+ * different mechanisms.
  */
 const REPLY_MS = 320;
+
+/** Matches `MAX_MESSAGE` in `app/api/assistant/route.ts`. */
+const MAX_MESSAGE = 500;
+
+/** Turns handed to the route as context. Unused by the matcher; see the route. */
+const HISTORY_TURNS = 8;
+
+/**
+ * How much keyboard has to be on screen before the hub gets out of its way.
+ *
+ * On iOS the software keyboard doesn't resize the layout viewport, so a
+ * bottom-anchored `fixed` panel — and the composer inside it — sits underneath
+ * it. `visualViewport` is the only thing that reports this. The threshold keeps
+ * pinch-zoom and the Safari URL bar's few dozen pixels from nudging the panel
+ * around; nothing short of an actual keyboard clears it. Android resizes the
+ * layout viewport instead, so this measures ~0 there and the panel moves on its
+ * own, which is why the effect must never assume it has work to do.
+ */
+const KEYBOARD_MIN_PX = 120;
+
+const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Module scope, not a component method: it closes over nothing, so it can't
  *  become a stale dependency of the effects that call it. */
@@ -241,6 +268,9 @@ export function ContactHub() {
   const [messages, setMessages] = useState<Msg[]>(seedMessages);
   const [chips, setChips] = useState<readonly string[]>(rootTopics);
   const [thinking, setThinking] = useState(false);
+  const [draft, setDraft] = useState("");
+  /** Pixels of on-screen keyboard the panel has to climb above. See `KEYBOARD_MIN_PX`. */
+  const [keyboard, setKeyboard] = useState(0);
 
   const rootRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -248,9 +278,21 @@ export function ContactHub() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const replyTimer = useRef(0);
   const turn = useRef(0);
+  /** Aborts an in-flight answer when the conversation is reset or unmounted. */
+  const inFlight = useRef<AbortController | null>(null);
+  /**
+   * Mirrors `messages` so `askFreeText` can read the transcript without taking
+   * it as a dependency — otherwise the callback is rebuilt on every bubble and
+   * the form's `onSubmit` identity churns for the whole conversation.
+   */
+  const log = useRef<Msg[]>(messages);
+  useEffect(() => {
+    log.current = messages;
+  }, [messages]);
 
   const id = useId();
   const panelId = `${id}-panel`;
+  const composerId = `${id}-composer`;
   // Distinct from `panelId`: the launcher controls the whole popover, the tabs
   // control only the body inside it. One id for both would have the tabs
   // claiming ownership of their own tab strip.
@@ -278,38 +320,136 @@ export function ContactHub() {
    *  it's a lookup, and a stale one is just clutter on the next visit. */
   const restart = useCallback(() => {
     clearTimeout(replyTimer.current);
+    inFlight.current?.abort();
     setThinking(false);
     setMessages(seedMessages());
     setChips(rootTopics);
+    setDraft("");
   }, []);
 
-  const ask = useCallback((topicId: string) => {
-    const topic = getTopic(topicId);
-    if (!topic) return;
-
-    const n = turn.current++;
-    setMessages((prev) => [...prev, { key: `you-${n}`, from: "you", text: topic.chip }]);
-    // Chips clear on tap, so a second question can't be queued behind an answer
-    // that hasn't landed. One thread, in order.
-    setChips([]);
-    setThinking(true);
-
-    clearTimeout(replyTimer.current);
-    replyTimer.current = window.setTimeout(() => {
+  /**
+   * The one place an answer becomes bubbles. Both entry points — a tapped chip
+   * and a typed question — end here, which is what keeps them looking like one
+   * assistant rather than two features that happen to share a panel.
+   */
+  const land = useCallback(
+    (n: number, reply: string[], actions: AssistantAction[] | undefined, next: readonly string[]) => {
       setThinking(false);
       setMessages((prev) => [
         ...prev,
-        ...topic.reply.map((text, i) => ({ key: `bot-${n}-${i}`, from: "bot" as const, text })),
-        ...(topic.actions ? [{ key: `act-${n}`, from: "bot" as const, actions: topic.actions }] : []),
+        ...reply.map((text, i) => ({ key: `bot-${n}-${i}`, from: "bot" as const, text })),
+        ...(actions?.length ? [{ key: `act-${n}`, from: "bot" as const, actions }] : []),
       ]);
-      // Never re-offer the question just answered, and always leave a way out
-      // to a human — the tree has to bottom out somewhere useful.
-      const next = (topic.followUps ?? rootTopics).filter((t) => t !== topicId);
-      setChips(topicId === "other" ? next : [...next, "other"]);
-    }, REPLY_MS);
-  }, []);
+      setChips(next);
+    },
+    [],
+  );
 
-  useEffect(() => () => clearTimeout(replyTimer.current), []);
+  const ask = useCallback(
+    (topicId: string) => {
+      const topic = getTopic(topicId);
+      if (!topic) return;
+
+      const n = turn.current++;
+      setMessages((prev) => [...prev, { key: `you-${n}`, from: "you", text: topic.chip }]);
+      // Chips clear on tap, so a second question can't be queued behind an
+      // answer that hasn't landed. One thread, in order.
+      setChips([]);
+      setThinking(true);
+
+      clearTimeout(replyTimer.current);
+      replyTimer.current = window.setTimeout(() => {
+        // Never re-offer the question just answered, and always leave a way out
+        // to a human — the tree has to bottom out somewhere useful.
+        const next = (topic.followUps ?? rootTopics).filter((t) => t !== topicId);
+        land(n, topic.reply, topic.actions, topicId === "other" ? next : [...next, "other"]);
+      }, REPLY_MS);
+    },
+    [land],
+  );
+
+  /**
+   * The typed path. Same thread, same pending indicator, same chips — the only
+   * difference from `ask` is that the answer comes over the wire, which is
+   * exactly the seam a real model plugs into (`app/api/assistant/route.ts`).
+   */
+  const askFreeText = useCallback(
+    async (raw: string) => {
+      const text = raw.trim().slice(0, MAX_MESSAGE);
+      if (!text || thinking) return;
+
+      const n = turn.current++;
+      setMessages((prev) => [...prev, { key: `you-${n}`, from: "you", text }]);
+      setDraft("");
+      setChips([]);
+      setThinking(true);
+
+      clearTimeout(replyTimer.current);
+      inFlight.current?.abort();
+      const controller = new AbortController();
+      inFlight.current = controller;
+
+      // Sent, not used — the matcher behind the route is stateless. It's here so
+      // that swapping in a conversational model is genuinely a one-file change
+      // rather than one file plus a client deploy.
+      const history = log.current
+        .filter((m) => m.text)
+        .slice(-HISTORY_TURNS)
+        .map((m) => ({ from: m.from, text: m.text }));
+
+      try {
+        // The floor and the request run together rather than in sequence: a
+        // reply that takes 400ms shouldn't also wait out the 320ms.
+        const [res] = await Promise.all([
+          fetch("/api/assistant", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: text, history }),
+            signal: controller.signal,
+          }),
+          delay(REPLY_MS),
+        ]);
+        if (!res.ok) throw new Error(String(res.status));
+
+        const data: AssistantReply = await res.json();
+        if (controller.signal.aborted) return;
+        land(n, data.reply, data.actions, data.followUps ?? rootTopics);
+      } catch (err) {
+        // An abort is a reset or an unmount, not a failure — the thread it was
+        // going to land in no longer exists, so saying anything would be worse
+        // than saying nothing.
+        if ((err as Error)?.name === "AbortError") return;
+        // Everything else: own it and hand over a channel that doesn't depend
+        // on us being up. Never a silent dead input.
+        land(
+          n,
+          ["Sorry — that didn't go through on our end. Quickest way past me is the phone."],
+          [
+            {
+              label: `Call ${site.contact.phone}`,
+              detail: `Someone picks up · ${hoursLine}`,
+              href: `tel:${site.contact.phoneHref}`,
+              icon: "phone",
+              primary: true,
+            },
+            { label: "Text us", href: `sms:${site.contact.phoneHref}`, icon: "chat" },
+          ],
+          rootTopics,
+        );
+      } finally {
+        if (inFlight.current === controller) inFlight.current = null;
+      }
+    },
+    [land, thinking],
+  );
+
+  useEffect(
+    () => () => {
+      clearTimeout(replyTimer.current);
+      inFlight.current?.abort();
+    },
+    [],
+  );
 
   // Escape closes and hands focus back; a click anywhere outside just closes.
   // Yanking focus to the corner of the screen because someone clicked into the
@@ -334,8 +474,40 @@ export function ContactHub() {
   // the close button, and landing a keyboard or screen-reader user on "close"
   // is an invitation to leave — from the container, the header introduces
   // itself and Tab walks forward through the conversation in reading order.
+  //
+  // Deliberately NOT the composer, though it is now the obvious candidate:
+  // autofocusing a text input on a phone throws up the keyboard the instant the
+  // hub opens, burying the greeting and the four chips that are the fast path
+  // for most visitors. Typing is the fallback here, not the default, and it is
+  // one Tab away.
   useEffect(() => {
     if (open) panelRef.current?.focus();
+  }, [open]);
+
+  /**
+   * Lift the whole hub above the software keyboard on browsers that don't
+   * resize the layout viewport for it (iOS). Without this the composer is
+   * underneath the keys the visitor is pressing.
+   */
+  useEffect(() => {
+    const vv = typeof window !== "undefined" ? window.visualViewport : null;
+    if (!open || !vv) return;
+
+    const sync = () => {
+      // Layout viewport minus what's actually visible: the keyboard, plus any
+      // browser chrome below the fold.
+      const hidden = window.innerHeight - vv.height - vv.offsetTop;
+      setKeyboard(hidden > KEYBOARD_MIN_PX ? Math.round(hidden) : 0);
+    };
+
+    sync();
+    vv.addEventListener("resize", sync);
+    vv.addEventListener("scroll", sync);
+    return () => {
+      vv.removeEventListener("resize", sync);
+      vv.removeEventListener("scroll", sync);
+      setKeyboard(0);
+    };
   }, [open]);
 
   // Pin to the newest message. Reading `prefers-reduced-motion` per call rather
@@ -349,7 +521,10 @@ export function ContactHub() {
       top: el.scrollHeight,
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
     });
-  }, [open, tab, messages, thinking, chips]);
+    // `keyboard` is a dependency because the panel shortens when the keyboard
+    // comes up: without re-pinning, the newest bubble ends up above the fold at
+    // the exact moment the visitor is typing about it.
+  }, [open, tab, messages, thinking, chips, keyboard]);
 
   /** Standard tabs pattern: arrows move between the two, Tab leaves the strip. */
   const onTabKeyDown = (e: React.KeyboardEvent) => {
@@ -419,6 +594,10 @@ export function ContactHub() {
   return (
     <div
       ref={rootRef}
+      // Transform rather than `bottom`: it runs on the compositor, so the hub
+      // tracks the keyboard's slide-up instead of stuttering a reflow per frame
+      // behind it. 0px on every browser that resizes for its own keyboard.
+      style={keyboard ? { transform: `translateY(-${keyboard}px)` } : undefined}
       className={cn(
         "no-tap-flash fixed z-40 flex flex-col items-end",
         // Clears StickyCallBar and the iOS home indicator underneath it. The
@@ -480,6 +659,10 @@ export function ContactHub() {
           tabIndex={-1}
           role="group"
           aria-label={`${site.shortName} assistant`}
+          // `dvh` tracks the URL bar but not the keyboard, so with one open the
+          // CSS height would run off the top of the screen. Cap it by the same
+          // measurement that moved the hub up in the first place.
+          style={keyboard ? { height: `calc(100dvh - ${keyboard}px - 6rem)` } : undefined}
           className={cn(
             "hub-pop mb-3 flex w-[23rem] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-card bg-white shadow-lift ring-1 ring-ink-900/10 focus:outline-none",
             // Tall enough for a conversation, never taller than the space
@@ -494,7 +677,7 @@ export function ContactHub() {
               <p className="font-display text-lg leading-tight">{site.shortName} Assistant</p>
               <p className="mt-1 flex items-center gap-1.5 text-xs text-ink-200">
                 <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-mint-400" />
-                Instant answers · real crew on standby
+                Usually replies in seconds
               </p>
             </div>
 
@@ -633,6 +816,68 @@ export function ContactHub() {
               </>
             )}
           </div>
+
+          {/* ── Composer ───────────────────────────────────────────────────
+              Additive, not a replacement. The chips above stay the fast path
+              for the four questions most visitors actually have — one tap
+              beats a sentence — and this is for everything off-script.
+
+              Below the log and above the tab strip, which is where every chat
+              app on the visitor's phone has trained them to look for it. */}
+          {tab === "chat" && (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                void askFreeText(draft);
+              }}
+              className="flex shrink-0 items-center gap-2 border-t border-ink-100 bg-white px-2.5 py-2.5"
+            >
+              <label htmlFor={composerId} className="sr-only">
+                Type your question
+              </label>
+              <input
+                id={composerId}
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                placeholder="Ask anything…"
+                // `send` rather than the default `go`, so the phone's return
+                // key says what the button beside it says.
+                enterKeyHint="send"
+                autoComplete="off"
+                maxLength={MAX_MESSAGE}
+                disabled={thinking}
+                className={cn(
+                  "min-h-[44px] min-w-0 flex-1 rounded-full border border-ink-200 bg-sand-50 px-4 text-ink-800",
+                  // 16px on mobile, because anything smaller makes iOS Safari
+                  // zoom the page on focus — and it never zooms back out.
+                  //
+                  // Exactly one `text-*` size across this whole list, for the
+                  // reason the AVATAR table at the top of this file spells out:
+                  // `cn` is a plain joiner with no conflict resolution, so a
+                  // stray `text-sm` alongside this would be settled by
+                  // stylesheet order rather than by call order — and it was,
+                  // silently, until a viewport measurement caught it.
+                  "text-base sm:text-sm",
+                  "placeholder:text-ink-300 focus:border-hydro-500 focus:bg-white focus:outline-none",
+                  "disabled:opacity-60",
+                )}
+              />
+              <button
+                type="submit"
+                disabled={thinking || !draft.trim()}
+                aria-label="Send"
+                className={cn(
+                  "grid h-11 w-11 shrink-0 place-items-center rounded-full text-white transition-colors",
+                  // R1 holds here too: hydro, not signal. This sends a message,
+                  // it doesn't convert anyone.
+                  "bg-hydro-600 hover:bg-hydro-500",
+                  "disabled:bg-ink-200 disabled:text-ink-400",
+                )}
+              >
+                <Icon name="send" className="h-5 w-5" />
+              </button>
+            </form>
+          )}
 
           {/* ── Tabs ───────────────────────────────────────────────────── */}
           <div

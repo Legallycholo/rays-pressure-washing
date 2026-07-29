@@ -40,7 +40,7 @@ export function ServiceAreaSection({
                 <Link
                   href={`/service-areas/${l.slug}`}
                   className={cn(
-                    "inline-block rounded-pill px-4 py-1.5 text-sm transition-colors",
+                    "inline-flex min-h-[44px] items-center rounded-pill px-4 py-1.5 text-sm transition-colors",
                     l.priority ? "font-bold" : "font-medium",
                     dark
                       ? l.priority

@@ -147,13 +147,13 @@ export default async function ServiceCityPage({
         <div className="flex flex-wrap items-center justify-center gap-2">
           <Link
             href={`/services/${service.slug}`}
-            className="rounded-pill bg-hydro-50 px-4 py-1.5 text-sm font-semibold text-hydro-800 hover:bg-hydro-100"
+            className="inline-flex min-h-[44px] items-center rounded-pill bg-hydro-50 px-4 py-1.5 text-sm font-semibold text-hydro-800 hover:bg-hydro-100"
           >
             All about {service.name}
           </Link>
           <Link
             href={`/service-areas/${loc.slug}`}
-            className="rounded-pill bg-hydro-50 px-4 py-1.5 text-sm font-semibold text-hydro-800 hover:bg-hydro-100"
+            className="inline-flex min-h-[44px] items-center rounded-pill bg-hydro-50 px-4 py-1.5 text-sm font-semibold text-hydro-800 hover:bg-hydro-100"
           >
             Everything we do in {loc.city}
           </Link>
@@ -161,7 +161,7 @@ export default async function ServiceCityPage({
             <Link
               key={s.slug}
               href={`/services/${s.slug}/${loc.slug}`}
-              className="rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700 hover:bg-sand-200"
+              className="inline-flex min-h-[44px] items-center rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700 hover:bg-sand-200"
             >
               {s.navLabel} in {loc.city}
             </Link>

@@ -70,7 +70,7 @@ export function Estimator() {
           <select
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
-            className="mt-2 w-full rounded-card border border-ink-200 bg-white p-3.5 text-sm text-ink-800 focus:border-hydro-500"
+            className="mt-2 w-full rounded-card border border-ink-200 bg-white p-3.5 text-base sm:text-sm text-ink-800 focus:border-hydro-500"
           >
             {services.map((s) => (
               <option key={s.slug} value={s.slug}>
@@ -89,7 +89,7 @@ export function Estimator() {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder={service.pricing.unit === "per item" ? "e.g. 14" : "e.g. 1200"}
-            className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-sm text-ink-800 placeholder:text-ink-300 focus:border-hydro-500"
+            className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm text-ink-800 placeholder:text-ink-300 focus:border-hydro-500"
           />
         </label>
 
@@ -104,7 +104,7 @@ export function Estimator() {
                 aria-pressed={condition === c.id}
                 title={c.hint}
                 className={cn(
-                  "rounded-card px-2 py-2.5 text-xs font-semibold transition-all",
+                  "flex min-h-[44px] items-center justify-center rounded-card px-2 py-2.5 text-xs font-semibold transition-all",
                   condition === c.id
                     ? "bg-hydro-600 text-white"
                     : "bg-sand-50 text-ink-700 ring-1 ring-ink-900/5 hover:ring-hydro-400",
@@ -116,12 +116,16 @@ export function Estimator() {
           </div>
         </fieldset>
 
-        <label className="flex items-center gap-2.5 text-sm text-ink-600 sm:col-span-2">
+        {/* The label is the tap target — clicking anywhere in it toggles the
+            box — so the row, not the 18px checkbox, is what has to clear 44px.
+            The box itself still grows a little: someone aiming at it rather
+            than at the words deserves to hit it. */}
+        <label className="flex min-h-[44px] items-center gap-2.5 py-1 text-sm text-ink-600 sm:col-span-2">
           <input
             type="checkbox"
             checked={farOut}
             onChange={(e) => setFarOut(e.target.checked)}
-            className="h-4.5 w-4.5 rounded accent-hydro-600"
+            className="h-5 w-5 shrink-0 rounded accent-hydro-600"
           />
           I&apos;m more than {travelPolicy.freeRadiusMinutes} minutes from town (+
           {currency(travelPolicy.surcharge)} travel, waived when a neighbour books too)

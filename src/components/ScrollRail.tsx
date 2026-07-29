@@ -79,12 +79,22 @@ export function ScrollRail({
     );
 
   return (
-    <div className={className}>
+    // The label lives on the wrapper, not on the `<ul>`.
+    //
+    // It used to be `role="group" aria-label` on the list itself, which reads
+    // as the right thing and isn't: an explicit role REPLACES the implicit one,
+    // so the `<ul>` stopped being a list in the accessibility tree and every
+    // `<li>` inside it became an orphan. Screen readers lost "list, 6 items"
+    // and the item count with it — the one piece of information a rail of
+    // horizontally-scrolled cards most needs to convey, since you can't see
+    // how many there are. Lighthouse flags it as `listitem`.
+    //
+    // `group` on the wrapper keeps the labelled, non-landmark region the
+    // focusable scroller wants, and hands the list its semantics back.
+    <div className={className} role="group" aria-label={label}>
       <ul
         ref={railRef}
         tabIndex={0}
-        role="group"
-        aria-label={label}
         className={cn(
           "flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-2",
           // Bleed to the container edges so a partially-visible next card

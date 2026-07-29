@@ -56,7 +56,7 @@ export function GalleryExplorer() {
 
   const chip = (active: boolean) =>
     cn(
-      "rounded-pill px-3.5 py-1.5 text-sm font-medium transition-colors",
+      "inline-flex min-h-[44px] items-center rounded-pill px-3.5 py-1.5 text-sm font-medium transition-colors",
       active ? "bg-ink-900 text-white" : "bg-sand-100 text-ink-600 hover:bg-sand-200",
     );
 

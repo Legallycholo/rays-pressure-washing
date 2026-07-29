@@ -18,7 +18,17 @@ export function Breadcrumbs({ crumbs, onDark = false }: { crumbs: Crumb[]; onDar
                   {c.name}
                 </span>
               ) : (
-                <Link href={c.href} className="transition-colors hover:text-hydro-400">
+                // 14px text is a 20px-tall tap target, well under the 44px
+                // floor. Grown with a pseudo-element rather than padding
+                // because the crumbs sit in a horizontal row: vertical
+                // expansion is free real estate, and expanding the box itself
+                // would push a breadcrumb bar to 44px tall on every page.
+                // Vertical only — horizontal would overlap the next crumb and
+                // hand taps to the wrong link.
+                <Link
+                  href={c.href}
+                  className="relative transition-colors after:absolute after:inset-x-0 after:-inset-y-3 after:content-[''] hover:text-hydro-400"
+                >
                   {c.name}
                 </Link>
               )}

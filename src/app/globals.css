@@ -466,3 +466,19 @@ p {
     transform: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Seasonal banner — dismissal, decided before first paint
+
+   Set by the inline script inside `SeasonalBanner`, which reads localStorage
+   during HTML parse. The band renders visible from the server (right for every
+   first-time visitor) and this rule takes it away again for the returning one
+   who already closed it.
+
+   It has to be CSS rather than React state: deciding this in an effect means
+   deciding it after the first paint, which is a 74px layout shift above the
+   hero on every single visit — it was the whole of the homepage's CLS.
+   ------------------------------------------------------------------------- */
+[data-banner-dismissed] .banner-seasonal {
+  display: none;
+}

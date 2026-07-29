@@ -345,7 +345,11 @@ export function Header() {
               <Link
                 key={l.slug}
                 href={`/service-areas/${l.slug}`}
-                className="rounded-pill bg-sand-100 px-3 py-1.5 text-sm font-medium text-ink-700"
+                // The rest of this drawer is `py-3.5` rows that clear 44px
+                // comfortably; these pills were the one thing in it that
+                // didn't, at 32px — in the one menu that only ever gets used
+                // by a thumb.
+                className="inline-flex min-h-[44px] items-center rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700"
               >
                 {l.city}
               </Link>

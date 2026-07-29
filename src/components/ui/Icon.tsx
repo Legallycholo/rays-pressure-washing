@@ -144,6 +144,12 @@ const paths: Record<string, React.ReactNode> = {
     </>
   ),
   droplet: <path d="M12 3s6 6.2 6 10.2A6 6 0 0 1 6 13.2C6 9.2 12 3 12 3z" />,
+  send: (
+    <>
+      <path d="M21 3 10.5 13.5" />
+      <path d="M21 3 14.5 21l-4-7.5L3 9.5z" />
+    </>
+  ),
 };
 
 export type IconName = keyof typeof paths;

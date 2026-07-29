@@ -123,7 +123,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
                 </p>
                 <Link
                   href="/pricing"
-                  className="mt-3 inline-block font-semibold text-hydro-700 underline underline-offset-2 hover:no-underline"
+                  className="mt-2 inline-flex min-h-[44px] items-center font-semibold text-hydro-700 underline underline-offset-2 hover:no-underline"
                 >
                   Estimate your price
                 </Link>
@@ -191,7 +191,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
                     ? `/services/${service.slug}/${l.slug}`
                     : `/service-areas/${l.slug}`
                 }
-                className="inline-block rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700 transition-colors hover:bg-hydro-50 hover:text-hydro-800"
+                className="inline-flex min-h-[44px] items-center rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700 transition-colors hover:bg-hydro-50 hover:text-hydro-800"
               >
                 {service.navLabel} in {l.city}
               </Link>

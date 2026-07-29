@@ -100,7 +100,7 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
               <li key={s.slug}>
                 <Link
                   href={`/services/${s.slug}/${loc.slug}`}
-                  className="inline-block rounded-pill bg-hydro-50 px-4 py-1.5 text-sm font-semibold text-hydro-800 transition-colors hover:bg-hydro-100"
+                  className="inline-flex min-h-[44px] items-center rounded-pill bg-hydro-50 px-4 py-1.5 text-sm font-semibold text-hydro-800 transition-colors hover:bg-hydro-100"
                 >
                   {s.navLabel} in {loc.city} →
                 </Link>

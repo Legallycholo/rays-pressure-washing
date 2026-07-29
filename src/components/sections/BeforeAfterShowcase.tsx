@@ -47,7 +47,11 @@ export function ProjectCard({
               href={expandHref}
               scroll={false}
               data-project-trigger={project.id}
-              className="group/expand inline-flex items-start gap-1.5 hover:text-hydro-700"
+              // `py-1 -my-1` grows the tap target past 44px without moving
+              // anything: vertical padding inflates the box, the negative
+              // margin cancels it out of the line box, so the heading sits
+              // exactly where it did.
+              className="group/expand -my-1 inline-flex min-h-[44px] items-start gap-1.5 py-1 hover:text-hydro-700"
             >
               {project.title}
               <Icon
