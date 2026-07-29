@@ -105,7 +105,7 @@
    ------------------------------------------------------------------------- */
 :root {
   color-scheme: light;
-  --header-height: 4.5rem;
+  --header-height: 5.5rem;
 
   /* Fixed-element geometry, in one place so the three things that have to agree
      about it can't drift: StickyCallBar's own height, the <body> padding that

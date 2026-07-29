@@ -103,14 +103,14 @@ export const projects: Project[] = [
   },
   {
     id: "p6",
-    title: "Retail plaza flatwork, overnight service",
-    serviceSlug: "commercial-flatwork",
+    title: "Motor court and walkway run",
+    serviceSlug: "driveway-concrete",
     citySlug: "cedar-park",
     before: "",
     after: "",
-    alt: "Retail plaza sidewalk before and after commercial cleaning",
+    alt: "Long residential driveway before and after surface cleaning",
     summary:
-      "Gum and grease across the full walkway run. Cleaned overnight with water reclamation, disposal documented for the compliance file.",
+      "A wide motor court with years of even gray across it. Rotary surface cleaner end to end so the lift is uniform, edges and joints finished by hand.",
     durationHours: 9,
     surfaceArea: "14,000 sq ft",
   },

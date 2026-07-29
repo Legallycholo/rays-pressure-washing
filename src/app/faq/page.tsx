@@ -9,7 +9,7 @@ import { faqSchema, breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "FAQ: Every Question We Get",
-  description: "Soft washing vs pressure washing, pricing, plants and pets, scheduling, commercial paperwork. All of it, answered straight.",
+  description: "Soft washing vs pressure washing, pricing, plants and pets, scheduling. All of it, answered straight.",
   alternates: { canonical: "/faq" },
 };
 

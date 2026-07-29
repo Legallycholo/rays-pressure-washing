@@ -37,7 +37,7 @@ export default function GalleryPage() {
       </Section>
       <CtaBand
         title="Want yours in this gallery?"
-        lede="Free quote, same-day response, and the before photo is on us."
+        lede="Call now, or submit the form and we will get back to you within 24 hours."
       />
     </>
   );

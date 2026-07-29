@@ -26,14 +26,14 @@ const srcSetFor = (ext: "webp" | "png") =>
   WIDTHS.map((w) => `${w === 1024 ? `/logo.${ext}` : `/logo-${w}.${ext}`} ${w}w`).join(", ");
 
 /**
- * Widest the lockup is ever laid out, the footer's `h-12` at the logo's 2.61
+ * Widest the lockup is ever laid out, the footer's `h-14` at the logo's 2.61
  * aspect ratio, rounded up. A fixed `sizes` rather than a breakpoint list
  * because the height classes vary per call site while the *ceiling* does not,
  * and over-declaring here costs one step up the srcset at most.
  */
-const SIZES = "130px";
+const SIZES = "165px";
 
-export function Logo({ className, heightClass = "h-10 sm:h-11", linked = false }: LogoProps) {
+export function Logo({ className, heightClass = "h-12 sm:h-14", linked = false }: LogoProps) {
   // WebP first (93kB vs 159kB at full size, and it stays ahead at every width),
   // PNG as the fallback. Both carry a real alpha channel, the supplied
   // artwork's black matte was knocked out, so the lockup drops onto the white

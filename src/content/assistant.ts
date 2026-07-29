@@ -32,8 +32,10 @@
  * the page wins and this file is the bug.
  * ──────────────────────────────────────────────────────────────────────────── */
 
-import { site, waLink } from "@/content/site";
+import { site, hoursLine } from "@/content/site";
 import { locations } from "@/content/locations";
+
+export { hoursLine };
 
 /** A link rendered as a row inside a chat answer or the contact directory. */
 export type AssistantAction = {
@@ -77,30 +79,6 @@ export type AssistantTopic = {
 };
 
 /* ---------------------------------------------------------------------------
-   Opening hours, derived rather than retyped
-
-   `site.hours` is the source of truth and feeds LocalBusiness schema, so a
-   second hand-written copy of it in chat copy is a guaranteed future
-   contradiction, the kind nobody notices until a customer turns up on a
-   Sunday.
-   ------------------------------------------------------------------------- */
-
-const to12h = (t: string) => {
-  const [h, m] = t.split(":").map(Number);
-  const hour = h % 12 === 0 ? 12 : h % 12;
-  return `${hour}${m ? `:${String(m).padStart(2, "0")}` : ""}${h < 12 ? "am" : "pm"}`;
-};
-
-const shortDays = (d: string) =>
-  d.replace(/\b(Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day\b/g, (_, stem) => stem.slice(0, 3)).replace(" – ", "–");
-
-/** e.g. "Mon–Fri 7am–6pm · Sat 8am–4pm", closed days drop out. */
-export const hoursLine = site.hours
-  .filter((h) => h.close)
-  .map((h) => `${shortDays(h.days)} ${to12h(h.open)}–${to12h(h.close)}`)
-  .join(" · ");
-
-/* ---------------------------------------------------------------------------
    The script
    ------------------------------------------------------------------------- */
 
@@ -125,23 +103,22 @@ export const assistantTopics: AssistantTopic[] = [
     chip: "How much will it cost?",
     reply: [
       "Almost everything we do prices off measured surface area, so a number guessed from here would be worth nothing to you.",
-      "The estimator asks a few questions about your property and gives you a real range in about a minute. It's built from our own job data. If the surfaces measure up as you describe them, the final quote lands inside it.",
+      "The fastest way to a real number is to talk to us. Call and we can usually answer on the spot, or send your address through the form and we'll get back to you within 24 hours.",
     ],
     actions: [
       {
-        label: "Get my free estimate",
-        detail: "About a minute · no card, no callback trap",
-        href: "/quote",
+        label: "Request a callback",
+        detail: "We reply within 24 hours",
+        href: "/contact",
         icon: "sparkle",
         internal: true,
         primary: true,
       },
       {
-        label: "See the pricing guide",
-        detail: "What moves the number up or down",
-        href: "/pricing",
-        icon: "arrow",
-        internal: true,
+        label: `Call ${site.contact.phone}`,
+        detail: hoursLine,
+        href: `tel:${site.contact.phoneHref}`,
+        icon: "phone",
       },
     ],
     followUps: ["payment", "bundles", "booking", "human"],
@@ -173,8 +150,8 @@ export const assistantTopics: AssistantTopic[] = [
     // Mirrors the catalog in `services.ts`. If a service is added there and
     // this line isn't updated, this line is the one that's wrong.
     reply: [
-      "Residential: roofs, siding, driveways and walkways, decks, patios, fences, gutters, windows and pool enclosures.",
-      "Commercial: building envelopes, storefronts and parking lots. Usually overnight, so nothing happens during trading hours.",
+      "Roofs, siding, driveways and walkways, decks, patios, fences, gutters, windows and pool enclosures.",
+      "We work on lake homes, and the whole exterior can go in one visit rather than four separate trips.",
     ],
     actions: [
       { label: "Browse every service", href: "/services", icon: "spray", internal: true },
@@ -216,11 +193,6 @@ export const assistantTopics: AssistantTopic[] = [
       "paver",
       "brick",
       "stucco",
-      "commercial",
-      "storefront",
-      "parking lot",
-      "dumpster",
-      "awning",
       "solar panel",
     ],
   },
@@ -229,14 +201,14 @@ export const assistantTopics: AssistantTopic[] = [
     id: "booking",
     chip: "How soon can you come out?",
     reply: [
-      `Most quotes go out same day, and typical lead time to the visit itself is a few days. We're on the phones ${hoursLine}.`,
+      `We get back to callback requests within 24 hours, and typical lead time to the visit itself is a few days. We are on the phones ${hoursLine}.`,
       "You don't need to be home. We need an outdoor spigot and access to any gated areas, and that's it. Heavy rain or lightning means we reschedule, and we call you that morning rather than leave you waiting.",
     ],
     actions: [
       {
-        label: "Book my visit",
-        detail: "Pick a service and a window",
-        href: "/quote",
+        label: "Request a callback",
+        detail: "We reply within 24 hours",
+        href: "/contact",
         icon: "calendar",
         internal: true,
         primary: true,
@@ -275,7 +247,7 @@ export const assistantTopics: AssistantTopic[] = [
     id: "human",
     chip: "Rather talk it through?",
     reply: [
-      `Of course. Fastest is the phone: someone picks up on the truck ${hoursLine}. Outside those hours, text or WhatsApp and you'll have a reply first thing.`,
+      `Of course. Fastest is the phone: someone picks up on the truck ${hoursLine}. Outside those hours, text us or submit the form and you will have a reply first thing.`,
     ],
     actions: [
       {
@@ -286,7 +258,6 @@ export const assistantTopics: AssistantTopic[] = [
         primary: true,
       },
       { label: "Text us", href: `sms:${site.contact.phoneHref}`, icon: "chat" },
-      { label: "WhatsApp us", href: waLink(), icon: "whatsapp", external: true },
       { label: "Send a message", detail: "We reply by email", href: "/contact", icon: "mail", internal: true },
     ],
     followUps: ["price", "booking", "trust"],
@@ -299,7 +270,6 @@ export const assistantTopics: AssistantTopic[] = [
       "number",
       "phone",
       "text",
-      "whatsapp",
       "email",
       "contact",
       "get in touch",
@@ -416,7 +386,7 @@ export const assistantTopics: AssistantTopic[] = [
     id: "trust",
     chip: "Are you licensed and insured?",
     reply: [
-      `Licensed and insured, crews are background-checked, and we've been doing this locally since ${site.foundedYear}. Commercial clients can have a certificate of insurance naming your management company, usually within a business day.`,
+      `Licensed and insured, locally owned, and Ray has been doing this a long time. Ask and we will send a certificate of insurance, usually within a business day.`,
       `And ${site.guarantee.title}: ${site.guarantee.body}`,
     ],
     actions: [
@@ -688,10 +658,10 @@ export function matchTopic(text: string): AssistantTopic | null {
    advice we can give without them having to ask for it.
    ------------------------------------------------------------------------- */
 
-export const quoteAction: AssistantAction = {
-  label: "Get my free quote",
-  detail: "About a minute · no obligation",
-  href: "/quote",
+export const callbackAction: AssistantAction = {
+  label: "Request a callback",
+  detail: "We reply within 24 hours",
+  href: "/contact",
   icon: "sparkle",
   internal: true,
   primary: true,
@@ -708,7 +678,6 @@ export const channelGroups: { heading: string; channels: AssistantAction[] }[] =
         icon: "phone",
       },
       { label: "Text us", detail: "Send a photo of the problem", href: `sms:${site.contact.phoneHref}`, icon: "chat" },
-      { label: "WhatsApp us", detail: "Same number, same crew", href: waLink(), icon: "whatsapp", external: true },
     ],
   },
   {

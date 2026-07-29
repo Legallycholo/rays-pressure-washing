@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { site, waLink } from "@/content/site";
-import { residentialServices, commercialServices } from "@/content/services";
+import { site } from "@/content/site";
+import { residentialServices } from "@/content/services";
 import { locations } from "@/content/locations";
 import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
@@ -42,12 +42,12 @@ export function Footer() {
                 Ready to see it clean again?
               </h2>
               <p className="mt-2 max-w-xl text-ink-200">
-                Free, no-obligation quote. Most estimates are back with you the same day.
+                Call now, or submit the form and we&apos;ll get back to you within 24 hours.
               </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
-              <Button href="/quote" size="lg">
-                Get My Free Quote
+              <Button href="/contact" size="lg">
+                Request a Callback
               </Button>
               <Button href={`tel:${site.contact.phoneHref}`} variant="onDark" size="lg">
                 <Icon name="phone" className="h-5 w-5" />
@@ -65,7 +65,7 @@ export function Footer() {
           {/* min-w-0 on every grid child: grid items default to min-width:auto,
               so one long unbreakable string (the email) widens the whole track. */}
           <div className="min-w-0 lg:col-span-2">
-            <Logo heightClass="h-11 sm:h-12" />
+            <Logo heightClass="h-14 sm:h-16" />
 
             {/* No trailing "." because the tagline punctuates itself. */}
             <p className="mt-4 max-w-sm text-sm leading-relaxed">{site.tagline}</p>
@@ -85,15 +85,6 @@ export function Footer() {
               >
                 <Icon name="phone" className="h-4 w-4 text-harbor-400" />
                 {site.contact.phone}
-              </a>
-              <a
-                href={waLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(footerLink, "gap-2.5")}
-              >
-                <Icon name="whatsapp" filled className="h-4 w-4 text-leaf-400" />
-                Message us on WhatsApp
               </a>
               <a
                 href={`mailto:${site.contact.email}`}
@@ -130,19 +121,6 @@ export function Footer() {
 
           <div>
             <h3 className="font-display text-sm uppercase tracking-[0.16em] text-white">
-              Commercial
-            </h3>
-            <ul className={footerList}>
-              {commercialServices.map((s) => (
-                <li key={s.slug}>
-                  <Link href={`/services/${s.slug}`} className={footerLink}>
-                    {s.navLabel}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <h3 className="mt-8 font-display text-sm uppercase tracking-[0.16em] text-white">
               Company
             </h3>
             <ul className={footerList}>
@@ -159,11 +137,6 @@ export function Footer() {
               <li>
                 <Link href="/reviews" className={footerLink}>
                   Reviews
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing" className={footerLink}>
-                  Pricing
                 </Link>
               </li>
               <li>

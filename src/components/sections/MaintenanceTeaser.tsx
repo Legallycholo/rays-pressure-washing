@@ -46,12 +46,7 @@ export function MaintenanceTeaser({ plan, terms }: { plan: MaintenancePlan; term
           <p className="mt-1 text-sm font-semibold uppercase tracking-wide text-ink-400">
             {plan.frequency}
           </p>
-          <p className="mt-6 font-display text-6xl font-bold text-leaf-600">
-            {plan.discountPercent}%
-            <span className="ml-2 align-middle font-sans text-base font-semibold text-ink-500">
-              below one-off rates
-            </span>
-          </p>
+          <p className="mt-6 text-lg leading-relaxed text-ink-600">{plan.blurb}</p>
           <p className="mt-6 border-t border-ink-100 pt-4 text-sm leading-relaxed text-ink-500">
             <span className="font-semibold text-ink-700">Best for:</span> {plan.bestFor}
           </p>

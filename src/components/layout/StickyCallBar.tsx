@@ -1,11 +1,11 @@
-import { site, waLink } from "@/content/site";
+import { site } from "@/content/site";
 import { Icon } from "@/components/ui/Icon";
 
 /**
  * Mobile-only persistent action bar.
  *
  * Rationale: the majority of local-service traffic is mobile, and most of it
- * arrives ready to contact someone rather than to read. Three taps, always
+ * arrives ready to contact someone rather than to read. Two taps, always
  * reachable, no scroll required. Hidden on desktop where the header CTA is
  * already permanently visible.
  *
@@ -21,7 +21,7 @@ export function StickyCallBar() {
       // in agreement.
       className="no-tap-flash fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-ink-900/95 pb-[var(--safe-bottom)] backdrop-blur-lg lg:hidden"
     >
-      <div className="grid grid-cols-3 divide-x divide-white/10">
+      <div className="grid grid-cols-2 divide-x divide-white/10">
         <a
           href={`tel:${site.contact.phoneHref}`}
           className="flex flex-col items-center gap-1 py-3 text-white active:bg-white/10"
@@ -30,20 +30,11 @@ export function StickyCallBar() {
           <span className="text-xs font-semibold">Call</span>
         </a>
         <a
-          href={waLink()}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex flex-col items-center gap-1 py-3 text-white active:bg-white/10"
-        >
-          <Icon name="whatsapp" filled className="h-5 w-5 text-leaf-400" />
-          <span className="text-xs font-semibold">WhatsApp</span>
-        </a>
-        <a
-          href="/quote"
+          href="/contact"
           className="flex flex-col items-center gap-1 bg-amber-400 py-3 text-ink-950 active:bg-amber-500"
         >
           <Icon name="sparkle" className="h-5 w-5" />
-          <span className="text-xs font-bold">Free Quote</span>
+          <span className="text-xs font-bold">Request Callback</span>
         </a>
       </div>
     </div>

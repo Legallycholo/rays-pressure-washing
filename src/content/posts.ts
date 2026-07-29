@@ -17,7 +17,7 @@ export type Post = {
   date: string;
   updated?: string;
   author: string;
-  category: "Maintenance" | "How it works" | "Cost" | "Seasonal" | "Commercial";
+  category: "Maintenance" | "How it works" | "Cost" | "Seasonal";
   readMinutes: number;
   /** Internal linking targets, keeps the SEO graph tight. */
   relatedServices: string[];

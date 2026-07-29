@@ -51,7 +51,7 @@ export default function ReviewsPage() {
             ))}
           </>
         }
-        primaryCta={{ label: "Get a free quote", href: "/quote" }}
+        primaryCta={{ label: "Request a Callback", href: "/contact" }}
       />
 
       {/* Review CTA Callout Banner */}

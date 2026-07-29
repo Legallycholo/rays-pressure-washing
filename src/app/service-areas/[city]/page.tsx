@@ -75,7 +75,7 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
             </Badge>
           </>
         }
-        primaryCta={{ label: "Get my free quote", href: "/quote" }}
+        primaryCta={{ label: "Request a Callback", href: "/contact" }}
         secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
       />
 
@@ -145,7 +145,7 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
       <CtaBand
         variant="inline"
         title={`Book your ${loc.city} clean`}
-        lede="Free quote, usually same-day."
+        lede="Call now, or submit the form and we will get back to you within 24 hours."
       />
 
       {/* Full catalog for the internal-link graph */}

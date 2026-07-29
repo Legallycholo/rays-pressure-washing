@@ -37,7 +37,7 @@ export default function MaintenancePlanPage() {
         title="Never think about it again"
         // Terms lead, "am I locked in?" is the objection, so answer it first
         lede={maintenancePlanTerms}
-        primaryCta={{ label: "Start a Plan", href: "/quote" }}
+        primaryCta={{ label: "Start a Plan", href: "/contact" }}
       />
 
       <Section tone="light">
@@ -60,13 +60,7 @@ export default function MaintenancePlanPage() {
                   <p className="mt-1 text-sm font-semibold uppercase tracking-wide text-ink-400">
                     {plan.frequency}
                   </p>
-                  <p className="mt-5 font-display text-5xl font-bold text-leaf-600">
-                    {plan.discountPercent}%
-                    <span className="ml-2 align-middle font-sans text-sm font-semibold text-ink-500">
-                      off one-off rates
-                    </span>
-                  </p>
-                  <p className="mt-3 text-sm leading-relaxed text-ink-500">{plan.blurb}</p>
+                  <p className="mt-5 text-sm leading-relaxed text-ink-500">{plan.blurb}</p>
                   <ul className="mt-5 space-y-2.5">
                     {plan.includes.map((item) => (
                       <li key={item} className="flex items-start gap-2.5 text-sm text-ink-700">
@@ -81,7 +75,7 @@ export default function MaintenancePlanPage() {
                   <div className="mt-auto pt-6">
                     {/* R2: one primary per viewport, anchor card only */}
                     <Button
-                      href={`/quote?plan=${plan.slug}`}
+                      href="/contact"
                       variant={plan.mostPopular ? "primary" : "secondary"}
                       fullWidth
                     >

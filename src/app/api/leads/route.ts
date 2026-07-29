@@ -1,15 +1,11 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { site } from "@/content/site";
-import { getService } from "@/content/services";
-import { getBundle } from "@/content/packages";
 
 /**
- * Every lead the site produces leaves through here, the quote wizard's final
- * step and the contact page's message form. One route rather than two because
- * the difference between them is which fields are filled in, not what happens
- * next: both become an email to the business, and both need the same
- * validation, the same spam floor, and the same honest failure.
+ * Every lead the site produces leaves through here: the contact page's message
+ * form is now the only sender. It becomes an email to the business, with
+ * validation, a spam floor, and an honest failure when Resend is unreachable.
  *
  * ── SENDING IDENTITY, AND WHY IT LOOKS TEMPORARY ────────────────────────────
  * `from` defaults to Resend's shared sandbox sender, which can only deliver to
@@ -22,11 +18,6 @@ import { getBundle } from "@/content/packages";
  * it (e.g. "Website <leads@yourdomain.com>") and the ceiling lifts. Nothing in
  * this file changes.
  *
- * ── WHAT THIS DOES NOT DO ───────────────────────────────────────────────────
- * Photos from the wizard are still discarded client-side (STRUCTURE.md open
- * decision #4), the count travels, the files don't. Attaching them means an
- * upload path and a storage bucket, which is a bigger decision than this route.
- * The email says how many were attached so nobody wonders where they went.
  */
 
 /* ---------------------------------------------------------------------------
@@ -40,7 +31,7 @@ const config = () => ({
   to: process.env.LEADS_TO_EMAIL || site.contact.email,
 });
 
-const MAX = { name: 120, email: 200, phone: 40, address: 300, message: 5_000, notes: 5_000 } as const;
+const MAX = { name: 120, email: 200, message: 5_000 } as const;
 
 /* ---------------------------------------------------------------------------
    Rate limiting
@@ -96,25 +87,14 @@ const looksLikeEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
 
 const str = (v: unknown, cap: number) => (typeof v === "string" ? v.trim().slice(0, cap) : "");
 
-type Lead =
-  | { kind: "contact"; name: string; email: string; message: string }
-  | {
-      kind: "quote";
-      name: string;
-      email: string;
-      phone: string;
-      address: string;
-      services: string[];
-      propertyType: string;
-      storeys: number;
-      size: string;
-      timing: string;
-      plan: string;
-      notes: string;
-      photoCount: number;
-      bundle: string | null;
-      estimate: { low: number; high: number } | null;
-    };
+/**
+ * One shape now. There used to be a second, `kind: "quote"`, carrying property
+ * measurements, a matched bundle and the estimate the visitor had been shown;
+ * it was the quote wizard's final step, and the wizard, the estimator and the
+ * bundles are all gone. Nothing has sent that shape since. Recover it from git
+ * history if quoting comes back rather than rebuilding it from memory.
+ */
+type Lead = { kind: "contact"; name: string; email: string; message: string };
 
 function parse(body: Record<string, unknown>): { lead: Lead } | { error: string } {
   const name = str(body.name, MAX.name);
@@ -127,50 +107,6 @@ function parse(body: Record<string, unknown>): { lead: Lead } | { error: string 
     const message = str(body.message, MAX.message);
     if (!message) return { error: "A message is required." };
     return { lead: { kind: "contact", name, email, message } };
-  }
-
-  if (body.kind === "quote") {
-    const phone = str(body.phone, MAX.phone);
-    const address = str(body.address, MAX.address);
-    if (!phone) return { error: "A phone number is required." };
-    if (!address) return { error: "A property address is required." };
-
-    // Slugs are checked against the catalog rather than trusted: they are
-    // rendered into the email, and an unknown slug is either a stale client or
-    // someone poking at the endpoint. Either way it isn't a service.
-    const services = Array.isArray(body.services)
-      ? body.services.filter((s): s is string => typeof s === "string" && Boolean(getService(s)))
-      : [];
-
-    const estimate =
-      body.estimate &&
-      typeof body.estimate === "object" &&
-      typeof (body.estimate as { low?: unknown }).low === "number" &&
-      typeof (body.estimate as { high?: unknown }).high === "number"
-        ? { low: (body.estimate as { low: number }).low, high: (body.estimate as { high: number }).high }
-        : null;
-
-    const bundleSlug = str(body.bundle, 80);
-
-    return {
-      lead: {
-        kind: "quote",
-        name,
-        email,
-        phone,
-        address,
-        services,
-        propertyType: str(body.propertyType, 40),
-        storeys: Number(body.storeys) || 1,
-        size: str(body.size, 40),
-        timing: str(body.timing, 40),
-        plan: str(body.plan, 80),
-        notes: str(body.notes, MAX.notes),
-        photoCount: Math.max(0, Math.min(20, Number(body.photoCount) || 0)),
-        bundle: bundleSlug && getBundle(bundleSlug) ? bundleSlug : null,
-        estimate,
-      },
-    };
   }
 
   return { error: "Unrecognised submission." };
@@ -187,64 +123,17 @@ function parse(body: Record<string, unknown>): { lead: Lead } | { error: string 
 const esc = (v: string) =>
   v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-const SIZE_LABEL: Record<string, string> = {
-  small: "Small (under 1,500 sq ft)",
-  medium: "Medium (1,500–2,500 sq ft)",
-  large: "Large (2,500–4,000 sq ft)",
-  xl: "Very large (over 4,000 sq ft)",
-};
-
-const TIMING_LABEL: Record<string, string> = {
-  asap: "As soon as possible",
-  "2weeks": "In the next two weeks",
-  month: "Sometime this month",
-  flexible: "Flexible / just pricing it up",
-};
-
-const money = (n: number) => `$${n.toLocaleString("en-US")}`;
-
 function rowsFor(lead: Lead): [string, string][] {
-  if (lead.kind === "contact") {
-    return [
-      ["Name", lead.name],
-      ["Email", lead.email],
-      ["Message", lead.message],
-    ];
-  }
-
-  const rows: [string, string][] = [
+  return [
     ["Name", lead.name],
-    ["Phone", lead.phone],
     ["Email", lead.email],
-    ["Address", lead.address],
-    ["Services", lead.services.map((s) => getService(s)?.name ?? s).join(", ") || "Not specified"],
-    ["Property", [lead.propertyType, `${lead.storeys} floor${lead.storeys > 1 ? "s" : ""}`].filter(Boolean).join(" · ") || "n/a"],
-    ["Size", SIZE_LABEL[lead.size] ?? lead.size ?? "n/a"],
-    ["Timing", TIMING_LABEL[lead.timing] ?? "No preference"],
+    ["Message", lead.message],
   ];
-
-  if (lead.bundle) rows.push(["Bundle matched", getBundle(lead.bundle)?.name ?? lead.bundle]);
-  if (lead.plan) rows.push(["Maintenance plan", lead.plan]);
-  if (lead.estimate) {
-    rows.push([
-      "Estimate they saw",
-      `${money(lead.estimate.low)} – ${money(lead.estimate.high)}. Quote against this, they will`,
-    ]);
-  }
-  if (lead.photoCount) {
-    rows.push([
-      "Photos",
-      `${lead.photoCount} attached in the browser and not uploaded, ask for them by reply`,
-    ]);
-  }
-  if (lead.notes) rows.push(["Notes", lead.notes]);
-
-  return rows;
 }
 
 function render(lead: Lead) {
   const rows = rowsFor(lead);
-  const heading = lead.kind === "quote" ? "New quote request" : "New website message";
+  const heading = "New website message";
 
   const html = `<!doctype html><html><body style="margin:0;padding:24px;background:#f4f1ec;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#16232e">
   <div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0">
@@ -272,12 +161,7 @@ function render(lead: Lead) {
   // plain text by default, and a lead nobody can read is a lead nobody calls.
   const text = [`${heading} · ${site.name}`, "", ...rows.map(([l, v]) => `${l}: ${v}`)].join("\n");
 
-  const subject =
-    lead.kind === "quote"
-      ? `New quote request: ${lead.name}, ${lead.address}`
-      : `Website message: ${lead.name}`;
-
-  return { subject, html, text };
+  return { subject: `Website message: ${lead.name}`, html, text };
 }
 
 /* ------------------------------------------------------------------------- */

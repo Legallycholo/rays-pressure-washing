@@ -96,18 +96,6 @@ export const testimonials: Testimonial[] = [
       "Hands down the best window cleaner in Columbia and Lexington! Cleaned all second-story glass inside and out. Very polite, punctual, and left everything crystal clear.",
   },
   {
-    id: "t7",
-    name: "Cedar Park Plaza",
-    neighborhood: "Highway Business District",
-    citySlug: "cedar-park",
-    serviceSlug: "commercial-flatwork",
-    rating: 5,
-    date: "2026-02-11",
-    source: "Google",
-    quote:
-      "Ray handles our commercial storefront windows and walkway pressure washing on a recurring schedule. Always reliable, prompt, and easy to work with.",
-  },
-  {
     id: "t8",
     name: "Gareth L.",
     neighborhood: "Millers Creek",

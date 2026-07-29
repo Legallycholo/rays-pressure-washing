@@ -17,7 +17,7 @@ import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: `${site.name}: locally owned exterior cleaning, based in ${cityState} since ${site.foundedYear}.`,
+  description: `${site.name}: locally owned exterior cleaning, based in ${cityState}.`,
   alternates: { canonical: "/about" },
 };
 
@@ -34,8 +34,8 @@ export default function AboutPage() {
         variant="page"
         breadcrumbs={crumbs}
         title={`The local crew that treats your place like the ${site.guarantee.title.toLowerCase()} depends on it`}
-        lede={`Because it does. ${site.name} has been washing ${site.serviceRegion} exteriors since ${site.foundedYear}. Same owner, same standard, same trucks you see around town.`}
-        primaryCta={{ label: "Get my free quote", href: "/quote" }}
+        lede={`Because it does. ${site.name} washes ${site.serviceRegion} exteriors, and has for years. Same owner, same standard, same trucks you see around town.`}
+        primaryCta={{ label: "Request a Callback", href: "/contact" }}
       />
 
       <StatsRow stats={stats} tone="hydro" />
@@ -51,16 +51,18 @@ export default function AboutPage() {
             />
             <div className="mt-6 space-y-4 leading-relaxed text-ink-600">
               <p>
-                {/* DRAFT COPY: replace with the real founding story at launch */}
-                Ray started this company in {site.foundedYear} with a trailer, a
-                pressure washer, and a low tolerance for the wand-stripe driveways and
-                blasted siding other outfits were leaving behind. The bet was simple:
-                learn the right method for every surface, publish honest prices, and
-                let the before-and-afters do the selling.
+                {/* DRAFT COPY: replace with the real founding story at launch.
+                    Deliberately no founding year: the one that used to be here
+                    was placeholder data. Add it back once it is confirmed. */}
+                Ray started this company with a trailer, a pressure washer, and a
+                low tolerance for the wand-stripe driveways and blasted siding
+                other outfits were leaving behind. The bet was simple: learn the
+                right method for every surface, quote it straight, and let the
+                before-and-afters do the selling.
               </p>
               <p>
-                Today it&apos;s a small crew, background-checked and trained on every
-                material we touch, but it&apos;s still the same bet. If you can see it
+                Today it&apos;s a small crew, trained on every material we touch, but
+                it&apos;s still the same bet. If you can see it
                 after we leave, we come back. That&apos;s not a slogan; it&apos;s the
                 guarantee.
               </p>

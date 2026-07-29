@@ -10,7 +10,7 @@ export type Faq = {
   id: string;
   question: string;
   answer: string;
-  category: "Process" | "Safety" | "Pricing" | "Scheduling" | "Commercial";
+  category: "Process" | "Safety" | "Pricing" | "Scheduling";
 };
 
 export const faqs: Faq[] = [
@@ -106,39 +106,18 @@ export const faqs: Faq[] = [
       "We cover the pool surface before we start and rinse the enclosure away from the water. Minor overspray is diluted to the point of irrelevance in a full pool, but we'd still recommend running your filter for a few hours afterwards as normal practice.",
   },
   {
-    id: "commercial-insurance",
-    category: "Commercial",
-    question: "Can you provide a certificate of insurance?",
-    answer:
-      "Yes. We carry general liability and workers' compensation, and we can issue a COI naming your property management company or landlord as an additional insured, usually within one business day of request.",
-  },
-  {
-    id: "after-hours",
-    category: "Commercial",
-    question: "Can you work outside our business hours?",
-    answer:
-      "Yes, and for most commercial flatwork we prefer to. Overnight and early-morning windows mean no customer disruption, no vehicles to work around, and no wet surfaces during trading. There's no premium for standard overnight scheduling.",
-  },
-  {
     id: "contracts",
-    category: "Commercial",
-    question: "Do you offer recurring maintenance contracts?",
+    category: "Pricing",
+    question: "Am I locked into a contract?",
     answer:
-      "Yes. Recurring schedules are priced 15–25% below one-off rates because we can route them efficiently. Terms are month-to-month. We'd rather keep the work by doing it well than by locking you in.",
-  },
-  {
-    id: "water-reclaim",
-    category: "Commercial",
-    question: "Do you reclaim wastewater on parking lots?",
-    answer:
-      "Yes. Surface runoff from commercial flatwork is regulated in most municipalities and cannot legally enter a storm drain. We use vacuum recovery and dispose through approved channels, and we can provide the disposal documentation for your compliance file.",
+      "No. Recurring visits are month-to-month and you can stop at any time. We'd rather keep the work by doing it well than by locking you in.",
   },
   {
     id: "quote-accuracy",
     category: "Pricing",
-    question: "Is the online estimate the price I'll actually pay?",
+    question: "Will the price change once you're on site?",
     answer:
-      "It's a genuine ballpark based on real job data, not a lead-capture trick, but it is calculated from the measurements you enter. If your surfaces measure up as described, the final quote lands within the range shown. If something on site differs materially, we tell you before we start work, never after.",
+      "The number we give you is the number you pay. We work it out from the surfaces themselves, so if something on site differs materially from what we discussed, we tell you before we start work, never after.",
   },
   {
     id: "payment",

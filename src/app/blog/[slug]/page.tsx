@@ -126,7 +126,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <CtaBand
         variant="inline"
         title="Reading done. Problem still there?"
-        lede="Free quote, same-day response."
+        lede="Call now, or submit the form and we will get back to you within 24 hours."
       />
 
       {morePosts.length > 0 && (

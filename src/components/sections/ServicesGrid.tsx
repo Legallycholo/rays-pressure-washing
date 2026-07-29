@@ -5,7 +5,7 @@ import { Card } from "@/components/ui/Card";
 import { Icon } from "@/components/ui/Icon";
 import { Badge } from "@/components/ui/Badge";
 import { Reveal } from "@/components/Reveal";
-import { cn, currency } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 type HeadingProps = { eyebrow?: string; title: React.ReactNode; lede?: React.ReactNode };
 
@@ -27,9 +27,7 @@ export function ServiceCard({ service, promoted = false }: { service: Service; p
       </p>
       <div className="mt-auto pt-5">
         <div className="flex items-center justify-between border-t border-ink-100 pt-4">
-          <span className="text-sm font-semibold text-ink-800">
-            From {currency(service.pricing.minimum)}
-          </span>
+          <span className="text-sm font-semibold text-ink-800">{service.cadence}</span>
           <Icon
             name="arrow"
             className="h-4 w-4 text-harbor-600 transition-transform group-hover:translate-x-1"
@@ -42,8 +40,7 @@ export function ServiceCard({ service, promoted = false }: { service: Service; p
 
 /**
  * SECTIONS.md §2.5. `promote` (activeCampaign.promoteServices) sorts those
- * services first and badges them "In season". The /services hub's segment
- * toggle lives in ServicesTabs.tsx, keeping this a Server Component.
+ * services first and badges them "In season".
  */
 export function ServicesGrid({
   services,

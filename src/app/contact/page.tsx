@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { site, waLink, cityState } from "@/content/site";
+import { site, cityState, formatHour } from "@/content/site";
 import { locations } from "@/content/locations";
 import { Hero } from "@/components/sections/Hero";
 import { CoverageMap } from "@/components/sections/CoverageMap";
@@ -11,7 +11,7 @@ import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "Contact Us",
-  description: `Call, text, WhatsApp or email ${site.name} in ${cityState}. Same-business-day replies.`,
+  description: `Call, text or email ${site.name} in ${cityState}, or submit the form and we'll get back to you within 24 hours.`,
   alternates: { canonical: "/contact" },
 };
 
@@ -23,7 +23,6 @@ const crumbs = [
 export default function ContactPage() {
   const channels = [
     { icon: "phone", label: "Call", value: site.contact.phone, href: `tel:${site.contact.phoneHref}`, note: "Fastest during work hours" },
-    { icon: "whatsapp", label: "WhatsApp", value: "Message us", href: waLink(), note: "Fastest after hours" },
     { icon: "phone", label: "Text", value: site.contact.phone, href: `sms:${site.contact.phoneHref}`, note: "Photos welcome" },
     { icon: "mail", label: "Email", value: site.contact.email, href: `mailto:${site.contact.email}`, note: "Same business day" },
   ];
@@ -50,7 +49,7 @@ export default function ContactPage() {
                     className="flex items-center gap-4 rounded-card bg-sand-50 p-4 ring-1 ring-ink-900/5 transition-all hover:-translate-y-0.5 hover:ring-harbor-400"
                   >
                     <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white text-harbor-600 ring-1 ring-ink-900/5">
-                      <Icon name={c.icon} filled={c.icon === "whatsapp"} className="h-5 w-5" />
+                      <Icon name={c.icon} className="h-5 w-5" />
                     </span>
                     <span className="min-w-0">
                       <span className="block font-semibold text-ink-800 [overflow-wrap:anywhere]">
@@ -73,8 +72,10 @@ export default function ContactPage() {
                 <dl>
                   {site.hours.map((h) => (
                     <div key={h.days} className="flex gap-3">
-                      <dt className="w-32 font-medium text-ink-700">{h.days}</dt>
-                      <dd>{h.open === "Closed" ? "Closed" : `${h.open} – ${h.close}`}</dd>
+                      <dt className="w-36 font-medium text-ink-700">{h.days}</dt>
+                      <dd>
+                        {h.close ? `${formatHour(h.open)} – ${formatHour(h.close)}` : "Closed"}
+                      </dd>
                     </div>
                   ))}
                 </dl>

@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
 import { site, stats, credentialBadges } from "@/content/site";
 import { featuredServices, residentialServices } from "@/content/services";
-import { activeCampaign, featuredBundles, maintenancePlans, maintenancePlanTerms } from "@/content/packages";
+import { maintenancePlans, maintenancePlanTerms } from "@/content/packages";
 import { locations } from "@/content/locations";
 import { featuredProjects } from "@/content/gallery";
 import { featuredTestimonials } from "@/content/testimonials";
 import { getFaqs } from "@/content/faqs";
 import { featuredPosts } from "@/content/posts";
-import { SeasonalBanner } from "@/components/sections/SeasonalBanner";
 import { Hero } from "@/components/sections/Hero";
 import { TrustBar } from "@/components/sections/TrustBar";
 import { SymptomChecker } from "@/components/sections/SymptomChecker";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
-import { BundlesSection } from "@/components/sections/BundlesSection";
 import { BeforeAfterShowcase } from "@/components/sections/BeforeAfterShowcase";
 import { VideoShowcase } from "@/components/sections/VideoShowcase";
 import { HowItWorks } from "@/components/sections/HowItWorks";
@@ -28,8 +26,8 @@ import { BlogPreview } from "@/components/sections/BlogPreview";
 export const metadata: Metadata = {
   title: `Pressure Washing & Exterior Cleaning in ${site.serviceRegion}`,
   description:
-    `${site.name}: soft washing, roof cleaning, driveway and concrete cleaning across ` +
-    `${site.serviceRegion}. Published prices, free same-day quotes, and the ${site.guarantee.title}.`,
+    `${site.name}: window cleaning, soft washing, roof cleaning and concrete cleaning for ` +
+    `lake homes across ${site.serviceRegion}. Same-day availability and the ${site.guarantee.title}.`,
   alternates: { canonical: "/" },
 };
 
@@ -48,12 +46,11 @@ const homeFaqIds = [
 export default function HomePage() {
   return (
     <>
-      <SeasonalBanner campaign={activeCampaign} />
       <Hero
         eyebrow={`Serving ${site.serviceRegion}`}
         title={site.tagline}
-        lede={`Soft washing, pressure washing and exterior cleaning done the right way for each surface. Quoted free, priced openly, and backed by the ${site.guarantee.title}.`}
-        primaryCta={{ label: "Get my free quote", href: "/quote" }}
+        lede={`Big houses on the water take more than a pressure washer and a ladder. We clean the glass, the siding, the roof and the driveway on lake homes around Lexington, with the method matched to each surface and backed by the ${site.guarantee.title}.`}
+        primaryCta={{ label: "Request a Callback", href: "/contact" }}
         secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
         project={featuredProjects[0]}
       />
@@ -61,14 +58,12 @@ export default function HomePage() {
       <SymptomChecker services={residentialServices} />
       <ServicesGrid
         services={featuredServices}
-        promote={activeCampaign?.promoteServices ?? []}
         heading={{
           eyebrow: "What we clean",
-          title: "Every surface, its own method",
-          lede: "Pressure where pressure works, chemistry where it doesn't. The method badge on each card tells you which.",
+          title: "Every surface on a lake house, its own method",
+          lede: "Pressure where pressure works, chemistry where it doesn't. Stone, stucco and hardwood near the water each get a different setting, and the method badge on each card tells you which.",
         }}
       />
-      <BundlesSection bundles={featuredBundles} />
       <BeforeAfterShowcase projects={featuredProjects} />
       {/* sand → ink → light: photo proof, motion proof, then the process. */}
       <VideoShowcase />

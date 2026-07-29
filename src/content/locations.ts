@@ -140,13 +140,13 @@ export const locations: Location[] = [
     driveMinutes: 35,
     population: "≈ 47,300",
     intro:
-      "Cedar Park's commercial strip along the highway is our biggest account cluster: retail plazas, quick-service restaurants and medical offices that need scheduled overnight work. Residential demand skews to the wooded western suburbs.",
-    housingStock: "Retail plazas and offices along the corridor, wooded residential to the west",
+      "Cedar Park's demand sits in the wooded western suburbs, where large homes on big lots back onto tree cover. Long driveways and deep shade are the two things that shape almost every job we run out there.",
+    housingStock: "Large homes on wooded lots, long driveways, mature tree cover to the west",
     localChallenge:
-      "Grease and gum accumulation across high-traffic retail flatwork, plus heavy leaf litter in the wooded suburbs.",
-    neighborhoods: ["Cedar Commons", "Westwood", "Pine Hollow", "Highway Business District"],
+      "Heavy leaf litter packs the gutters, and constant shade keeps siding and concrete damp enough for algae to hold on year-round.",
+    neighborhoods: ["Cedar Commons", "Westwood", "Pine Hollow", "Cedar Ridge"],
     landmarks: ["Cedar Park Plaza", "Memorial Hospital", "Cedar Park Nature Preserve"],
-    topServices: ["commercial-flatwork", "commercial-storefront", "gutter-cleaning"],
+    topServices: ["gutter-cleaning", "house-washing", "driveway-concrete"],
   },
   {
     slug: "maple-grove",

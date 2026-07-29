@@ -33,7 +33,7 @@ export default function ServiceAreasPage() {
         breadcrumbs={crumbs}
         title={`On the road across ${site.serviceRegion}`}
         lede={`Based in ${site.address.city}, working everywhere below. Each area page covers what we see most in that neighborhood, because a lakefront deck and a new-build driveway are different jobs.`}
-        primaryCta={{ label: "Check my address", href: "/quote" }}
+        primaryCta={{ label: "Request a Callback", href: "/contact" }}
       />
 
       <Section tone="light">

@@ -18,7 +18,7 @@ export default function NotFound() {
           <Button href="/services" variant="secondary">
             Browse Services
           </Button>
-          <Button href="/quote">Get a Free Quote</Button>
+          <Button href="/contact">Request a Callback</Button>
         </div>
         <Link
           href={`tel:${site.contact.phoneHref}`}

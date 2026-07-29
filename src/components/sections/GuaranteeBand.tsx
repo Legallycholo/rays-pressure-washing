@@ -13,7 +13,7 @@ export function GuaranteeBand({ guarantee }: { guarantee: { title: string; body:
         <Icon name="shield" className="h-16 w-16 text-white opacity-90" />
         <h2 className="text-display-sm text-white sm:text-4xl">{guarantee.title}</h2>
         <p className="text-lg leading-relaxed text-harbor-50">{guarantee.body}</p>
-        <Button href="/quote" variant="onDark" size="lg" className="mt-2">
+        <Button href="/contact" variant="onDark" size="lg" className="mt-2">
           Put it to the test
         </Button>
       </div>

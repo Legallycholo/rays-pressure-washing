@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { site } from "@/content/site";
-import { residentialServices, commercialServices } from "@/content/services";
+import { site, hoursLine } from "@/content/site";
+import { residentialServices } from "@/content/services";
 import { priorityLocations } from "@/content/locations";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
@@ -14,7 +14,6 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { href: "/gallery", label: "Before & After" },
-  { href: "/pricing", label: "Pricing" },
   { href: "/service-areas", label: "Service Areas" },
   { href: "/reviews", label: "Reviews" },
   { href: "/about", label: "About" },
@@ -91,7 +90,7 @@ export function Header() {
               </span>
               <span className="inline-flex items-center gap-2">
                 <Icon name="clock" className="h-4 w-4 text-harbor-400" />
-                Mon–Fri 7am–6pm · Sat 8am–4pm
+                {hoursLine}
               </span>
             </div>
             <div className="flex items-center gap-5">
@@ -142,7 +141,7 @@ export function Header() {
                   <div className="grid grid-cols-2 gap-6 rounded-2xl bg-white p-6 shadow-lift ring-1 ring-ink-900/10">
                     <div>
                       <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
-                        Residential
+                        Services
                       </p>
                       <ul className="space-y-0.5">
                         {residentialServices.map((s) => (
@@ -159,35 +158,18 @@ export function Header() {
                       </ul>
                     </div>
                     <div className="flex flex-col">
-                      <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
-                        Commercial
-                      </p>
-                      <ul className="space-y-0.5">
-                        {commercialServices.map((s) => (
-                          <li key={s.slug}>
-                            <Link
-                              href={`/services/${s.slug}`}
-                              className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-ink-600 transition-colors hover:bg-sand-50 hover:text-harbor-700"
-                            >
-                              <Icon name={s.icon} className="h-4 w-4 text-harbor-500" />
-                              {s.navLabel}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-
-                      <div className="mt-auto rounded-xl bg-ink-900 p-4 text-white harbor-mesh">
-                        <p className="font-display text-lg">Not sure what you need?</p>
+                      <div className="rounded-xl bg-ink-900 p-4 text-white harbor-mesh">
+                        <p className="font-display text-lg">Own a big place on the lake?</p>
                         <p className="mt-1 text-sm text-ink-200">
-                          Answer four questions and get a ballpark in under a minute.
+                          Call now or send your address and we&apos;ll get back to you within 24 hours.
                         </p>
-                        <Link
-                          href="/quote"
+                        <a
+                          href={`tel:${site.contact.phoneHref}`}
                           className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-amber-400 hover:text-amber-300"
                         >
-                          Start free quote
+                          Call {site.contact.phone}
                           <Icon name="arrow" className="h-4 w-4" />
-                        </Link>
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -229,8 +211,8 @@ export function Header() {
                   inFlowPrimary ? "opacity-0" : "opacity-100",
                 )}
               >
-                <Button href="/quote" size="sm">
-                  Free Quote
+                <Button href="/contact" size="sm">
+                  Request a Callback
                 </Button>
               </span>
 
@@ -276,8 +258,8 @@ export function Header() {
       >
         <Container className="py-6">
           <div className="flex flex-col gap-2">
-            <Button href="/quote" size="lg" fullWidth>
-              Get My Free Quote
+            <Button href="/contact" size="lg" fullWidth>
+              Request a Callback
             </Button>
             <div className="grid grid-cols-2 gap-2">
               <Button href={`tel:${site.contact.phoneHref}`} variant="secondary" size="md">
@@ -291,27 +273,10 @@ export function Header() {
           </div>
 
           <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
-            Residential
+            Services
           </p>
           <ul className="divide-y divide-ink-100 border-y border-ink-100">
             {residentialServices.map((s) => (
-              <li key={s.slug}>
-                <Link
-                  href={`/services/${s.slug}`}
-                  className="flex items-center gap-3 py-3.5 font-medium text-ink-800"
-                >
-                  <Icon name={s.icon} className="h-5 w-5 text-harbor-500" />
-                  {s.navLabel}
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
-            Commercial
-          </p>
-          <ul className="divide-y divide-ink-100 border-y border-ink-100">
-            {commercialServices.map((s) => (
               <li key={s.slug}>
                 <Link
                   href={`/services/${s.slug}`}

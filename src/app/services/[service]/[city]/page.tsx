@@ -18,7 +18,6 @@ import { Icon } from "@/components/ui/Icon";
 import { Badge } from "@/components/ui/Badge";
 import { JsonLd } from "@/components/JsonLd";
 import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/schema";
-import { currency } from "@/lib/utils";
 
 /**
  * The service × city matrix, PRIORITY CITIES ONLY for now (STRUCTURE.md §7.3
@@ -83,14 +82,13 @@ export default async function ServiceCityPage({
         extras={
           <>
             <Badge tone="onDark">{service.method}</Badge>
-            <Badge tone="onDark">From {currency(service.pricing.minimum)}</Badge>
             <Badge tone="onDark">
               <Icon name="clock" className="h-3.5 w-3.5" />
               {loc.driveMinutes === 0 ? "We're based here" : `${loc.driveMinutes} min from our shop`}
             </Badge>
           </>
         }
-        primaryCta={{ label: "Get my free quote", href: `/quote?services=${service.slug}` }}
+        primaryCta={{ label: "Request a Callback", href: "/contact" }}
         secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
       />
 

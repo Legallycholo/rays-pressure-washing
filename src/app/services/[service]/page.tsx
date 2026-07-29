@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { site } from "@/content/site";
 import { getService, serviceSlugs, services } from "@/content/services";
-import { bundles } from "@/content/packages";
 import { locations } from "@/content/locations";
 import { getFaqs } from "@/content/faqs";
 import { projectsFor } from "@/content/gallery";
@@ -11,7 +10,6 @@ import { testimonialsFor } from "@/content/testimonials";
 import { Hero } from "@/components/sections/Hero";
 import { BeforeAfterShowcase } from "@/components/sections/BeforeAfterShowcase";
 import { HowItWorks } from "@/components/sections/HowItWorks";
-import { BundlesSection } from "@/components/sections/BundlesSection";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { Testimonials } from "@/components/sections/Testimonials";
@@ -23,7 +21,6 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/JsonLd";
 import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/schema";
-import { currency } from "@/lib/utils";
 
 export function generateStaticParams() {
   return serviceSlugs.map((service) => ({ service }));
@@ -53,7 +50,6 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
     { name: service.name, href: `/services/${service.slug}` },
   ];
   const serviceFaqs = getFaqs(service.faqIds);
-  const serviceBundles = bundles.filter((b) => b.serviceSlugs.includes(service.slug)).slice(0, 3);
   const related = service.related.map(getService).filter((s): s is NonNullable<typeof s> => Boolean(s));
   const projects = projectsFor({ serviceSlug: service.slug });
 
@@ -71,14 +67,13 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
               <Icon name="spray" className="h-3.5 w-3.5" />
               {service.method}
             </Badge>
-            <Badge tone="onDark">From {currency(service.pricing.minimum)}</Badge>
             <Badge tone="onDark">
               <Icon name="clock" className="h-3.5 w-3.5" />
               {service.pricing.duration}
             </Badge>
           </>
         }
-        primaryCta={{ label: "Get my free quote", href: `/quote?services=${service.slug}` }}
+        primaryCta={{ label: "Request a Callback", href: "/contact" }}
         secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
       />
 
@@ -113,19 +108,17 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
               </ul>
               <div className="mt-6 border-t border-ink-100 pt-5 text-sm text-ink-500">
                 <p>
-                  <span className="font-semibold text-ink-800">Typical range:</span>{" "}
-                  {currency(service.pricing.from)}–{currency(service.pricing.to)} per {service.pricing.unit}
-                  {" · "}
-                  {currency(service.pricing.minimum)} minimum
+                  <span className="font-semibold text-ink-800">Typical visit:</span>{" "}
+                  {service.pricing.duration}
                 </p>
                 <p className="mt-1.5">
                   <span className="font-semibold text-ink-800">Recommended:</span> {service.cadence}
                 </p>
                 <Link
-                  href="/pricing"
+                  href="/contact"
                   className="mt-2 inline-flex min-h-[44px] items-center font-semibold text-harbor-700 underline underline-offset-2 hover:no-underline"
                 >
-                  Estimate your price
+                  Request a callback
                 </Link>
               </div>
             </div>
@@ -142,18 +135,6 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
 
       <HowItWorks />
 
-      {serviceBundles.length > 0 && (
-        <BundlesSection
-          bundles={serviceBundles}
-          anchorPopular={false}
-          heading={{
-            eyebrow: "While we're there",
-            title: `${service.name} pairs well with…`,
-            lede: "The setup's already done, so adding surfaces to the same visit is the cheapest they'll ever be.",
-          }}
-        />
-      )}
-
       <Testimonials
         items={testimonialsFor({ serviceSlug: service.slug })}
         tone="sand"
@@ -163,8 +144,8 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
       <CtaBand
         variant="inline"
         title={`Ready for ${service.name.toLowerCase()}?`}
-        lede="Free quote, usually same-day."
-        primaryCta={{ label: "Start my quote", href: `/quote?services=${service.slug}` }}
+        lede="Call now, or submit the form and we will get back to you within 24 hours."
+        primaryCta={{ label: "Request a Callback", href: "/contact" }}
       />
 
       {serviceFaqs.length > 0 && (

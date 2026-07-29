@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 export type Step = { icon: string; title: string; body: string };
 
 export const defaultSteps: Step[] = [
-  { icon: "calendar", title: "Get your quote", body: "Four questions online, or one phone call. Same-day in most cases." },
+  { icon: "calendar", title: "Reach out", body: "Call now, or submit the form and we'll get back to you within 24 hours." },
   { icon: "clock", title: "Pick your date", body: "We confirm a window that works and call ahead on the day." },
   { icon: "spray", title: "We clean", body: "The right method for each surface, and you don't even need to be home." },
   { icon: "check", title: "Walk it with us", body: "You inspect the result before we leave. That's the guarantee in action." },
@@ -31,7 +31,7 @@ export function HowItWorks({ steps = defaultSteps }: { steps?: Step[] }) {
       <Reveal>
         <SectionHeading
           eyebrow="How it works"
-          title="From quote to clean in four steps"
+          title="From first call to clean in four steps"
         />
       </Reveal>
       <StackingCards

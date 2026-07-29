@@ -46,8 +46,8 @@ export function VideoShowcase({
           </ul>
           {/* onDark, never primary: the hero already owns the one Signal CTA
               in play at this point (R1/R2). */}
-          <Button href="/quote" variant="onDark">
-            Get My Free Quote
+          <Button href="/contact" variant="onDark">
+            Request a Callback
             <Icon name="arrow" className="h-4 w-4" />
           </Button>
         </div>

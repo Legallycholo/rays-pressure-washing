@@ -1,14 +1,15 @@
 /**
- * The service catalog. This array drives:
+ * The service catalog: window cleaning and pressure-washing-method services
+ * for residential lake houses. This array drives:
  *   - the /services hub grid
  *   - every /services/[service] detail page
  *   - every /services/[service]/[city] programmatic SEO page
- *   - the nav mega-menu, the footer, and the quote wizard's step 1
+ *   - the nav mega-menu and the footer
  *
  * Adding a service here creates all of its pages automatically.
  */
 
-export type Segment = "residential" | "commercial";
+export type Segment = "residential";
 
 export type Service = {
   slug: string;
@@ -54,9 +55,9 @@ export const services: Service[] = [
     navLabel: "House Washing",
     segment: "residential",
     blurb:
-      "A low-pressure soft wash that strips algae, mildew and road film off siding without forcing water behind it.",
+      "A low-pressure soft wash that strips algae, mildew and mineral film off siding, stone and stucco without forcing water behind it.",
     intro:
-      "Most of what makes a house look tired isn't dirt. It's organic growth feeding on the surface. We treat it chemically at low pressure so the siding, seals and paint stay exactly where they belong. The green comes off; the house doesn't.",
+      "Most of what makes a house look tired isn't dirt. It's organic growth feeding on the surface, and a house that sits near open water feeds it constantly: humidity off the lake, shade from mature trees, and nothing ever fully drying out. We treat it chemically at low pressure so the siding, seals and paint stay exactly where they belong. The green comes off; the house doesn't.",
     icon: "home",
     method: "Soft wash",
     includes: [
@@ -113,7 +114,7 @@ export const services: Service[] = [
     blurb:
       "Surface-cleaner passes that lift years of gray out of concrete evenly. No zebra stripes, no wand marks.",
     intro:
-      "Concrete is where a rushed job shows forever. A pressure wand leaves stripes you'll see every time you pull in. We use a rotating surface cleaner for an even lift, then hand-detail the edges and expansion joints.",
+      "Concrete is where a rushed job shows forever. A pressure wand leaves stripes you'll see every time you pull in, and on a long lake-house driveway or a motor court there is nowhere to hide them. We use a rotating surface cleaner for an even lift across the whole slab, then hand-detail the edges and expansion joints.",
     icon: "driveway",
     method: "Surface clean",
     includes: [
@@ -142,7 +143,7 @@ export const services: Service[] = [
     blurb:
       "Pressure dialed to the material: wood, composite, pavers and stone each get a different setting.",
     intro:
-      "Wood, composite, travertine and pavers each fail in a different way under the wrong nozzle. We match pressure and chemistry to the material, so the surface comes back clean rather than furred, etched or stripped.",
+      "Wood, composite, travertine and pavers each fail in a different way under the wrong nozzle. Waterside decks are the worst of it: constant damp, deep shade, and a slick film that builds up faster than anyone expects. We match pressure and chemistry to the material, so the surface comes back clean rather than furred, etched or stripped.",
     icon: "deck",
     method: "Pressure wash",
     includes: [
@@ -223,7 +224,7 @@ export const services: Service[] = [
     blurb:
       "Pure-water pole system that leaves glass to dry spot-free, with no ladders leaning on your gutters.",
     intro:
-      "We filter the minerals out of the water before it ever touches the glass, so it dries clear on its own and there is nothing left behind to squeegee or towel off. Reaching second-story windows from the ground means no ladder feet in your flowerbeds and nobody standing on your roofline. Frames, sills and screens get cleaned in the same visit, because clean glass in a dirty frame still reads as dirty.",
+      "We filter the minerals out of the water before it ever touches the glass, so it dries clear on its own and there is nothing left behind to squeegee or towel off. That matters most on the lake-facing side of a house, where a wall of glass is the whole point of the room behind it and hard-water spotting is the thing you notice from the sofa. Reaching second-story windows from the ground means no ladder feet in your flowerbeds and nobody standing on your roofline. Frames, sills and screens get cleaned in the same visit, because clean glass in a dirty frame still reads as dirty.",
     icon: "window",
     method: "Hand detail",
     includes: [
@@ -242,6 +243,7 @@ export const services: Service[] = [
     cadence: "Every 6–12 months",
     faqIds: ["hard-water", "interior-windows", "need-to-be-home"],
     related: ["house-washing", "gutter-cleaning"],
+    featured: true,
   },
   {
     slug: "pool-deck",
@@ -270,90 +272,9 @@ export const services: Service[] = [
     faqIds: ["pool-chemicals", "plants-safe", "how-long-lasts"],
     related: ["deck-patio", "driveway-concrete"],
   },
-  {
-    slug: "commercial-building-washing",
-    name: "Commercial Building Washing",
-    navLabel: "Building Washing",
-    segment: "commercial",
-    blurb:
-      "Scheduled exterior maintenance for offices, retail and multi-family, done outside trading hours.",
-    intro:
-      "A tired building costs you tenants and foot traffic. We work to a fixed schedule, outside your operating hours, with the documentation your property manager or insurer needs on file.",
-    icon: "building",
-    method: "Soft wash",
-    includes: [
-      "Full building envelope",
-      "Out-of-hours and overnight scheduling",
-      "COI and safety documentation provided",
-      "Multi-property contract pricing",
-    ],
-    symptoms: [
-      "Streaking and staining on the facade",
-      "Tenant complaints about appearance",
-      "Upcoming inspection or property sale",
-    ],
-    pricing: { unit: "sq ft", from: 0.1, to: 0.28, minimum: 750, duration: "1–3 days" },
-    cadence: "Every 6–12 months",
-    faqIds: ["commercial-insurance", "after-hours", "contracts"],
-    related: ["commercial-storefront", "commercial-flatwork"],
-  },
-  {
-    slug: "commercial-storefront",
-    name: "Storefront & Awning Cleaning",
-    navLabel: "Storefronts",
-    segment: "commercial",
-    blurb: "Entryways, glass and awnings on a recurring schedule, before your doors open.",
-    intro:
-      "The ten feet either side of your front door does more for your brand than most of your marketing. We keep the glass, the awning and the entry concrete looking maintained on a schedule you never have to think about.",
-    icon: "storefront",
-    method: "Pressure wash",
-    includes: [
-      "Entry glass and door frames",
-      "Awning and signage cleaning",
-      "Entry concrete degreased",
-      "Weekly, biweekly or monthly plans",
-    ],
-    symptoms: [
-      "Gum and grime tracked across the entry",
-      "Faded, dirty awning fabric",
-      "Fingerprinted glass by mid-morning",
-    ],
-    pricing: { unit: "flat", from: 120, to: 450, minimum: 120, duration: "1–2 hours" },
-    cadence: "Weekly to monthly",
-    faqIds: ["after-hours", "contracts", "commercial-insurance"],
-    related: ["commercial-building-washing", "commercial-flatwork"],
-  },
-  {
-    slug: "commercial-flatwork",
-    name: "Parking Lots & Sidewalks",
-    navLabel: "Parking & Sidewalks",
-    segment: "commercial",
-    blurb:
-      "Degreasing, gum removal and reclaimed-water flatwork that keeps you compliant with runoff rules.",
-    intro:
-      "Large-area flatwork isn't just a bigger driveway. There are wastewater rules about where the runoff goes. We capture and reclaim, degrease the oil-drop zones, and remove gum with heat rather than brute pressure.",
-    icon: "parking",
-    method: "Surface clean",
-    includes: [
-      "Water reclamation and compliant disposal",
-      "Oil and grease spot treatment",
-      "Gum removal",
-      "Night and weekend scheduling",
-    ],
-    symptoms: [
-      "Black oil drip lines in every bay",
-      "Gum spotting across the walkways",
-      "Municipal or landlord compliance notice",
-    ],
-    pricing: { unit: "sq ft", from: 0.06, to: 0.15, minimum: 600, duration: "1–2 nights" },
-    cadence: "Quarterly to twice yearly",
-    faqIds: ["water-reclaim", "after-hours", "contracts"],
-    related: ["commercial-building-washing", "commercial-storefront"],
-  },
 ];
 
 export const residentialServices = services.filter((s) => s.segment === "residential");
-export const commercialServices = services.filter((s) => s.segment === "commercial");
 export const featuredServices = services.filter((s) => s.featured);
 
 export const getService = (slug: string) => services.find((s) => s.slug === slug);

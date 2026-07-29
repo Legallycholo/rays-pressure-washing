@@ -10,7 +10,7 @@ import {
   greetingPrompt,
   getTopic,
   hoursLine,
-  quoteAction,
+  callbackAction,
   rootTopics,
   type AssistantAction,
 } from "@/content/assistant";
@@ -82,7 +82,7 @@ const NUDGE = {
    */
   storageKey: "rays:hub-nudge",
   /** Mid-conversion pages. A chat nudge there is an interruption, not help. */
-  suppressOn: ["/quote", "/contact"],
+  suppressOn: ["/contact"],
 } as const;
 
 /**
@@ -286,6 +286,24 @@ export function ContactHub() {
    * the form's `onSubmit` identity churns for the whole conversation.
    */
   const log = useRef<Msg[]>(messages);
+
+  /**
+   * The chime a bot answer arrives on, so someone who looked away from the tab
+   * still notices the reply. Built on first use rather than at mount: an
+   * `Audio()` constructed before any interaction can be blocked outright by
+   * autoplay policy, and every path that reaches it is already a tap or a
+   * submit. Failures are swallowed on purpose, a muted device or a browser that
+   * refuses playback is not a reason to break the conversation.
+   */
+  const chime = useRef<HTMLAudioElement | null>(null);
+  const playChime = useCallback(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    chime.current ??= new Audio("/sounds/notification.wav");
+    chime.current.volume = 0.35;
+    chime.current.currentTime = 0;
+    void chime.current.play().catch(() => {});
+  }, []);
+
   useEffect(() => {
     log.current = messages;
   }, [messages]);
@@ -341,8 +359,9 @@ export function ContactHub() {
         ...(actions?.length ? [{ key: `act-${n}`, from: "bot" as const, actions }] : []),
       ]);
       setChips(next);
+      playChime();
     },
-    [],
+    [playChime],
   );
 
   const ask = useCallback(
@@ -796,7 +815,7 @@ export function ContactHub() {
               </div>
             ) : (
               <>
-                <ActionRow action={quoteAction} onNavigate={() => close()} />
+                <ActionRow action={callbackAction} onNavigate={() => close()} />
 
                 {channelGroups.map((group) => (
                   <div key={group.heading}>

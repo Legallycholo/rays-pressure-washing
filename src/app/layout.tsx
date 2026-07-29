@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   },
   description:
     `Professional pressure washing, soft washing and exterior cleaning across ${site.serviceRegion}. ` +
-    `Licensed, insured, and backed by the Spotless Guarantee. Free same-day quotes.`,
+    `Licensed, insured, and backed by the Spotless Guarantee. Call now, or submit the form and we will get back to you within 24 hours.`,
   applicationName: site.name,
   keywords: [
     "pressure washing",

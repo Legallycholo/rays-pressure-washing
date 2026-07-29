@@ -28,7 +28,6 @@ export const site = {
   logoSrc: "/logo.png",
   logoSrcWebp: "/logo.webp",
   logoAlt: "Ray's Window Cleaning and Pressure Washing LLC",
-  foundedYear: 2016, // PLACEHOLDER
 
   /** PLACEHOLDER: canonical production origin, no trailing slash. */
   url: "https://www.ryanspressurewashing.example",
@@ -38,47 +37,34 @@ export const site = {
     phone: "(803) 368-3600",
     /** E.164, used for tel: and sms: hrefs. */
     phoneHref: "+18033683600",
-    /**
-     * Digits only, used for the wa.me deep link in `StickyCallBar` and
-     * `ContactHub`.
-     *
-     * UNCONFIRMED: set to the same line as `phone` because that is the only
-     * number supplied. wa.me does not fail gracefully: if this number has no
-     * WhatsApp account, the link opens an error page rather than doing
-     * nothing. Confirm the number is on WhatsApp, or remove the two WhatsApp
-     * entry points, before this goes live.
-     */
-    whatsapp: "18033683600",
     email: "rayswindows81@gmail.com",
   },
 
   address: {
-    street: "1420 Example Commerce Dr, Suite 5", // PLACEHOLDER
-    city: "Springfield", // PLACEHOLDER
+    street: "257 Riglaw Cir",
+    city: "Lexington",
     region: "SC",
     regionName: "South Carolina",
-    postalCode: "29201", // PLACEHOLDER
+    postalCode: "29073",
     country: "US",
-    /** PLACEHOLDER, Columbia SC coordinates. Used for LocalBusiness schema + map embed. */
-    lat: 34.0007,
-    lng: -81.0348,
+    /** Lexington, SC town-center coordinates; refine to the exact parcel once geocoded. */
+    lat: 33.9815,
+    lng: -81.2362,
   },
 
   /**
    * Broad region label used in copy: "serving all of {serviceRegion}".
    *
-   * The (803) area code covers the South Carolina Midlands and York County.
-   * "the South Carolina Midlands" is the placeholder until the actual territory
-   * is confirmed; if the business runs out of Rock Hill rather than the
-   * Columbia area, this and `locations.ts` both need rechecking.
+   * Lexington sits on Lake Murray, and the current push targets large homes
+   * on the lake, not a general service-area claim.
    */
-  serviceRegion: "the South Carolina Midlands", // PLACEHOLDER
+  serviceRegion: "the Lake Murray area",
 
-  hours: [
-    { days: "Monday – Friday", open: "07:00", close: "18:00" },
-    { days: "Saturday", open: "08:00", close: "16:00" },
-    { days: "Sunday", open: "Closed", close: "" },
-  ],
+  /**
+   * One row because the week is uniform. `schema.ts` and the chat's `hoursLine`
+   * both derive from this array, so keep it an array even at length one.
+   */
+  hours: [{ days: "Monday – Sunday", open: "07:00", close: "22:00" }],
 
   /** Drives the star rating badges and the Review schema aggregate. */
   rating: {
@@ -89,9 +75,8 @@ export const site = {
   /** Rendered as trust chips. Remove any that aren't true, these are claims. */
   credentials: [
     "Licensed & insured",
-    "$2M liability coverage", // PLACEHOLDER
-    "Background-checked crews",
-    "Locally owned since 2016", // PLACEHOLDER
+    "Same-Day Availability · Instant Pricing · No Contracts",
+    "Locally owned and operated",
   ],
 
   /** Direct link for customers to leave a 5-star Google review */
@@ -122,8 +107,30 @@ export const site = {
   },
 } as const;
 
-/** Convenience: "Springfield, SC" */
+/** Convenience: "Lexington, SC" */
 export const cityState = `${site.address.city}, ${site.address.region}`;
+
+/**
+ * "07:00" → "7am". `site.hours` stores 24-hour times because that is what
+ * schema.org's `openingHours` wants; every human-facing render goes through
+ * here so the site never shows a visitor a 24-hour clock.
+ */
+export const formatHour = (t: string) => {
+  const [h, m] = t.split(":").map(Number);
+  const hour = h % 12 === 0 ? 12 : h % 12;
+  return `${hour}${m ? `:${String(m).padStart(2, "0")}` : ""}${h < 12 ? "am" : "pm"}`;
+};
+
+/** e.g. "Mon–Sun 7am–10pm". Closed days drop out. */
+export const hoursLine = site.hours
+  .filter((h) => h.close)
+  .map(
+    (h) =>
+      `${h.days
+        .replace(/\b(Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day\b/g, (_, stem) => stem.slice(0, 3))
+        .replace(" – ", "–")} ${formatHour(h.open)}–${formatHour(h.close)}`,
+  )
+  .join(" · ");
 
 /**
  * The same four credentials as `site.credentials`, in the richer form a badge
@@ -141,21 +148,20 @@ export type CredentialBadge = { label: string; issuer: string; logoSrc: string }
 
 export const credentialBadges: CredentialBadge[] = [
   { label: site.credentials[0], issuer: "State contractor licensing board", logoSrc: "" },
-  { label: site.credentials[1], issuer: "General liability insurer", logoSrc: "" },
-  { label: site.credentials[2], issuer: "Third-party screening provider", logoSrc: "" },
-  { label: site.credentials[3], issuer: `${site.address.city} business registry`, logoSrc: "" },
+  { label: site.credentials[1], issuer: "Business practice", logoSrc: "" },
+  { label: site.credentials[2], issuer: `Based in ${cityState}`, logoSrc: "" },
 ];
 
 /**
- * StatsRow data (SECTIONS.md §2.16, open decision #2). Two figures derive from
- * real fields above; the other two are PLACEHOLDER counts to replace.
+ * StatsRow data (SECTIONS.md §2.16, open decision #2). One figure derives from
+ * a real field above; the other two are PLACEHOLDER counts to replace.
+ *
+ * No "Years in business" tile: the founding year it was computed from was
+ * placeholder data and the business does not want to claim one yet. Add the
+ * tile back only alongside a confirmed year.
  */
 export const stats = [
-  { value: String(new Date().getFullYear() - site.foundedYear), label: "Years in business" },
   { value: "3,400", suffix: "+", label: "Properties cleaned" }, // PLACEHOLDER
   { value: String(site.rating.count), suffix: "+", label: "Five-star reviews" },
   { value: "1.2M", suffix: " sq ft", label: "Cleaned last year" }, // PLACEHOLDER
 ];
-
-export const waLink = (message = "Hi! I'd like a quote for exterior cleaning.") =>
-  `https://wa.me/${site.contact.whatsapp}?text=${encodeURIComponent(message)}`;

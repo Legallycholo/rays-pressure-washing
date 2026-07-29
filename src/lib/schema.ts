@@ -15,6 +15,35 @@ import type { Post } from "@/content/posts";
 
 const origin = site.url;
 
+const WEEK = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+] as const;
+
+/**
+ * "Monday – Sunday" → every day between them; "Saturday" → just Saturday.
+ * `site.hours` stores the label a human reads, and schema.org wants the days
+ * enumerated, so this is the one place that translation happens.
+ */
+function expandDays(label: string): string[] {
+  const [from, to] = label.split("–").map((s) => s.trim());
+  const start = WEEK.indexOf(from as (typeof WEEK)[number]);
+  if (start < 0) return [label];
+  if (!to) return [WEEK[start]];
+
+  const end = WEEK.indexOf(to as (typeof WEEK)[number]);
+  if (end < 0) return [WEEK[start]];
+
+  // Wraps across Sunday, e.g. "Saturday – Monday".
+  const span = (end - start + WEEK.length) % WEEK.length;
+  return Array.from({ length: span + 1 }, (_, i) => WEEK[(start + i) % WEEK.length]);
+}
+
 export function localBusinessSchema() {
   return {
     "@context": "https://schema.org",
@@ -26,7 +55,6 @@ export function localBusinessSchema() {
     telephone: site.contact.phoneHref,
     email: site.contact.email,
     priceRange: "$$",
-    foundingDate: String(site.foundedYear),
     address: {
       "@type": "PostalAddress",
       streetAddress: site.address.street,
@@ -47,11 +75,16 @@ export function localBusinessSchema() {
       bestRating: 5,
       worstRating: 1,
     },
+    /**
+     * `dayOfWeek` takes schema.org day names, not the display string in
+     * `site.hours` ("Monday – Sunday"), so the range is expanded here. Anything
+     * without a closing time is a closed day and drops out.
+     */
     openingHoursSpecification: site.hours
-      .filter((h) => h.open !== "Closed")
+      .filter((h) => Boolean(h.close))
       .map((h) => ({
         "@type": "OpeningHoursSpecification",
-        dayOfWeek: h.days,
+        dayOfWeek: expandDays(h.days),
         opens: h.open,
         closes: h.close,
       })),
@@ -82,19 +115,16 @@ export function serviceSchema(service: Service, location?: Location) {
 }
 
 /**
- * Bundle pages emit AggregateOffer (STRUCTURE.md §13). The low price is the
- * discounted sum of constituent service minimums, placeholder maths on
- * placeholder figures, same as everything else in content.
+ * Bundle pages emit a Service with an offer count only. No prices: the business
+ * does not publish figures anywhere on the site, and markup that contradicts the
+ * page is worse than no markup.
  */
 export function bundleOfferSchema(bundle: {
   name: string;
   blurb: string;
   slug: string;
-  savingsPercent: number;
   serviceSlugs: readonly string[];
-  minimumSum: number;
 }) {
-  const low = Math.round(bundle.minimumSum * (1 - bundle.savingsPercent / 100));
   return {
     "@context": "https://schema.org",
     "@type": "Service",
@@ -104,8 +134,6 @@ export function bundleOfferSchema(bundle: {
     url: `${origin}/packages/${bundle.slug}`,
     offers: {
       "@type": "AggregateOffer",
-      priceCurrency: "USD",
-      lowPrice: low,
       offerCount: bundle.serviceSlugs.length,
     },
   };

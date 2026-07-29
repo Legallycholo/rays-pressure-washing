@@ -12,7 +12,7 @@ type Cta = { label: string; href: string };
 export function CtaBand({
   title,
   lede,
-  primaryCta = { label: "Get my free quote", href: "/quote" },
+  primaryCta = { label: "Request a Callback", href: "/contact" },
   secondaryCta = { label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` },
   variant = "full",
 }: {
@@ -57,7 +57,7 @@ export function CtaBand({
           </Button>
         </div>
         <p className="text-sm text-ink-300">
-          Free quotes · {site.guarantee.title} · Licensed &amp; insured
+          Same-day availability · {site.guarantee.title} · Licensed &amp; insured
         </p>
       </div>
     </Section>
