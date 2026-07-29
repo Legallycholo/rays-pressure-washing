@@ -5,7 +5,7 @@ import { site } from "@/content/site";
 
 /**
  * Default social card, uses the real logo lockup from `public/logo.jpg` on the
- * same hydro-mesh canvas as before so shares match the live site identity.
+ * same harbor-mesh canvas as before so shares match the live site identity.
  */
 
 export const alt = `${site.legalName} · ${site.tagline}`;
@@ -29,8 +29,8 @@ export default async function OpengraphImage() {
           justifyContent: "space-between",
           backgroundColor: "#06131d",
           backgroundImage:
-            "radial-gradient(1000px 700px at 10% -10%, rgba(11,143,214,0.45), transparent), " +
-            "radial-gradient(800px 600px at 95% 10%, rgba(63,224,191,0.20), transparent)",
+            "radial-gradient(1000px 700px at 10% -10%, rgba(30,115,184,0.45), transparent), " +
+            "radial-gradient(800px 600px at 95% 10%, rgba(69,186,73,0.20), transparent)",
           padding: 72,
         }}
       >
@@ -54,7 +54,7 @@ export default async function OpengraphImage() {
         <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
           {site.credentials.slice(0, 3).map((c) => (
             <div key={c} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3fe0bf" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#45ba49" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
                 <path d="m4.5 12.5 5 5 10-11" />
               </svg>
               <span style={{ fontSize: 22, color: "#d3e2ef" }}>{c}</span>

@@ -38,7 +38,7 @@ export function SeasonalBanner({ campaign }: { campaign?: SeasonalCampaign }) {
   if (!campaign || dismissed) return null;
 
   return (
-    <div className="banner-seasonal bg-signal-400 text-ink-950">
+    <div className="banner-seasonal bg-amber-400 text-ink-950">
       {/*
         Runs at parse time, before this element is painted. Sets the attribute
         that `globals.css` uses to hide the band, so a returning visitor who

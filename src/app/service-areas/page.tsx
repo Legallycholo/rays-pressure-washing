@@ -57,7 +57,7 @@ export default function ServiceAreasPage() {
                 <p className="mt-3 text-sm leading-relaxed text-ink-500 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] overflow-hidden">
                   {l.localChallenge}
                 </p>
-                <p className="mt-auto flex items-center gap-1.5 pt-4 text-sm font-semibold text-hydro-700">
+                <p className="mt-auto flex items-center gap-1.5 pt-4 text-sm font-semibold text-harbor-700">
                   {l.city} services
                   <Icon name="arrow" className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </p>
@@ -75,7 +75,7 @@ export default function ServiceAreasPage() {
           {travelPolicy.note.charAt(0).toLowerCase() + travelPolicy.note.slice(1)}
         </p>
         <p className="mt-6 text-center">
-          <Link href="/contact" className="font-semibold text-hydro-700 underline underline-offset-2 hover:no-underline">
+          <Link href="/contact" className="font-semibold text-harbor-700 underline underline-offset-2 hover:no-underline">
             Not listed? Ask us anyway
           </Link>
         </p>

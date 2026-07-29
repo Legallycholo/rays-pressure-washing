@@ -23,7 +23,7 @@ export function Card({
       className={cn(
         "group relative flex flex-col overflow-hidden rounded-card bg-white shadow-card ring-1 ring-ink-900/5",
         interactive &&
-          "transition-all duration-300 hover:-translate-y-1 hover:shadow-lift hover:ring-hydro-500/25",
+          "transition-all duration-300 hover:-translate-y-1 hover:shadow-lift hover:ring-harbor-500/25",
         className,
       )}
     >

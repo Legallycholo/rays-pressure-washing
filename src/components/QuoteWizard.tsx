@@ -243,8 +243,8 @@ export function QuoteWizard() {
   if (done) {
     return (
       <div className="mx-auto max-w-xl rounded-card bg-white p-10 text-center shadow-lift ring-1 ring-ink-900/5">
-        <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-mint-400/20">
-          <Icon name="check" className="h-8 w-8 text-mint-600" />
+        <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-leaf-400/20">
+          <Icon name="check" className="h-8 w-8 text-leaf-600" />
         </span>
         <h2 className="mt-5 font-display text-3xl text-ink-900">Got it, {form.name.split(" ")[0] || "thanks"}.</h2>
         <p className="mt-3 leading-relaxed text-ink-500">
@@ -277,7 +277,7 @@ export function QuoteWizard() {
               <span
                 className={cn(
                   "grid h-9 w-9 place-items-center rounded-full text-sm font-bold transition-colors",
-                  state === "done" && "bg-mint-500 text-white",
+                  state === "done" && "bg-leaf-500 text-white",
                   state === "current" && "bg-ink-900 text-white",
                   state === "todo" && "bg-sand-100 text-ink-400",
                 )}
@@ -313,11 +313,11 @@ export function QuoteWizard() {
                       className={cn(
                         "flex h-full w-full flex-col items-center gap-2 rounded-card p-4 text-center transition-all",
                         on
-                          ? "bg-hydro-600 text-white shadow-glow"
-                          : "bg-sand-50 text-ink-700 ring-1 ring-ink-900/5 hover:ring-hydro-400",
+                          ? "bg-harbor-600 text-white shadow-glow"
+                          : "bg-sand-50 text-ink-700 ring-1 ring-ink-900/5 hover:ring-harbor-400",
                       )}
                     >
-                      <Icon name={s.icon} className={cn("h-6 w-6", on ? "text-white" : "text-hydro-600")} />
+                      <Icon name={s.icon} className={cn("h-6 w-6", on ? "text-white" : "text-harbor-600")} />
                       <span className="text-xs font-semibold leading-tight">{s.navLabel}</span>
                     </button>
                   </li>
@@ -325,8 +325,8 @@ export function QuoteWizard() {
               })}
             </ul>
             {matchedBundle && (
-              <p className="mt-4 rounded-card bg-mint-400/10 p-3.5 text-sm text-ink-700 ring-1 ring-mint-500/25">
-                <Icon name="sparkle" className="mr-1.5 inline h-4 w-4 text-mint-600" />
+              <p className="mt-4 rounded-card bg-leaf-400/10 p-3.5 text-sm text-ink-700 ring-1 ring-leaf-500/25">
+                <Icon name="sparkle" className="mr-1.5 inline h-4 w-4 text-leaf-600" />
                 That&apos;s our <strong>{matchedBundle.name}</strong> package:{" "}
                 <strong>{matchedBundle.savingsPercent}% off</strong> booked together. Applied automatically.
               </p>
@@ -352,8 +352,8 @@ export function QuoteWizard() {
                     className={cn(
                       "rounded-card p-3 text-sm font-semibold capitalize transition-all",
                       form.propertyType === t
-                        ? "bg-hydro-600 text-white"
-                        : "bg-sand-50 text-ink-700 ring-1 ring-ink-900/5 hover:ring-hydro-400",
+                        ? "bg-harbor-600 text-white"
+                        : "bg-sand-50 text-ink-700 ring-1 ring-ink-900/5 hover:ring-harbor-400",
                     )}
                   >
                     {t}
@@ -373,8 +373,8 @@ export function QuoteWizard() {
                     className={cn(
                       "rounded-card p-3 text-sm font-semibold transition-all",
                       form.storeys === n
-                        ? "bg-hydro-600 text-white"
-                        : "bg-sand-50 text-ink-700 ring-1 ring-ink-900/5 hover:ring-hydro-400",
+                        ? "bg-harbor-600 text-white"
+                        : "bg-sand-50 text-ink-700 ring-1 ring-ink-900/5 hover:ring-harbor-400",
                     )}
                   >
                     {n === 3 ? "3+" : n}
@@ -394,12 +394,12 @@ export function QuoteWizard() {
                     className={cn(
                       "flex flex-col rounded-card p-3 text-left transition-all",
                       form.size === s.id
-                        ? "bg-hydro-600 text-white"
-                        : "bg-sand-50 text-ink-700 ring-1 ring-ink-900/5 hover:ring-hydro-400",
+                        ? "bg-harbor-600 text-white"
+                        : "bg-sand-50 text-ink-700 ring-1 ring-ink-900/5 hover:ring-harbor-400",
                     )}
                   >
                     <span className="text-sm font-semibold">{s.label}</span>
-                    <span className={cn("text-xs", form.size === s.id ? "text-hydro-100" : "text-ink-400")}>
+                    <span className={cn("text-xs", form.size === s.id ? "text-harbor-100" : "text-ink-400")}>
                       {s.hint}
                     </span>
                   </button>
@@ -418,8 +418,8 @@ export function QuoteWizard() {
             <p className="mt-1.5 text-sm text-ink-500">
               A couple of phone photos makes your quote dramatically more accurate.
             </p>
-            <label className="mt-5 flex cursor-pointer flex-col items-center gap-2 rounded-card border-2 border-dashed border-ink-200 bg-sand-50 p-8 text-center transition-colors hover:border-hydro-400">
-              <Icon name="camera" className="h-8 w-8 text-hydro-500" />
+            <label className="mt-5 flex cursor-pointer flex-col items-center gap-2 rounded-card border-2 border-dashed border-ink-200 bg-sand-50 p-8 text-center transition-colors hover:border-harbor-400">
+              <Icon name="camera" className="h-8 w-8 text-harbor-500" />
               <span className="text-sm font-semibold text-ink-700">Add photos</span>
               <span className="text-xs text-ink-400">Up to 8 · JPG, PNG or HEIC</span>
               <input
@@ -458,7 +458,7 @@ export function QuoteWizard() {
                 onChange={(e) => set("notes", e.target.value)}
                 rows={3}
                 placeholder="Gate codes, fragile plants, that one stain that won't budge…"
-                className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm text-ink-800 placeholder:text-ink-300 focus:border-hydro-500"
+                className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm text-ink-800 placeholder:text-ink-300 focus:border-harbor-500"
               />
             </label>
           </div>
@@ -494,7 +494,7 @@ export function QuoteWizard() {
                     onChange={(e) => set(key, e.target.value)}
                     placeholder={ph}
                     autoComplete={key === "address" ? "street-address" : key}
-                    className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm text-ink-800 placeholder:text-ink-300 focus:border-hydro-500"
+                    className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm text-ink-800 placeholder:text-ink-300 focus:border-harbor-500"
                   />
                 </label>
               ))}
@@ -503,7 +503,7 @@ export function QuoteWizard() {
                 <select
                   value={form.timing}
                   onChange={(e) => set("timing", e.target.value)}
-                  className="mt-2 w-full rounded-card border border-ink-200 bg-white p-3.5 text-base sm:text-sm text-ink-800 focus:border-hydro-500"
+                  className="mt-2 w-full rounded-card border border-ink-200 bg-white p-3.5 text-base sm:text-sm text-ink-800 focus:border-harbor-500"
                 >
                   <option value="">No preference</option>
                   <option value="asap">As soon as possible</option>
@@ -520,14 +520,14 @@ export function QuoteWizard() {
             visitor has already done four steps of work and telling them it
             didn't go through without offering an alternative wastes all of it. */}
         {errors.length > 0 && (
-          <div role="alert" className="mt-5 rounded-card bg-signal-50 p-4 text-sm text-signal-800 ring-1 ring-signal-500/20">
+          <div role="alert" className="mt-5 rounded-card bg-amber-50 p-4 text-sm text-amber-800 ring-1 ring-amber-500/20">
             <ul className="space-y-1.5">
               {errors.map((e) => (
                 <li key={e}>{e}</li>
               ))}
             </ul>
             {sendFailed && (
-              <p className="mt-2.5 border-t border-signal-500/20 pt-2.5 leading-relaxed">
+              <p className="mt-2.5 border-t border-amber-500/20 pt-2.5 leading-relaxed">
                 Nothing you typed is lost. Try Send again, or skip us entirely and call{" "}
                 <a
                   href={`tel:${site.contact.phoneHref}`}
@@ -543,10 +543,10 @@ export function QuoteWizard() {
 
         {/* Running estimate, visible from step 2 (§9.1) */}
         {step >= 2 && estimate && (
-          <aside className="mt-6 rounded-card bg-ink-900 p-5 text-white hydro-mesh">
+          <aside className="mt-6 rounded-card bg-ink-900 p-5 text-white harbor-mesh">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-mint-400">Your running estimate</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-leaf-400">Your running estimate</p>
                 <p className="mt-1 font-display text-3xl font-bold">
                   {currency(estimate.low)} – {currency(estimate.high)}
                 </p>
@@ -578,7 +578,7 @@ export function QuoteWizard() {
 
       <p className="mt-5 text-center text-xs text-ink-400">
         No spam, no reselling your details, no obligation. Prefer a human?{" "}
-        <a href={`tel:${site.contact.phoneHref}`} className="font-semibold text-hydro-700 underline underline-offset-2">
+        <a href={`tel:${site.contact.phoneHref}`} className="font-semibold text-harbor-700 underline underline-offset-2">
           {site.contact.phone}
         </a>
       </p>

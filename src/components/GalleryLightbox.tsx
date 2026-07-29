@@ -184,7 +184,7 @@ export function GalleryLightbox({ projects }: { projects: Project[] }) {
                 <button
                   type="button"
                   onClick={() => step(-1)}
-                  className="inline-flex items-center gap-1.5 rounded-pill px-3 py-2 text-sm font-semibold text-hydro-700 transition-colors hover:bg-hydro-50"
+                  className="inline-flex items-center gap-1.5 rounded-pill px-3 py-2 text-sm font-semibold text-harbor-700 transition-colors hover:bg-harbor-50"
                 >
                   <Icon name="arrow" className="h-4 w-4 rotate-180" />
                   Previous
@@ -195,7 +195,7 @@ export function GalleryLightbox({ projects }: { projects: Project[] }) {
                 <button
                   type="button"
                   onClick={() => step(1)}
-                  className="inline-flex items-center gap-1.5 rounded-pill px-3 py-2 text-sm font-semibold text-hydro-700 transition-colors hover:bg-hydro-50"
+                  className="inline-flex items-center gap-1.5 rounded-pill px-3 py-2 text-sm font-semibold text-harbor-700 transition-colors hover:bg-harbor-50"
                 >
                   Next
                   <Icon name="arrow" className="h-4 w-4" />

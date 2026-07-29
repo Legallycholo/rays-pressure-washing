@@ -21,12 +21,12 @@ export function StatsRow({ stats, tone = "hydro" }: { stats: readonly Stat[]; to
             <div key={s.label} className="flex flex-col items-center gap-1 text-center">
               <dd className="font-display text-display-sm font-bold text-white">
                 {s.value}
-                {s.suffix && <span className="text-mint-300">{s.suffix}</span>}
+                {s.suffix && <span className="text-leaf-300">{s.suffix}</span>}
               </dd>
               <dt
                 className={cn(
                   "text-sm uppercase tracking-wide",
-                  tone === "hydro" ? "text-hydro-100" : "text-ink-300",
+                  tone === "hydro" ? "text-harbor-100" : "text-ink-300",
                 )}
               >
                 {s.label}

@@ -38,7 +38,7 @@ export default function BlogIndexPage() {
             <a
               key={cat}
               href={`#cat-${cat.replace(/\s+/g, "-").toLowerCase()}`}
-              className="inline-flex min-h-[44px] items-center rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700 transition-colors hover:bg-hydro-50 hover:text-hydro-800"
+              className="inline-flex min-h-[44px] items-center rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700 transition-colors hover:bg-harbor-50 hover:text-harbor-800"
             >
               {cat}
             </a>

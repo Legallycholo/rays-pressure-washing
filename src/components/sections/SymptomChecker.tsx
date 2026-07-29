@@ -29,8 +29,8 @@ export function SymptomChecker({ services, limit = 6 }: { services: Service[]; l
               <p className="font-display text-lg text-ink-800">&ldquo;{symptom}&rdquo;</p>
               <div className="mt-auto pt-5">
                 <div className="border-t border-ink-100 pt-4">
-                  <span className="flex items-center gap-2.5 text-sm font-semibold text-ink-600 transition-colors group-hover:text-hydro-700">
-                    <Icon name={service.icon} className="h-5 w-5 text-hydro-500" />
+                  <span className="flex items-center gap-2.5 text-sm font-semibold text-ink-600 transition-colors group-hover:text-harbor-700">
+                    <Icon name={service.icon} className="h-5 w-5 text-harbor-500" />
                     That&apos;s {service.name.toLowerCase()}
                     <Icon name="arrow" className="ml-auto h-4 w-4 transition-transform group-hover:translate-x-1" />
                   </span>
@@ -42,7 +42,7 @@ export function SymptomChecker({ services, limit = 6 }: { services: Service[]; l
       </ul>
       <p className="mt-10 text-center text-ink-500">
         None of these?{" "}
-        <Link href="/quote" className="font-semibold text-hydro-700 underline underline-offset-2 hover:no-underline">
+        <Link href="/quote" className="font-semibold text-harbor-700 underline underline-offset-2 hover:no-underline">
           Describe it and we&apos;ll tell you what it needs
         </Link>
       </p>

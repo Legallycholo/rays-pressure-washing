@@ -84,7 +84,7 @@ export default function AboutPage() {
         <ul className="mx-auto mt-10 flex max-w-2xl flex-wrap justify-center gap-2">
           {site.credentials.map((c) => (
             <li key={c} className="inline-flex items-center gap-2 rounded-pill bg-white px-4 py-2 text-sm font-medium text-ink-700 ring-1 ring-ink-900/5">
-              <Icon name="shield" className="h-4 w-4 text-mint-600" />
+              <Icon name="shield" className="h-4 w-4 text-leaf-600" />
               {c}
             </li>
           ))}

@@ -86,22 +86,22 @@ export function Header() {
           <div className="flex h-10 items-center justify-between text-sm">
             <div className="flex items-center gap-6">
               <span className="inline-flex items-center gap-2">
-                <Icon name="pin" className="h-4 w-4 text-hydro-400" />
+                <Icon name="pin" className="h-4 w-4 text-harbor-400" />
                 Serving {site.serviceRegion}
               </span>
               <span className="inline-flex items-center gap-2">
-                <Icon name="clock" className="h-4 w-4 text-hydro-400" />
+                <Icon name="clock" className="h-4 w-4 text-harbor-400" />
                 Mon–Fri 7am–6pm · Sat 8am–4pm
               </span>
             </div>
             <div className="flex items-center gap-5">
-              <span className="inline-flex items-center gap-2 text-mint-400">
+              <span className="inline-flex items-center gap-2 text-leaf-400">
                 <Icon name="shield" className="h-4 w-4" />
                 Licensed &amp; insured
               </span>
               <a
                 href={`tel:${site.contact.phoneHref}`}
-                className="font-semibold text-white transition-colors hover:text-hydro-300"
+                className="font-semibold text-white transition-colors hover:text-harbor-300"
               >
                 {site.contact.phone}
               </a>
@@ -130,7 +130,7 @@ export function Header() {
               <li className="group relative">
                 <Link
                   href="/services"
-                  className="inline-flex items-center gap-1 rounded-pill px-3 py-2 text-sm font-semibold text-ink-700 transition-colors hover:bg-sand-50 hover:text-hydro-700"
+                  className="inline-flex items-center gap-1 rounded-pill px-3 py-2 text-sm font-semibold text-ink-700 transition-colors hover:bg-sand-50 hover:text-harbor-700"
                 >
                   Services
                   <Icon name="chevron" className="h-4 w-4 transition-transform group-hover:rotate-180" />
@@ -141,7 +141,7 @@ export function Header() {
                 <div className="invisible absolute left-1/2 top-full w-[46rem] -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 ease-out-expo group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                   <div className="grid grid-cols-2 gap-6 rounded-2xl bg-white p-6 shadow-lift ring-1 ring-ink-900/10">
                     <div>
-                      <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-hydro-600">
+                      <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
                         Residential
                       </p>
                       <ul className="space-y-0.5">
@@ -149,9 +149,9 @@ export function Header() {
                           <li key={s.slug}>
                             <Link
                               href={`/services/${s.slug}`}
-                              className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-ink-600 transition-colors hover:bg-sand-50 hover:text-hydro-700"
+                              className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-ink-600 transition-colors hover:bg-sand-50 hover:text-harbor-700"
                             >
-                              <Icon name={s.icon} className="h-4 w-4 text-hydro-500" />
+                              <Icon name={s.icon} className="h-4 w-4 text-harbor-500" />
                               {s.navLabel}
                             </Link>
                           </li>
@@ -159,7 +159,7 @@ export function Header() {
                       </ul>
                     </div>
                     <div className="flex flex-col">
-                      <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-hydro-600">
+                      <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
                         Commercial
                       </p>
                       <ul className="space-y-0.5">
@@ -167,23 +167,23 @@ export function Header() {
                           <li key={s.slug}>
                             <Link
                               href={`/services/${s.slug}`}
-                              className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-ink-600 transition-colors hover:bg-sand-50 hover:text-hydro-700"
+                              className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-ink-600 transition-colors hover:bg-sand-50 hover:text-harbor-700"
                             >
-                              <Icon name={s.icon} className="h-4 w-4 text-hydro-500" />
+                              <Icon name={s.icon} className="h-4 w-4 text-harbor-500" />
                               {s.navLabel}
                             </Link>
                           </li>
                         ))}
                       </ul>
 
-                      <div className="mt-auto rounded-xl bg-ink-900 p-4 text-white hydro-mesh">
+                      <div className="mt-auto rounded-xl bg-ink-900 p-4 text-white harbor-mesh">
                         <p className="font-display text-lg">Not sure what you need?</p>
                         <p className="mt-1 text-sm text-ink-200">
                           Answer four questions and get a ballpark in under a minute.
                         </p>
                         <Link
                           href="/quote"
-                          className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-signal-400 hover:text-signal-300"
+                          className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-amber-400 hover:text-amber-300"
                         >
                           Start free quote
                           <Icon name="arrow" className="h-4 w-4" />
@@ -199,8 +199,8 @@ export function Header() {
                   <Link
                     href={l.href}
                     className={cn(
-                      "rounded-pill px-3 py-2 text-sm font-semibold transition-colors hover:bg-sand-50 hover:text-hydro-700",
-                      pathname.startsWith(l.href) ? "text-hydro-700" : "text-ink-700",
+                      "rounded-pill px-3 py-2 text-sm font-semibold transition-colors hover:bg-sand-50 hover:text-harbor-700",
+                      pathname.startsWith(l.href) ? "text-harbor-700" : "text-ink-700",
                     )}
                   >
                     {l.label}
@@ -290,7 +290,7 @@ export function Header() {
             </div>
           </div>
 
-          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-hydro-600">
+          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
             Residential
           </p>
           <ul className="divide-y divide-ink-100 border-y border-ink-100">
@@ -300,14 +300,14 @@ export function Header() {
                   href={`/services/${s.slug}`}
                   className="flex items-center gap-3 py-3.5 font-medium text-ink-800"
                 >
-                  <Icon name={s.icon} className="h-5 w-5 text-hydro-500" />
+                  <Icon name={s.icon} className="h-5 w-5 text-harbor-500" />
                   {s.navLabel}
                 </Link>
               </li>
             ))}
           </ul>
 
-          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-hydro-600">
+          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
             Commercial
           </p>
           <ul className="divide-y divide-ink-100 border-y border-ink-100">
@@ -317,14 +317,14 @@ export function Header() {
                   href={`/services/${s.slug}`}
                   className="flex items-center gap-3 py-3.5 font-medium text-ink-800"
                 >
-                  <Icon name={s.icon} className="h-5 w-5 text-hydro-500" />
+                  <Icon name={s.icon} className="h-5 w-5 text-harbor-500" />
                   {s.navLabel}
                 </Link>
               </li>
             ))}
           </ul>
 
-          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-hydro-600">
+          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
             Explore
           </p>
           <ul className="divide-y divide-ink-100 border-y border-ink-100">
@@ -337,7 +337,7 @@ export function Header() {
             ))}
           </ul>
 
-          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-hydro-600">
+          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
             Popular Areas
           </p>
           <div className="flex flex-wrap gap-2 pb-10">

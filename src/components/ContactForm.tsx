@@ -23,8 +23,8 @@ export function ContactForm() {
 
   if (sent) {
     return (
-      <div className="rounded-card bg-mint-400/10 p-8 text-center ring-1 ring-mint-500/25">
-        <Icon name="check" className="mx-auto h-10 w-10 text-mint-600" />
+      <div className="rounded-card bg-leaf-400/10 p-8 text-center ring-1 ring-leaf-500/25">
+        <Icon name="check" className="mx-auto h-10 w-10 text-leaf-600" />
         <p className="mt-3 font-display text-xl text-ink-900">Message received.</p>
         <p className="mt-1.5 text-sm text-ink-500">We reply the same business day.</p>
       </div>
@@ -74,16 +74,16 @@ export function ContactForm() {
       <div className="grid gap-4 sm:grid-cols-2">
         <label className="block">
           <span className="text-sm font-bold text-ink-700">Name</span>
-          <input name="name" type="text" autoComplete="name" className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm focus:border-hydro-500" />
+          <input name="name" type="text" autoComplete="name" className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm focus:border-harbor-500" />
         </label>
         <label className="block">
           <span className="text-sm font-bold text-ink-700">Email</span>
-          <input name="email" type="email" autoComplete="email" className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm focus:border-hydro-500" />
+          <input name="email" type="email" autoComplete="email" className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm focus:border-harbor-500" />
         </label>
       </div>
       <label className="block">
         <span className="text-sm font-bold text-ink-700">Message</span>
-        <textarea name="message" rows={5} className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm focus:border-hydro-500" />
+        <textarea name="message" rows={5} className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm focus:border-harbor-500" />
       </label>
 
       {/*
@@ -106,7 +106,7 @@ export function ContactForm() {
       />
 
       {error && (
-        <div role="alert" className="rounded-card bg-signal-50 p-3.5 text-sm text-signal-800 ring-1 ring-signal-500/20">
+        <div role="alert" className="rounded-card bg-amber-50 p-3.5 text-sm text-amber-800 ring-1 ring-amber-500/20">
           <p>{error}</p>
           {failedToSend && (
             <p className="mt-2 leading-relaxed">

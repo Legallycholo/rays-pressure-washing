@@ -112,7 +112,7 @@ export function CoverageMap({
           href="/service-areas"
           className={cn(
             "font-semibold underline underline-offset-2 hover:no-underline",
-            onDark ? "text-mint-400" : "text-hydro-700",
+            onDark ? "text-leaf-400" : "text-harbor-700",
           )}
         >
           See the full service area

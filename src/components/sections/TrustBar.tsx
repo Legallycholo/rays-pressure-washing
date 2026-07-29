@@ -43,7 +43,7 @@ export function TrustBar({
             .filter((c) => !withArt.some((b) => b.label === c))
             .map((c) => (
               <span key={c} className="inline-flex items-center gap-2 text-sm font-medium text-ink-600">
-                <Icon name="check" className="h-4 w-4 text-mint-500" />
+                <Icon name="check" className="h-4 w-4 text-leaf-500" />
                 {c}
               </span>
             ))}

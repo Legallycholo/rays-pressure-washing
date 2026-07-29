@@ -3,9 +3,9 @@ import { cn } from "@/lib/utils";
 type Tone = "hydro" | "mint" | "signal" | "neutral" | "onDark";
 
 const tones: Record<Tone, string> = {
-  hydro: "bg-hydro-50 text-hydro-700 ring-hydro-500/20",
-  mint: "bg-mint-400/15 text-mint-700 ring-mint-500/25",
-  signal: "bg-signal-50 text-signal-700 ring-signal-500/20",
+  hydro: "bg-harbor-50 text-harbor-700 ring-harbor-500/20",
+  mint: "bg-leaf-400/15 text-leaf-700 ring-leaf-500/25",
+  signal: "bg-amber-50 text-amber-700 ring-amber-500/20",
   neutral: "bg-sand-100 text-ink-600 ring-ink-900/10",
   onDark: "bg-white/10 text-white ring-white/20",
 };

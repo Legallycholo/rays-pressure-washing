@@ -22,7 +22,7 @@ export function ServiceAreaSection({
     <Section tone={tone}>
       <div className="grid items-center gap-10 md:grid-cols-2 lg:gap-16">
         <div className="flex flex-col items-start gap-4">
-          <span className={cn("inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em]", dark ? "text-mint-400" : "text-hydro-600")}>
+          <span className={cn("inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em]", dark ? "text-leaf-400" : "text-harbor-600")}>
             <Icon name="pin" className="h-4 w-4" />
             Where we work
           </span>
@@ -47,7 +47,7 @@ export function ServiceAreaSection({
                         ? "bg-white/15 text-white hover:bg-white/25"
                         : "bg-white/5 text-ink-200 hover:bg-white/15"
                       : l.priority
-                        ? "bg-hydro-50 text-hydro-800 hover:bg-hydro-100"
+                        ? "bg-harbor-50 text-harbor-800 hover:bg-harbor-100"
                         : "bg-sand-100 text-ink-600 hover:bg-sand-200",
                   )}
                 >

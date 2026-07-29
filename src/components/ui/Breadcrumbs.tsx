@@ -27,7 +27,7 @@ export function Breadcrumbs({ crumbs, onDark = false }: { crumbs: Crumb[]; onDar
                 // hand taps to the wrong link.
                 <Link
                   href={c.href}
-                  className="relative transition-colors after:absolute after:inset-x-0 after:-inset-y-3 after:content-[''] hover:text-hydro-400"
+                  className="relative transition-colors after:absolute after:inset-x-0 after:-inset-y-3 after:content-[''] hover:text-harbor-400"
                 >
                   {c.name}
                 </Link>

@@ -113,7 +113,7 @@ export function GalleryExplorer() {
           <button
             type="button"
             onClick={() => replaceQuery(pathname, new URLSearchParams())}
-            className="mt-2 text-sm font-semibold text-hydro-700 underline underline-offset-2 hover:no-underline"
+            className="mt-2 text-sm font-semibold text-harbor-700 underline underline-offset-2 hover:no-underline"
           >
             Reset filters
           </button>

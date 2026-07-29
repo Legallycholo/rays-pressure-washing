@@ -118,7 +118,7 @@ export default async function ServiceCityPage({
           <ul className="!mt-7 space-y-2.5 rounded-card bg-sand-50 p-6 ring-1 ring-ink-900/5">
             {service.includes.slice(0, 4).map((item) => (
               <li key={item} className="flex items-start gap-2.5 text-ink-700">
-                <Icon name="check" className="mt-0.5 h-5 w-5 shrink-0 text-mint-600" />
+                <Icon name="check" className="mt-0.5 h-5 w-5 shrink-0 text-leaf-600" />
                 {item}
               </li>
             ))}
@@ -147,13 +147,13 @@ export default async function ServiceCityPage({
         <div className="flex flex-wrap items-center justify-center gap-2">
           <Link
             href={`/services/${service.slug}`}
-            className="inline-flex min-h-[44px] items-center rounded-pill bg-hydro-50 px-4 py-1.5 text-sm font-semibold text-hydro-800 hover:bg-hydro-100"
+            className="inline-flex min-h-[44px] items-center rounded-pill bg-harbor-50 px-4 py-1.5 text-sm font-semibold text-harbor-800 hover:bg-harbor-100"
           >
             All about {service.name}
           </Link>
           <Link
             href={`/service-areas/${loc.slug}`}
-            className="inline-flex min-h-[44px] items-center rounded-pill bg-hydro-50 px-4 py-1.5 text-sm font-semibold text-hydro-800 hover:bg-hydro-100"
+            className="inline-flex min-h-[44px] items-center rounded-pill bg-harbor-50 px-4 py-1.5 text-sm font-semibold text-harbor-800 hover:bg-harbor-100"
           >
             Everything we do in {loc.city}
           </Link>

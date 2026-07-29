@@ -7,7 +7,7 @@ const tones: Record<Tone, string> = {
   light: "bg-white text-ink-800",
   sand: "bg-sand-50 text-ink-800",
   ink: "bg-ink-900 text-ink-100 hydro-mesh",
-  hydro: "bg-hydro-700 text-white",
+  hydro: "bg-harbor-700 text-white",
 };
 
 /**

@@ -80,7 +80,7 @@ export function Hero({
       <div className="grid items-center gap-12 lg:grid-cols-[5fr_7fr]">
         <div className="flex flex-col items-center gap-6 text-center md:mx-auto md:max-w-2xl lg:mx-0 lg:max-w-none lg:items-start lg:text-left">
           {eyebrow && (
-            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-mint-400">
+            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-leaf-400">
               <Icon name="pin" className="h-4 w-4" />
               {eyebrow}
             </span>
@@ -94,7 +94,7 @@ export function Hero({
           <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:justify-start">
             {site.credentials.slice(0, 3).map((c) => (
               <li key={c} className="inline-flex items-center gap-1.5 text-sm text-ink-200">
-                <Icon name="check" className="h-4 w-4 text-mint-400" />
+                <Icon name="check" className="h-4 w-4 text-leaf-400" />
                 {c}
               </li>
             ))}

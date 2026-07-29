@@ -46,8 +46,8 @@ export function Logo({ className, heightClass = "h-10 sm:h-11", linked = false }
         srcSet={srcSetFor("png")}
         sizes={SIZES}
         alt={site.logoAlt}
-        width={1024}
-        height={392}
+        width={705}
+        height={354}
         className={cn(
           "w-auto max-w-[min(100%,14rem)] object-contain sm:max-w-[min(100%,18rem)]",
           heightClass,

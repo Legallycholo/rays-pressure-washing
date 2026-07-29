@@ -46,7 +46,7 @@ export function BlogPreview({ posts }: { posts: Post[] }) {
         ))}
       </ul>
       <p className="mt-10 text-center">
-        <Link href="/blog" className="font-semibold text-hydro-700 underline underline-offset-2 hover:no-underline">
+        <Link href="/blog" className="font-semibold text-harbor-700 underline underline-offset-2 hover:no-underline">
           All guides
         </Link>
       </p>
