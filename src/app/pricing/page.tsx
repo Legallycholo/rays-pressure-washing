@@ -59,7 +59,7 @@ export default function PricingPage() {
               {services.map((s) => (
                 <tr key={s.slug} className="transition-colors hover:bg-sand-50">
                   <td className="p-4">
-                    <a href={`/services/${s.slug}`} className="font-semibold text-ink-800 hover:text-hydro-700">
+                    <a href={`/services/${s.slug}`} className="font-semibold text-ink-800 hover:text-harbor-700">
                       {s.name}
                     </a>
                     <span className="block text-xs text-ink-400">{s.method}</span>
@@ -80,7 +80,7 @@ export default function PricingPage() {
           {Math.max(...bundles.map((b) => b.savingsPercent))}% below these rates; maintenance
           plans {Math.min(...maintenancePlans.map((p) => p.discountPercent))}–
           {Math.max(...maintenancePlans.map((p) => p.discountPercent))}% below.{" "}
-          <a href="/packages" className="font-semibold text-hydro-700 underline underline-offset-2">
+          <a href="/packages" className="font-semibold text-harbor-700 underline underline-offset-2">
             See packages
           </a>
         </p>
@@ -100,7 +100,7 @@ export default function PricingPage() {
                 ["Travel", `Beyond ${30} minutes a flat call-out applies, waived when neighbors book together.`],
               ].map(([title, body]) => (
                 <li key={title} className="flex gap-3">
-                  <Icon name="check" className="mt-1 h-5 w-5 shrink-0 text-mint-600" />
+                  <Icon name="check" className="mt-1 h-5 w-5 shrink-0 text-leaf-600" />
                   <p className="text-ink-600">
                     <span className="font-semibold text-ink-800">{title}.</span> {body}
                   </p>
@@ -118,7 +118,7 @@ export default function PricingPage() {
                 ["No mention of method", "If they can't say soft wash or pressure wash and why, the roof finds out the hard way."],
               ].map(([title, body]) => (
                 <li key={title} className="flex gap-3">
-                  <Icon name="droplet" className="mt-1 h-5 w-5 shrink-0 text-signal-500" />
+                  <Icon name="droplet" className="mt-1 h-5 w-5 shrink-0 text-amber-500" />
                   <p className="text-ink-600">
                     <span className="font-semibold text-ink-800">{title}.</span> {body}
                   </p>

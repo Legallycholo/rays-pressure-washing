@@ -93,7 +93,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
               <ul className="mt-3 space-y-2.5">
                 {service.symptoms.map((s) => (
                   <li key={s} className="flex items-start gap-2.5 text-ink-600">
-                    <Icon name="droplet" className="mt-0.5 h-4 w-4 shrink-0 text-hydro-500" />
+                    <Icon name="droplet" className="mt-0.5 h-4 w-4 shrink-0 text-harbor-500" />
                     &ldquo;{s}&rdquo;
                   </li>
                 ))}
@@ -106,7 +106,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
               <ul className="mt-4 space-y-3">
                 {service.includes.map((item) => (
                   <li key={item} className="flex items-start gap-2.5 text-ink-700">
-                    <Icon name="check" className="mt-0.5 h-5 w-5 shrink-0 text-mint-600" />
+                    <Icon name="check" className="mt-0.5 h-5 w-5 shrink-0 text-leaf-600" />
                     {item}
                   </li>
                 ))}
@@ -123,7 +123,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
                 </p>
                 <Link
                   href="/pricing"
-                  className="mt-2 inline-flex min-h-[44px] items-center font-semibold text-hydro-700 underline underline-offset-2 hover:no-underline"
+                  className="mt-2 inline-flex min-h-[44px] items-center font-semibold text-harbor-700 underline underline-offset-2 hover:no-underline"
                 >
                   Estimate your price
                 </Link>
@@ -191,7 +191,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
                     ? `/services/${service.slug}/${l.slug}`
                     : `/service-areas/${l.slug}`
                 }
-                className="inline-flex min-h-[44px] items-center rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700 transition-colors hover:bg-hydro-50 hover:text-hydro-800"
+                className="inline-flex min-h-[44px] items-center rounded-pill bg-sand-100 px-4 py-1.5 text-sm font-medium text-ink-700 transition-colors hover:bg-harbor-50 hover:text-harbor-800"
               >
                 {service.navLabel} in {l.city}
               </Link>

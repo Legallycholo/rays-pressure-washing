@@ -17,11 +17,11 @@ export function BundleCard({ bundle, anchor = false }: { bundle: Bundle; anchor?
     <div
       className={cn(
         "relative flex h-full flex-col overflow-hidden rounded-card bg-white shadow-card ring-1 ring-ink-900/5",
-        anchor && bundle.mostPopular && "ring-2 ring-mint-400 lg:scale-105 lg:shadow-lift",
+        anchor && bundle.mostPopular && "ring-2 ring-leaf-400 lg:scale-105 lg:shadow-lift",
       )}
     >
       {bundle.mostPopular && (
-        <p className="bg-mint-400 py-1.5 text-center text-xs font-bold uppercase tracking-widest text-ink-950">
+        <p className="bg-leaf-400 py-1.5 text-center text-xs font-bold uppercase tracking-widest text-ink-950">
           Most popular
         </p>
       )}
@@ -32,7 +32,7 @@ export function BundleCard({ bundle, anchor = false }: { bundle: Bundle; anchor?
         <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-3">
           {services.map((s) => (
             <li key={s.slug} className="flex w-14 flex-col items-center gap-1 text-center">
-              <span className="grid h-9 w-9 place-items-center rounded-lg bg-hydro-50 text-hydro-600">
+              <span className="grid h-9 w-9 place-items-center rounded-lg bg-harbor-50 text-harbor-600">
                 <Icon name={s.icon} className="h-4.5 w-4.5" />
               </span>
               <span className="text-xs leading-tight text-ink-500">{s.navLabel}</span>

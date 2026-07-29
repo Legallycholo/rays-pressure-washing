@@ -90,7 +90,7 @@ export default async function BundlePage({ params }: { params: Promise<{ bundle:
           {services.map((s) => (
             <li key={s.slug} className="flex flex-col rounded-card bg-white p-6 shadow-card ring-1 ring-ink-900/5">
               <div className="flex items-center gap-3">
-                <span className="grid h-11 w-11 place-items-center rounded-xl bg-hydro-50 text-hydro-600">
+                <span className="grid h-11 w-11 place-items-center rounded-xl bg-harbor-50 text-harbor-600">
                   <Icon name={s.icon} className="h-5 w-5" />
                 </span>
                 <div>
@@ -101,7 +101,7 @@ export default async function BundlePage({ params }: { params: Promise<{ bundle:
               <ul className="mt-4 space-y-2">
                 {s.includes.slice(0, 3).map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm text-ink-600">
-                    <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-mint-600" />
+                    <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-leaf-600" />
                     {item}
                   </li>
                 ))}
@@ -118,7 +118,7 @@ export default async function BundlePage({ params }: { params: Promise<{ bundle:
           <dl className="mt-5 space-y-3 text-ink-600">
             <div className="flex items-center justify-between gap-4">
               <dt>Booked separately (minimum charges)</dt>
-              <dd className="font-semibold text-ink-800 line-through decoration-signal-500/60">
+              <dd className="font-semibold text-ink-800 line-through decoration-amber-500/60">
                 from {currency(minimumSum)}
               </dd>
             </div>
@@ -157,11 +157,11 @@ export default async function BundlePage({ params }: { params: Promise<{ bundle:
               {i < arr.length - 1 && (
                 <span aria-hidden="true" className="absolute left-[11px] top-7 bottom-0 w-0.5 bg-ink-100" />
               )}
-              <span className="relative z-10 mt-1 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-hydro-600">
+              <span className="relative z-10 mt-1 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-harbor-600">
                 <Icon name="check" className="h-3.5 w-3.5 text-white" />
               </span>
               <div>
-                <p className="text-xs font-bold uppercase tracking-wider text-hydro-600">{step.time}</p>
+                <p className="text-xs font-bold uppercase tracking-wider text-harbor-600">{step.time}</p>
                 <p className="mt-1 leading-relaxed text-ink-600">{step.body}</p>
               </div>
             </li>

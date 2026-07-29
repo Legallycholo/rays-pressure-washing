@@ -51,12 +51,12 @@ export function ProjectCard({
               // anything: vertical padding inflates the box, the negative
               // margin cancels it out of the line box, so the heading sits
               // exactly where it did.
-              className="group/expand -my-1 inline-flex min-h-[44px] items-start gap-1.5 py-1 hover:text-hydro-700"
+              className="group/expand -my-1 inline-flex min-h-[44px] items-start gap-1.5 py-1 hover:text-harbor-700"
             >
               {project.title}
               <Icon
                 name="expand"
-                className="mt-1 h-4 w-4 shrink-0 text-ink-300 transition-colors group-hover/expand:text-hydro-600"
+                className="mt-1 h-4 w-4 shrink-0 text-ink-300 transition-colors group-hover/expand:text-harbor-600"
               />
               <span className="sr-only">, open full size</span>
             </Link>

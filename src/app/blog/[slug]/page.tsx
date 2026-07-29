@@ -90,9 +90,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                       <li key={s.slug}>
                         <Link
                           href={`/services/${s.slug}`}
-                          className="flex min-h-[44px] items-center gap-2.5 text-sm font-medium text-ink-700 hover:text-hydro-700"
+                          className="flex min-h-[44px] items-center gap-2.5 text-sm font-medium text-ink-700 hover:text-harbor-700"
                         >
-                          <Icon name={s.icon} className="h-4 w-4 text-hydro-500" />
+                          <Icon name={s.icon} className="h-4 w-4 text-harbor-500" />
                           {s.name}
                         </Link>
                       </li>
@@ -108,9 +108,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
                       <li key={l.slug}>
                         <Link
                           href={`/service-areas/${l.slug}`}
-                          className="flex min-h-[44px] items-center gap-2.5 text-sm font-medium text-ink-700 hover:text-hydro-700"
+                          className="flex min-h-[44px] items-center gap-2.5 text-sm font-medium text-ink-700 hover:text-harbor-700"
                         >
-                          <Icon name="pin" className="h-4 w-4 text-hydro-500" />
+                          <Icon name="pin" className="h-4 w-4 text-harbor-500" />
                           {l.city}, {l.region}
                         </Link>
                       </li>

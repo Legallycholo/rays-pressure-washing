@@ -62,7 +62,7 @@ export default function ReviewsPage() {
         </ul>
         <p className="mt-10 text-center text-sm text-ink-400">
           Had us out recently? A review on{" "}
-          <a href={site.social.google} target="_blank" rel="noopener noreferrer" className="font-semibold text-hydro-700 underline underline-offset-2">
+          <a href={site.social.google} target="_blank" rel="noopener noreferrer" className="font-semibold text-harbor-700 underline underline-offset-2">
             Google
           </a>{" "}
           helps more than you&apos;d think.

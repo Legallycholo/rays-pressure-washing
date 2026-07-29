@@ -14,8 +14,8 @@ export function MaintenanceTeaser({ plan, terms }: { plan: MaintenancePlan; term
     <Section tone="sand">
       <div className="grid items-center gap-10 md:grid-cols-2 lg:gap-16">
         <div className="flex flex-col items-start gap-4">
-          <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-hydro-600">
-            <span className="h-px w-6 bg-hydro-500/50" aria-hidden="true" />
+          <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-harbor-600">
+            <span className="h-px w-6 bg-harbor-500/50" aria-hidden="true" />
             Stop thinking about it
           </span>
           <h2 className="text-display-sm text-ink-900 sm:text-4xl">
@@ -29,7 +29,7 @@ export function MaintenanceTeaser({ plan, terms }: { plan: MaintenancePlan; term
           <ul className="space-y-2.5">
             {plan.includes.slice(0, 3).map((item) => (
               <li key={item} className="flex items-start gap-2.5 text-ink-700">
-                <Icon name="check" className="mt-0.5 h-5 w-5 shrink-0 text-mint-600" />
+                <Icon name="check" className="mt-0.5 h-5 w-5 shrink-0 text-leaf-600" />
                 {item}
               </li>
             ))}
@@ -46,7 +46,7 @@ export function MaintenanceTeaser({ plan, terms }: { plan: MaintenancePlan; term
           <p className="mt-1 text-sm font-semibold uppercase tracking-wide text-ink-400">
             {plan.frequency}
           </p>
-          <p className="mt-6 font-display text-6xl font-bold text-mint-600">
+          <p className="mt-6 font-display text-6xl font-bold text-leaf-600">
             {plan.discountPercent}%
             <span className="ml-2 align-middle font-sans text-base font-semibold text-ink-500">
               below one-off rates

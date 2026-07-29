@@ -47,11 +47,11 @@ export default function MaintenancePlanPage() {
               <div
                 className={cn(
                   "relative flex h-full flex-col overflow-hidden rounded-card bg-white shadow-card ring-1 ring-ink-900/5",
-                  plan.mostPopular && "ring-2 ring-mint-400 lg:scale-105 lg:shadow-lift",
+                  plan.mostPopular && "ring-2 ring-leaf-400 lg:scale-105 lg:shadow-lift",
                 )}
               >
                 {plan.mostPopular && (
-                  <p className="bg-mint-400 py-1.5 text-center text-xs font-bold uppercase tracking-widest text-ink-950">
+                  <p className="bg-leaf-400 py-1.5 text-center text-xs font-bold uppercase tracking-widest text-ink-950">
                     Most popular
                   </p>
                 )}
@@ -60,7 +60,7 @@ export default function MaintenancePlanPage() {
                   <p className="mt-1 text-sm font-semibold uppercase tracking-wide text-ink-400">
                     {plan.frequency}
                   </p>
-                  <p className="mt-5 font-display text-5xl font-bold text-mint-600">
+                  <p className="mt-5 font-display text-5xl font-bold text-leaf-600">
                     {plan.discountPercent}%
                     <span className="ml-2 align-middle font-sans text-sm font-semibold text-ink-500">
                       off one-off rates
@@ -70,7 +70,7 @@ export default function MaintenancePlanPage() {
                   <ul className="mt-5 space-y-2.5">
                     {plan.includes.map((item) => (
                       <li key={item} className="flex items-start gap-2.5 text-sm text-ink-700">
-                        <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-mint-600" />
+                        <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-leaf-600" />
                         {item}
                       </li>
                     ))}
@@ -113,7 +113,7 @@ export default function MaintenancePlanPage() {
                 className="flex items-center justify-between gap-3 rounded-card bg-white p-4 ring-1 ring-ink-900/5"
               >
                 <span className="flex items-center gap-3 font-medium text-ink-800">
-                  <Icon name={s.icon} className="h-5 w-5 text-hydro-600" />
+                  <Icon name={s.icon} className="h-5 w-5 text-harbor-600" />
                   {s.name}
                 </span>
                 <Badge tone="hydro">{s.cadence}</Badge>

@@ -34,7 +34,7 @@ export function Footer() {
   return (
     <footer className="bg-ink-950 text-ink-300">
       {/* Final conversion band: the last thing before the link farm. */}
-      <div className="border-b border-white/10 bg-ink-900 hydro-mesh">
+      <div className="border-b border-white/10 bg-ink-900 harbor-mesh">
         <Container size="wide" className="py-14">
           <div className="flex flex-col items-center gap-6 text-center lg:flex-row lg:justify-between lg:text-left">
             <div>
@@ -83,7 +83,7 @@ export function Footer() {
                 href={`tel:${site.contact.phoneHref}`}
                 className={cn(footerLink, "gap-2.5")}
               >
-                <Icon name="phone" className="h-4 w-4 text-hydro-400" />
+                <Icon name="phone" className="h-4 w-4 text-harbor-400" />
                 {site.contact.phone}
               </a>
               <a
@@ -92,18 +92,18 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className={cn(footerLink, "gap-2.5")}
               >
-                <Icon name="whatsapp" filled className="h-4 w-4 text-mint-400" />
+                <Icon name="whatsapp" filled className="h-4 w-4 text-leaf-400" />
                 Message us on WhatsApp
               </a>
               <a
                 href={`mailto:${site.contact.email}`}
                 className={cn(footerLink, "gap-2.5")}
               >
-                <Icon name="mail" className="h-4 w-4 shrink-0 text-hydro-400" />
+                <Icon name="mail" className="h-4 w-4 shrink-0 text-harbor-400" />
                 <span className="min-w-0 [overflow-wrap:anywhere]">{site.contact.email}</span>
               </a>
               <p className="flex items-start gap-2.5">
-                <Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-hydro-400" />
+                <Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-harbor-400" />
                 <span>
                   {site.address.street}
                   <br />
@@ -202,7 +202,7 @@ export function Footer() {
             </ul>
             <Link
               href="/service-areas"
-              className="mt-2 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-hydro-400 hover:text-hydro-300 lg:mt-4 lg:min-h-0"
+              className="mt-2 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-semibold text-harbor-400 hover:text-harbor-300 lg:mt-4 lg:min-h-0"
             >
               All areas
               <Icon name="arrow" className="h-4 w-4" />
@@ -216,7 +216,7 @@ export function Footer() {
               key={c}
               className="inline-flex items-center gap-1.5 rounded-pill bg-white/5 px-3 py-1.5 text-xs font-medium ring-1 ring-inset ring-white/10"
             >
-              <Icon name="check" className="h-3.5 w-3.5 text-mint-400" />
+              <Icon name="check" className="h-3.5 w-3.5 text-leaf-400" />
               {c}
             </span>
           ))}

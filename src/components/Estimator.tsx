@@ -70,7 +70,7 @@ export function Estimator() {
           <select
             value={slug}
             onChange={(e) => setSlug(e.target.value)}
-            className="mt-2 w-full rounded-card border border-ink-200 bg-white p-3.5 text-base sm:text-sm text-ink-800 focus:border-hydro-500"
+            className="mt-2 w-full rounded-card border border-ink-200 bg-white p-3.5 text-base sm:text-sm text-ink-800 focus:border-harbor-500"
           >
             {services.map((s) => (
               <option key={s.slug} value={s.slug}>
@@ -89,7 +89,7 @@ export function Estimator() {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder={service.pricing.unit === "per item" ? "e.g. 14" : "e.g. 1200"}
-            className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm text-ink-800 placeholder:text-ink-300 focus:border-hydro-500"
+            className="mt-2 w-full rounded-card border border-ink-200 p-3.5 text-base sm:text-sm text-ink-800 placeholder:text-ink-300 focus:border-harbor-500"
           />
         </label>
 
@@ -106,8 +106,8 @@ export function Estimator() {
                 className={cn(
                   "flex min-h-[44px] items-center justify-center rounded-card px-2 py-2.5 text-xs font-semibold transition-all",
                   condition === c.id
-                    ? "bg-hydro-600 text-white"
-                    : "bg-sand-50 text-ink-700 ring-1 ring-ink-900/5 hover:ring-hydro-400",
+                    ? "bg-harbor-600 text-white"
+                    : "bg-sand-50 text-ink-700 ring-1 ring-ink-900/5 hover:ring-harbor-400",
                 )}
               >
                 {c.label}
@@ -125,17 +125,17 @@ export function Estimator() {
             type="checkbox"
             checked={farOut}
             onChange={(e) => setFarOut(e.target.checked)}
-            className="h-5 w-5 shrink-0 rounded accent-hydro-600"
+            className="h-5 w-5 shrink-0 rounded accent-harbor-600"
           />
           I&apos;m more than {travelPolicy.freeRadiusMinutes} minutes from town (+
           {currency(travelPolicy.surcharge)} travel, waived when a neighbor books too)
         </label>
       </div>
 
-      <div className="mt-6 rounded-card bg-ink-900 p-6 text-white hydro-mesh">
+      <div className="mt-6 rounded-card bg-ink-900 p-6 text-white harbor-mesh">
         {range ? (
           <>
-            <p className="text-xs font-bold uppercase tracking-wider text-mint-400">Your ballpark</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-leaf-400">Your ballpark</p>
             {/* Small jobs clamp to the minimum on BOTH ends. Rendering that as
                 "$250 – $250" reads like a broken widget, so show it as a floor
                 instead, still not a point estimate, which is the rule that
@@ -170,8 +170,8 @@ export function Estimator() {
       </div>
 
       {bundleHint && bundleHint.others.length > 0 && (
-        <p className="mt-4 rounded-card bg-mint-400/10 p-3.5 text-sm text-ink-700 ring-1 ring-mint-500/25">
-          <Icon name="sparkle" className="mr-1.5 inline h-4 w-4 text-mint-600" />
+        <p className="mt-4 rounded-card bg-leaf-400/10 p-3.5 text-sm text-ink-700 ring-1 ring-leaf-500/25">
+          <Icon name="sparkle" className="mr-1.5 inline h-4 w-4 text-leaf-600" />
           Add {bundleHint.others.join(" + ")} and it becomes the{" "}
           <strong>{bundleHint.bundle.name}</strong> package:{" "}
           <strong>{bundleHint.bundle.savingsPercent}% off everything</strong>.

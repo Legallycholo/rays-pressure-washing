@@ -175,7 +175,7 @@ function Avatar({
   return (
     <span
       className={cn(
-        "grid shrink-0 place-items-center rounded-full bg-gradient-to-br from-hydro-400 to-hydro-700 text-white",
+        "grid shrink-0 place-items-center rounded-full bg-gradient-to-br from-harbor-400 to-harbor-700 text-white",
         AVATAR[size].box,
         className,
       )}
@@ -201,8 +201,8 @@ function ActionRow({ action, onNavigate }: { action: AssistantAction; onNavigate
           action.primary
             ? "text-white"
             : action.icon === "whatsapp"
-              ? "text-mint-600"
-              : "text-hydro-600",
+              ? "text-leaf-600"
+              : "text-harbor-600",
         )}
       />
       <span className="min-w-0 flex-1">
@@ -211,7 +211,7 @@ function ActionRow({ action, onNavigate }: { action: AssistantAction; onNavigate
           <span
             className={cn(
               "mt-0.5 block text-xs font-normal leading-snug",
-              action.primary ? "text-hydro-100" : "text-ink-400",
+              action.primary ? "text-harbor-100" : "text-ink-400",
             )}
           >
             {action.detail}
@@ -220,7 +220,7 @@ function ActionRow({ action, onNavigate }: { action: AssistantAction; onNavigate
       </span>
       <Icon
         name="arrow"
-        className={cn("h-4 w-4 shrink-0", action.primary ? "text-hydro-200" : "text-ink-200")}
+        className={cn("h-4 w-4 shrink-0", action.primary ? "text-harbor-200" : "text-ink-200")}
       />
     </>
   );
@@ -231,7 +231,7 @@ function ActionRow({ action, onNavigate }: { action: AssistantAction; onNavigate
   const className = cn(
     "flex min-h-[48px] w-full items-center gap-3 rounded-xl px-3 py-2 text-left transition-colors",
     action.primary
-      ? "bg-hydro-600 text-white hover:bg-hydro-500"
+      ? "bg-harbor-600 text-white hover:bg-harbor-500"
       : "text-ink-700 hover:bg-sand-100",
   );
 
@@ -671,12 +671,12 @@ export function ContactHub() {
           )}
         >
           {/* ── Header ─────────────────────────────────────────────────── */}
-          <div className="hydro-mesh flex shrink-0 items-start gap-3 bg-ink-900 px-4 py-3.5 text-white">
+          <div className="harbor-mesh flex shrink-0 items-start gap-3 bg-ink-900 px-4 py-3.5 text-white">
             <Avatar size="md" className="mt-0.5 shadow-glow" />
             <div className="min-w-0 flex-1">
               <p className="font-display text-lg leading-tight">{site.shortName} Assistant</p>
               <p className="mt-1 flex items-center gap-1.5 text-xs text-ink-200">
-                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-mint-400" />
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-leaf-400" />
                 Usually replies in seconds
               </p>
             </div>
@@ -728,7 +728,7 @@ export function ContactHub() {
                     return (
                       <p
                         key={m.key}
-                        className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-hydro-600 px-3.5 py-2.5 text-sm font-semibold leading-relaxed text-white"
+                        className="ml-auto max-w-[85%] rounded-2xl rounded-br-md bg-harbor-600 px-3.5 py-2.5 text-sm font-semibold leading-relaxed text-white"
                       >
                         {m.text}
                       </p>
@@ -785,7 +785,7 @@ export function ContactHub() {
                           key={topicId}
                           type="button"
                           onClick={() => ask(topicId)}
-                          className="hub-pop min-h-[44px] max-w-[90%] rounded-full border border-hydro-200 bg-white px-4 py-2 text-right text-sm font-semibold text-hydro-700 shadow-card transition-colors hover:border-hydro-300 hover:bg-hydro-50"
+                          className="hub-pop min-h-[44px] max-w-[90%] rounded-full border border-harbor-200 bg-white px-4 py-2 text-right text-sm font-semibold text-harbor-700 shadow-card transition-colors hover:border-harbor-300 hover:bg-harbor-50"
                         >
                           {topic.chip}
                         </button>
@@ -858,7 +858,7 @@ export function ContactHub() {
                   // stylesheet order rather than by call order, and it was,
                   // silently, until a viewport measurement caught it.
                   "text-base sm:text-sm",
-                  "placeholder:text-ink-300 focus:border-hydro-500 focus:bg-white focus:outline-none",
+                  "placeholder:text-ink-300 focus:border-harbor-500 focus:bg-white focus:outline-none",
                   "disabled:opacity-60",
                 )}
               />
@@ -870,7 +870,7 @@ export function ContactHub() {
                   "grid h-11 w-11 shrink-0 place-items-center rounded-full text-white transition-colors",
                   // R1 holds here too: hydro, not signal. This sends a message,
                   // it doesn't convert anyone.
-                  "bg-hydro-600 hover:bg-hydro-500",
+                  "bg-harbor-600 hover:bg-harbor-500",
                   "disabled:bg-ink-200 disabled:text-ink-400",
                 )}
               >
@@ -902,7 +902,7 @@ export function ContactHub() {
                     for conversion actions only. */}
                 <Icon
                   name="sparkle"
-                  className="absolute -right-1 -top-1 h-2.5 w-2.5 text-mint-500"
+                  className="absolute -right-1 -top-1 h-2.5 w-2.5 text-leaf-500"
                 />
               </span>
               Assistant
@@ -943,7 +943,7 @@ export function ContactHub() {
         <Icon
           name="chat"
           className={cn(
-            "absolute h-6 w-6 text-hydro-400 transition-all duration-200 ease-out-expo",
+            "absolute h-6 w-6 text-harbor-400 transition-all duration-200 ease-out-expo",
             open && "rotate-90 scale-50 opacity-0",
           )}
         />
@@ -957,7 +957,7 @@ export function ContactHub() {
         {unread && !open && (
           <span
             aria-hidden="true"
-            className="absolute right-0.5 top-0.5 h-3.5 w-3.5 rounded-full bg-mint-400 ring-[3px] ring-ink-900 lg:right-1 lg:top-1"
+            className="absolute right-0.5 top-0.5 h-3.5 w-3.5 rounded-full bg-leaf-400 ring-[3px] ring-ink-900 lg:right-1 lg:top-1"
           />
         )}
       </button>

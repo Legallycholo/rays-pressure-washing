@@ -4,7 +4,7 @@ import { Icon } from "./Icon";
 
 export function Stars({ value = 5, className }: { value?: number; className?: string }) {
   return (
-    <span className={cn("inline-flex items-center gap-0.5 text-signal-400", className)}>
+    <span className={cn("inline-flex items-center gap-0.5 text-amber-400", className)}>
       {Array.from({ length: 5 }, (_, i) => (
         <Icon
           key={i}

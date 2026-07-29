@@ -33,11 +33,11 @@ export function SectionHeading({
         <span
           className={cn(
             "inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em]",
-            onDark ? "text-mint-400" : "text-hydro-600",
+            onDark ? "text-leaf-400" : "text-harbor-600",
           )}
         >
           <span
-            className={cn("h-px w-6", onDark ? "bg-mint-400/60" : "bg-hydro-500/50")}
+            className={cn("h-px w-6", onDark ? "bg-leaf-400/60" : "bg-harbor-500/50")}
             aria-hidden="true"
           />
           {eyebrow}

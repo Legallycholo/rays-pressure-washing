@@ -74,7 +74,7 @@ export function HowItWorks({ steps = defaultSteps }: { steps?: Step[] }) {
               </span>
               <div>
                 <h3 className="flex items-center gap-2 font-display text-lg text-ink-900 sm:justify-center lg:justify-start lg:text-3xl">
-                  <Icon name={step.icon} className="h-5 w-5 text-hydro-600 lg:h-7 lg:w-7" />
+                  <Icon name={step.icon} className="h-5 w-5 text-harbor-600 lg:h-7 lg:w-7" />
                   {step.title}
                 </h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-ink-500 lg:max-w-xl lg:text-lg">

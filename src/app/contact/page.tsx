@@ -47,9 +47,9 @@ export default function ContactPage() {
                   <a
                     href={c.href}
                     {...(c.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className="flex items-center gap-4 rounded-card bg-sand-50 p-4 ring-1 ring-ink-900/5 transition-all hover:-translate-y-0.5 hover:ring-hydro-400"
+                    className="flex items-center gap-4 rounded-card bg-sand-50 p-4 ring-1 ring-ink-900/5 transition-all hover:-translate-y-0.5 hover:ring-harbor-400"
                   >
-                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white text-hydro-600 ring-1 ring-ink-900/5">
+                    <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white text-harbor-600 ring-1 ring-ink-900/5">
                       <Icon name={c.icon} filled={c.icon === "whatsapp"} className="h-5 w-5" />
                     </span>
                     <span className="min-w-0">
@@ -65,11 +65,11 @@ export default function ContactPage() {
 
             <address className="mt-8 space-y-3 text-sm not-italic text-ink-600">
               <p className="flex items-start gap-2.5">
-                <Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-hydro-600" />
+                <Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-harbor-600" />
                 {site.address.street}, {cityState} {site.address.postalCode}
               </p>
               <div className="flex items-start gap-2.5">
-                <Icon name="clock" className="mt-0.5 h-4 w-4 shrink-0 text-hydro-600" />
+                <Icon name="clock" className="mt-0.5 h-4 w-4 shrink-0 text-harbor-600" />
                 <dl>
                   {site.hours.map((h) => (
                     <div key={h.days} className="flex gap-3">

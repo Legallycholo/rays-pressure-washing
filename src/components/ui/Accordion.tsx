@@ -30,7 +30,7 @@ export function Accordion({
             <span>{item.question}</span>
             <Icon
               name="chevron"
-              className="h-5 w-5 shrink-0 text-hydro-600 transition-transform duration-200 group-open:rotate-180"
+              className="h-5 w-5 shrink-0 text-harbor-600 transition-transform duration-200 group-open:rotate-180"
             />
           </summary>
           <div className="px-5 pb-5 -mt-1">

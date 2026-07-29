@@ -13,7 +13,7 @@ export function ServiceCard({ service, promoted = false }: { service: Service; p
   return (
     <Card href={`/services/${service.slug}`} className="h-full p-6">
       <div className="flex items-start justify-between gap-3">
-        <span className="grid h-12 w-12 place-items-center rounded-xl bg-hydro-50 text-hydro-600">
+        <span className="grid h-12 w-12 place-items-center rounded-xl bg-harbor-50 text-harbor-600">
           <Icon name={service.icon} className="h-6 w-6" />
         </span>
         <span className="flex flex-wrap justify-end gap-1.5">
@@ -32,7 +32,7 @@ export function ServiceCard({ service, promoted = false }: { service: Service; p
           </span>
           <Icon
             name="arrow"
-            className="h-4 w-4 text-hydro-600 transition-transform group-hover:translate-x-1"
+            className="h-4 w-4 text-harbor-600 transition-transform group-hover:translate-x-1"
           />
         </div>
       </div>

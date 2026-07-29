@@ -26,7 +26,7 @@ export function StickyCallBar() {
           href={`tel:${site.contact.phoneHref}`}
           className="flex flex-col items-center gap-1 py-3 text-white active:bg-white/10"
         >
-          <Icon name="phone" className="h-5 w-5 text-hydro-400" />
+          <Icon name="phone" className="h-5 w-5 text-harbor-400" />
           <span className="text-xs font-semibold">Call</span>
         </a>
         <a
@@ -35,12 +35,12 @@ export function StickyCallBar() {
           rel="noopener noreferrer"
           className="flex flex-col items-center gap-1 py-3 text-white active:bg-white/10"
         >
-          <Icon name="whatsapp" filled className="h-5 w-5 text-mint-400" />
+          <Icon name="whatsapp" filled className="h-5 w-5 text-leaf-400" />
           <span className="text-xs font-semibold">WhatsApp</span>
         </a>
         <a
           href="/quote"
-          className="flex flex-col items-center gap-1 bg-signal-400 py-3 text-ink-950 active:bg-signal-500"
+          className="flex flex-col items-center gap-1 bg-amber-400 py-3 text-ink-950 active:bg-amber-500"
         >
           <Icon name="sparkle" className="h-5 w-5" />
           <span className="text-xs font-bold">Free Quote</span>

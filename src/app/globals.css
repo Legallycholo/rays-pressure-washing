@@ -24,39 +24,43 @@
   --color-ink-900: #06131d;
   --color-ink-950: #030b12;
 
-  /* Hydro — the brand blue. Water, clarity, pressure. */
-  --color-hydro-50: #eaf7ff;
-  --color-hydro-100: #cfedff;
-  --color-hydro-200: #9fdaff;
-  --color-hydro-300: #63c2fb;
-  --color-hydro-400: #2ea6ef;
-  --color-hydro-500: #0b8fd6;
-  --color-hydro-600: #0071b0;
-  --color-hydro-700: #005a8d;
-  --color-hydro-800: #064a73;
-  --color-hydro-900: #0a3e60;
+  /* Harbor — replaces hydro. Recalibrated to the logo's actual arc blue. */
+  --color-harbor-50: #edf6fc;
+  --color-harbor-100: #d3e7f8;
+  --color-harbor-200: #9fcbef;
+  --color-harbor-300: #61aae5;
+  --color-harbor-400: #2489db;
+  --color-harbor-500: #1e73b8;
+  --color-harbor-600: #185d95;
+  --color-harbor-700: #134a76;
+  --color-harbor-800: #0f395c;
+  --color-harbor-900: #0c2e4b;
 
-  /* Signal — CTA ONLY. If it isn't a conversion action, it isn't this colour. */
-  --color-signal-50: #fff3ed;
-  --color-signal-100: #ffe2d3;
-  --color-signal-200: #ffc0a6;
-  --color-signal-300: #ff9670;
-  --color-signal-400: #ff6a2b;
-  --color-signal-500: #f74e0c;
-  --color-signal-600: #e33604;
-  --color-signal-700: #bc2607;
-  --color-signal-800: #95210e;
-  --color-signal-900: #781f0f;
+  /* Leaf — replaces mint. The logo's grass/kelly green. */
+  --color-leaf-50: #f0f9f0;
+  --color-leaf-100: #daf1db;
+  --color-leaf-200: #ade1af;
+  --color-leaf-300: #79cd7c;
+  --color-leaf-400: #45ba49;
+  --color-leaf-500: #3a9c3d;
+  --color-leaf-600: #2f7f31;
+  --color-leaf-700: #256527;
+  --color-leaf-800: #1d4e1f;
+  --color-leaf-900: #173f19;
 
-  /* Mint — "clean" indicator. Reveal lines, checkmarks, after-states. */
-  --color-mint-300: #6ef0d3;
-  --color-mint-400: #3fe0bf;
-  --color-mint-500: #16c5a3;
-  --color-mint-600: #059e83;
-  --color-mint-700: #077e6a;
+  /* Amber — replaces signal. CTA ONLY. */
+  --color-amber-50: #fef8ec;
+  --color-amber-100: #fcecc8;
+  --color-amber-200: #f9da96;
+  --color-amber-300: #f8c563;
+  --color-amber-400: #f6ae1e;
+  --color-amber-500: #e0961a;
+  --color-amber-600: #c17f16;
+  --color-amber-700: #a06712;
+  --color-amber-800: #82530f;
+  --color-amber-900: #6b440d;
 
-  /* Sand — warm neutral for alternating sections, so light bands aren't
-     sterile white against all that navy. */
+  /* Sand — warm neutral for alternating sections. */
   --color-sand-50: #faf8f5;
   --color-sand-100: #f4f0e9;
   --color-sand-200: #e8e0d4;
@@ -148,13 +152,13 @@ p {
 
 /* Visible, on-brand focus ring everywhere. Never remove without a replacement. */
 :focus-visible {
-  outline: 3px solid var(--color-hydro-400);
+  outline: 3px solid var(--color-harbor-400);
   outline-offset: 2px;
   border-radius: 2px;
 }
 
 ::selection {
-  background-color: var(--color-hydro-200);
+  background-color: var(--color-harbor-200);
   color: var(--color-ink-900);
 }
 
@@ -190,9 +194,9 @@ p {
 /* Subtle water-texture wash for dark sections. */
 .hydro-mesh {
   background-image:
-    radial-gradient(60rem 40rem at 12% -10%, rgb(11 143 214 / 0.35), transparent 60%),
-    radial-gradient(45rem 35rem at 92% 8%, rgb(63 224 191 / 0.16), transparent 62%),
-    radial-gradient(40rem 30rem at 50% 110%, rgb(11 143 214 / 0.18), transparent 60%);
+    radial-gradient(60rem 40rem at 12% -10%, rgb(30 115 184 / 0.35), transparent 60%),
+    radial-gradient(45rem 35rem at 92% 8%, rgb(69 186 73 / 0.16), transparent 62%),
+    radial-gradient(40rem 30rem at 50% 110%, rgb(30 115 184 / 0.18), transparent 60%);
 }
 
 /* Grid used behind dark hero/CTA bands. */
@@ -209,7 +213,7 @@ p {
   background-color: var(--color-ink-100);
   background-image: repeating-linear-gradient(
     45deg,
-    rgb(11 143 214 / 0.07) 0 1rem,
+    rgb(30 115 184 / 0.07) 0 1rem,
     transparent 1rem 2rem
   );
 }
@@ -243,7 +247,7 @@ p {
   outline: none;
 }
 .coverage-pin:focus-visible .coverage-pin__dot {
-  stroke: var(--color-hydro-300);
+  stroke: var(--color-harbor-300);
   stroke-width: 3;
   paint-order: stroke;
 }

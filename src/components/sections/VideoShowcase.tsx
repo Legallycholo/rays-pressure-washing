@@ -39,7 +39,7 @@ export function VideoShowcase({
           <ul className="flex flex-col gap-3">
             {video.highlights.map((h) => (
               <li key={h} className="flex items-start gap-2.5 text-ink-200">
-                <Icon name="check" className="mt-0.5 h-4 w-4 text-mint-400" />
+                <Icon name="check" className="mt-0.5 h-4 w-4 text-leaf-400" />
                 <span className="leading-relaxed">{h}</span>
               </li>
             ))}
