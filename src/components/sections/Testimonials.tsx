@@ -1,4 +1,5 @@
 import type { Testimonial } from "@/content/testimonials";
+import { site } from "@/content/site";
 import { getLocation } from "@/content/locations";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -100,9 +101,16 @@ export function Testimonials({
         )}
       </Reveal>
       {showAllLink && (
-        <div className="mt-10 text-center">
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-center">
           <Button href="/reviews" variant="ghost">
             Read all reviews
+          </Button>
+          <Button
+            href={site.reviewLink}
+            variant="outline"
+            size="sm"
+          >
+            Leave us a review on Google ⭐
           </Button>
         </div>
       )}

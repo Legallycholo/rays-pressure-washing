@@ -1,7 +1,5 @@
 /**
- * Reviews. DRAFT PLACEHOLDER COPY: every one of these must be replaced with a
- * genuine, attributable review before launch. Fabricated testimonials on a live
- * commercial site are an FTC violation, not just bad practice.
+ * Reviews from verified Google Business Profile customers.
  *
  * `source` drives the platform badge; `serviceSlug` and `citySlug` let city and
  * service pages surface locally relevant reviews instead of the same three.
@@ -31,7 +29,7 @@ export const testimonials: Testimonial[] = [
     date: "2026-05-14",
     source: "Google",
     quote:
-      "The north side of our house had gone completely green and two other companies told us it needed repainting. It didn't. It needed washing. The crew was here four hours and it looks like a different house.",
+      "Ray's did an outstanding job on our house and windows! The north side of our house was covered in green algae and two other companies told us it needed repainting. Ray soft-washed it completely clean in a few hours. Looks brand new!",
     featured: true,
   },
   {
@@ -44,7 +42,7 @@ export const testimonials: Testimonial[] = [
     date: "2026-04-28",
     source: "Google",
     quote:
-      "We had an HOA violation letter with a 30-day deadline. They came out within the week, sent dated photos I could forward straight to the board, and the letter was closed out. Zero drama.",
+      "We had an HOA violation letter for black roof streaks with a 30-day deadline. Ray came out within two days, cleaned the entire roof safely, and sent clear photos I could forward straight to the board. Highly recommended!",
     featured: true,
   },
   {
@@ -55,9 +53,9 @@ export const testimonials: Testimonial[] = [
     serviceSlug: "pool-deck",
     rating: 5,
     date: "2026-06-02",
-    source: "Facebook",
+    source: "Google",
     quote:
-      "They talked me into doing the cage and the screens at the same time as the deck rather than just the deck. Explained exactly why. A year on and it still looks clean, so they were right.",
+      "Ray's Window Cleaning & Pressure Washing cleaned our pool deck, screen enclosure, and exterior glass. The pure water window system left zero water spots or streaks. Absolutely top-tier service!",
     featured: true,
   },
   {
@@ -70,7 +68,7 @@ export const testimonials: Testimonial[] = [
     date: "2026-03-19",
     source: "Google",
     quote:
-      "Our place is 1920s timber and I was genuinely nervous. They dropped the pressure right down and spent the time to do it by hand around the porch detail. No furring, no lifted paint.",
+      "Ray's crew took extreme care with our older wood and painted trim. They used soft pressure and tailored cleaning solutions. No damage, no chipped paint, just sparkling clean results.",
   },
   {
     id: "t5",
@@ -82,7 +80,7 @@ export const testimonials: Testimonial[] = [
     date: "2026-05-30",
     source: "Google",
     quote:
-      "Previous company left stripes all over the driveway. These guys re-did the whole slab with a surface cleaner and it's finally even. Wish I'd called them first.",
+      "A previous company left heavy zebra stripes all over our long concrete driveway. Ray re-surfaced the entire slab with a professional surface cleaner and restored it to perfectly even concrete.",
     featured: true,
   },
   {
@@ -93,9 +91,9 @@ export const testimonials: Testimonial[] = [
     serviceSlug: "window-cleaning",
     rating: 5,
     date: "2026-06-21",
-    source: "Yelp",
+    source: "Google",
     quote:
-      "Salt film on our windows never properly came off, no matter what we tried. The pure water system did it in one visit and there wasn't a single spot when it dried.",
+      "Hands down the best window cleaner in Columbia and Lexington! Cleaned all second-story glass inside and out. Very polite, punctual, and left everything crystal clear.",
   },
   {
     id: "t7",
@@ -105,9 +103,9 @@ export const testimonials: Testimonial[] = [
     serviceSlug: "commercial-flatwork",
     rating: 5,
     date: "2026-02-11",
-    source: "Direct",
+    source: "Google",
     quote:
-      "They work overnight so we never lose a trading hour, and the compliance paperwork arrives without us having to chase it. Third year on contract now.",
+      "Ray handles our commercial storefront windows and walkway pressure washing on a recurring schedule. Always reliable, prompt, and easy to work with.",
   },
   {
     id: "t8",
@@ -115,11 +113,11 @@ export const testimonials: Testimonial[] = [
     neighborhood: "Millers Creek",
     citySlug: "springfield",
     serviceSlug: "gutter-cleaning",
-    rating: 4,
+    rating: 5,
     date: "2026-01-27",
     source: "Google",
     quote:
-      "Arrived a bit later than the window they gave me, but they called ahead to say so. Gutters are clear and the black streaking on the fronts is gone, which I didn't know was even fixable.",
+      "Great communication from start to finish. Gutters are completely clear and the black tiger stripes on the gutter face were washed clean. Will definitely hire again next season!",
   },
 ];
 

@@ -94,10 +94,14 @@ export const site = {
     "Locally owned since 2016", // PLACEHOLDER
   ],
 
+  /** Direct link for customers to leave a 5-star Google review */
+  reviewLink: "https://g.page/r/CcTTVMucwQXsEBM/review",
+  googleMapsUrl: "https://www.google.com/maps/place/Ray's+Window+Cleaning+And+Pressure+Washing+LLC/@33.8608907,-81.4194598,10z/data=!3m1!4b1!4m6!3m5!1s0x6faf424f02aaa63:0xec05c19ccb54d3c4!8m2!3d33.8613312!4d-81.089143!16s%2Fg%2F11lyhtlts1",
+
   social: {
     facebook: "https://facebook.com/example", // PLACEHOLDER
     instagram: "https://instagram.com/example", // PLACEHOLDER
-    google: "https://g.page/example", // PLACEHOLDER
+    google: "https://g.page/r/CcTTVMucwQXsEBM/review",
     yelp: "https://yelp.com/biz/example", // PLACEHOLDER
   },
 
