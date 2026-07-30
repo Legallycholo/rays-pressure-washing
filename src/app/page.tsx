@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { site, credentialBadges, cityState } from "@/content/site";
+import { site, credentialBadges, cityState, guaranteeName } from "@/content/site";
 import { stats } from "@/content/stats";
 import { featuredServices, residentialServices } from "@/content/services";
 import { maintenancePlans, maintenancePlanTerms } from "@/content/packages";
@@ -29,8 +29,8 @@ import { faqSchema } from "@/lib/schema";
 export const metadata: Metadata = {
   title: `Pressure Washing Big Lake Houses in ${cityState}`,
   description:
-    `${site.name}: window cleaning, soft washing, roof cleaning and concrete cleaning for ` +
-    `lake homes across ${site.serviceRegion}. Same-day availability and the ${site.guarantee.title}.`,
+    `Window cleaning, soft washing, roof cleaning and concrete cleaning for lake homes ` +
+    `across ${site.serviceRegion}. Same-day availability and the ${guaranteeName}.`,
   alternates: { canonical: "/" },
 };
 
@@ -79,7 +79,7 @@ export default function HomePage() {
       <Hero
         eyebrow={`Serving ${site.serviceRegion}`}
         title={`Pressure washing big lake houses in ${cityState}`}
-        lede={`Big houses on the water take more than a pressure washer and a ladder. We clean the glass, the siding, the roof and the driveway on lake homes around ${site.address.city}, with the method matched to each surface and backed by the ${site.guarantee.title}.`}
+        lede={`Big houses on the water take more than a pressure washer and a ladder. We clean the glass, the siding, the roof and the driveway on lake homes around ${site.address.city}, with the method matched to each surface and backed by the ${guaranteeName}.`}
         primaryCta={{ label: "Request a Callback", href: "/contact" }}
         secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
         project={featuredProjects[0]}

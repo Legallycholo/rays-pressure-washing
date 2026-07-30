@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { site, cityState } from "@/content/site";
+import { site, cityState, guaranteeName } from "@/content/site";
 import { stats } from "@/content/stats";
 import { locations } from "@/content/locations";
 import { getFaqs } from "@/content/faqs";
@@ -38,7 +38,7 @@ export default function AboutPage() {
       <Hero
         variant="page"
         breadcrumbs={crumbs}
-        title={`The local crew that treats your place like the ${site.guarantee.title.toLowerCase()} depends on it`}
+        title={`The local crew that treats your place like the ${guaranteeName.toLowerCase()} depends on it`}
         lede={`Because it does. ${site.name} washes ${site.serviceRegion} exteriors, and has for years. Same owner, same standard, same trucks you see around town.`}
         primaryCta={{ label: "Request a Callback", href: "/contact" }}
       />

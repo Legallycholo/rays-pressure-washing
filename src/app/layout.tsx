@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { site, cityState } from "@/content/site";
+import { site, cityState, guaranteeName } from "@/content/site";
 import { locations } from "@/content/locations";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -26,9 +26,15 @@ export const metadata: Metadata = {
     default: `Pressure Washing & Window Cleaning in ${cityState} | ${site.shortName}`,
     template: `%s | ${site.shortName}`,
   },
+  /**
+   * The fallback description for any page that doesn't set its own. Was 218
+   * characters — past the ~160 Google renders — so the call to action at the end
+   * was never shown. Trimmed to fit; the pages that most need a CTA in the
+   * snippet set their own description anyway.
+   */
   description:
-    `Professional pressure washing, soft washing and exterior cleaning across ${site.serviceRegion}. ` +
-    `Licensed, insured, and backed by the Spotless Guarantee. Call now, or submit the form and we will get back to you within 24 hours.`,
+    `Professional pressure washing, soft washing and window cleaning across ${site.serviceRegion}. ` +
+    `Licensed, insured, and backed by the ${guaranteeName}.`,
   applicationName: site.name,
   /**
    * Google has ignored the keywords meta since 2009, so this earns its place

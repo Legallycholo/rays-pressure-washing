@@ -113,32 +113,71 @@ is the correction layer.
   Aiken and Dalzell both render the travel-fee sentence, and the batch-route
   discount language appears where it should.
 
-### Still outstanding
+### Round two, 29 July 2026 — approved follow-ups
 
-Everything in §11, plus two items that section missed:
+Both open items above were resolved, and auditing them surfaced a systematic
+metadata problem that had been present since before this plan.
 
-- **`site.serviceRegion` is now too narrow and should be decided.** It reads
-  "the Lake Murray area", and it is rendered as a *coverage* claim — "Serving
-  {serviceRegion}", "across {serviceRegion}" — in the homepage hero and in the
-  title/description of several pages. With Aiken (Aiken County, 50 min) and
-  Dalzell (Sumter County, 60 min) in the confirmed area, that string describes
-  roughly half of where the business actually works, and the Aiken and Dalzell
-  pages currently claim to serve them "across the Lake Murray area".
-  Recommended replacement: **"the SC Midlands"**. Deliberately not changed here —
-  the lake-house positioning was set on purpose two commits before this pass, and
-  swapping the phrase touches marketing copy sitewide, which is the business's
-  call and not a mechanical fix. Note the two jobs one string is doing: the
-  homepage H1 can stay lake-focused as a *targeting* choice while
-  `serviceRegion` describes actual *coverage*. Splitting them is the cleaner fix
-  if the lake framing should be kept.
-- **`site.ts` `stats` still holds two invented public figures** — "3,400+
-  Properties cleaned" and "1.2M sq ft Cleaned last year", both rendered on the
-  homepage. These are the same class of fabricated claim as the old 4.9-from-218
-  rating and were not in this plan's scope, so they were left in place rather
-  than silently changed. They should be replaced with real numbers or the tiles
-  removed before the index flip. Note the middle tile now derives correctly and
-  reads "7+ Five-star reviews", which is truthful but looks thin — another reason
-  to get the real Google figures.
+**`site.serviceRegion` → "the SC Midlands".** It read "the Lake Murray area"
+while the confirmed area reached Aiken and Sumter counties, so the Aiken and
+Dalzell pages claimed to serve them "across the Lake Murray area". The field's
+docblock now states that it only ever describes *coverage* — the homepage H1 and
+title lead on lake houses via `cityState` and are untouched by the change, so the
+lake-home targeting survives. Keeping those two jobs in separate strings is the
+point: once a coverage string starts doing positioning work, one of the two
+becomes a lie.
+
+**`stats` rebuilt from derived figures and moved to `content/stats.ts`.** The two
+invented tiles are gone. All four now derive: cities covered (13), average review
+score (5.0), services offered (8), days open per week (7). Nothing there can go
+stale or be wrong. It moved out of `site.ts` because it reads from the service
+catalog and service area, and business *identity* should not depend on the content
+describing the work.
+
+**Columbia promoted to a fourth priority city.** Search volume is an order of
+magnitude above anywhere else on the list (~137,000 people against Lexington's
+24,000) and its housing stock is the most varied on the site, so the eight new
+service×city pages have real material. Matrix went 24 → 32, sitemap 61 → **69**.
+
+**`expandDays` de-duplicated.** It was private in `lib/schema.ts`; `content/stats.ts`
+needed the same translation for its days-per-week tile. Moved to `content/site.ts`
+beside the `hours` data both callers read, with `openDaysCount` derived from it.
+
+#### The metadata bugs this surfaced
+
+- **48 of 71 pages had meta descriptions over the ~160-character limit**, running
+  200–370 characters and truncating mid-sentence in the search result. Cause: the
+  city and service×city templates interpolated `loc.localChallenge` — and in the
+  matrix case `localChallenge` *plus* `service.blurb` — straight into the
+  description. `localChallenge` is page prose, rendered as a section lede; it was
+  never a 160-character field. Rewriting it richer in §1.5 made this worse.
+  **Fix:** a new short `Location.summary` field, one clause under 95 characters,
+  purpose-written per city. All 32 matrix and 13 city descriptions now fit and
+  every one is distinct.
+- **The root `<title>` was 103 characters** — everything identifying the business
+  sat past the truncation point. Now leads with the search phrase and the city and
+  ends with the short brand name, at 49.
+- **The layout fallback description was 218 characters**, so its call to action
+  was never rendered. Trimmed to 142.
+- **"and the The Spotless Guarantee"** appeared in three places, including the
+  homepage meta description, from interpolating `the ${site.guarantee.title}` when
+  the title already begins with "The". Added a derived `guaranteeName` export
+  (title minus the leading article) for copy that supplies its own.
+- **The `/service-areas` description listed all 13 city names** (230+ chars) and
+  read "the surrounding **the** SC Midlands area". Now derived from the count plus
+  the priority cities.
+- **`Article.metaTitle`** added, optional. The soft-wash article's H1 is 63
+  characters, which overflows a `<title>` once the brand suffix is appended — but
+  an H1 can afford to be longer and more conversational than a search result can,
+  and forcing them to share one string makes one of them worse.
+- **`keywords`** now carries service-plus-city terms instead of `serviceRegion`
+  alone. Google has ignored the tag since 2009; it earns its place only as a hint
+  to smaller engines, which means the entries should at least be terms a human
+  would type.
+
+Audited after the fix: **71 pages, all titles ≤62 characters, all descriptions
+≤160, zero duplicate descriptions.** The one flagged page is `/_global-error`,
+Next's internal error boundary, which is never indexed.
 
 ---
 

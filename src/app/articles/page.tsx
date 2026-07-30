@@ -9,7 +9,7 @@ import { breadcrumbSchema, articleListSchema } from "@/lib/schema";
 export const metadata: Metadata = {
   title: "Articles: Exterior Cleaning, Explained Straight",
   description:
-    "How exterior cleaning actually works, which method belongs on which surface, and how often it needs doing. Written to make you a sharper buyer, whoever you end up hiring.",
+    "How exterior cleaning actually works, which method belongs on which surface, and how often it needs doing. Written to make you a sharper buyer.",
   alternates: { canonical: "/articles" },
 };
 

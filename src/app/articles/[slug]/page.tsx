@@ -26,7 +26,9 @@ export async function generateMetadata({
   const article = getArticle((await params).slug);
   if (!article) return {};
   return {
-    title: article.title,
+    // `metaTitle` when the H1 is too long for a search result; see the note on
+    // the field in content/articles.ts. The H1 itself always uses `title`.
+    title: article.metaTitle ?? article.title,
     description: article.excerpt,
     alternates: { canonical: `/articles/${article.slug}` },
     // `article` rather than the sitewide `website`, and the dates a crawler

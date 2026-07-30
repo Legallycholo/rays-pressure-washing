@@ -53,6 +53,20 @@ export type Location = {
   housingStock: string;
   /** The local environmental problem that drives demand here. */
   localChallenge: string;
+  /**
+   * One short clause for meta descriptions. Keep under ~95 characters.
+   *
+   * This exists because `localChallenge` is written for the page — it is rendered
+   * as a section lede and woven into body prose, so it wants to be a full,
+   * specific sentence. It was also being interpolated straight into the meta
+   * description of every city and service×city page, where the budget is ~160
+   * characters before Google truncates. The result was 48 pages with descriptions
+   * running 200–370 characters, cut off mid-sentence in the search result.
+   *
+   * Two fields because they are two jobs. Keep this distinct per city — thirteen
+   * city pages sharing one description is its own problem.
+   */
+  summary: string;
   /** Neighborhood names: real internal-link and long-tail value. */
   neighborhoods: string[];
   /** Recognizable local reference points. */
@@ -89,6 +103,8 @@ export const locations: Location[] = [
       "Lexington is where our trucks are parked, so it's the town we know street by street. The older blocks around Main Street are painted brick and hardboard siding that stains fast on the shaded side, while the subdivisions spreading toward Lake Murray are newer vinyl and stone with a completely different set of problems. Being based here also means we reach a Lexington address faster than anyone driving out from Columbia.",
     housingStock:
       "Mixed: older painted brick and hardboard near downtown, large newer vinyl and stone subdivisions toward Lake Murray",
+    summary:
+      "Home base. Dense oak canopy keeps north-facing walls damp, so algae comes back fast.",
     localChallenge:
       "Heavy oak and pine canopy over the established streets keeps north-facing walls damp most of the year, so algae comes back faster here than in the open new-build developments.",
     neighborhoods: [
@@ -117,6 +133,8 @@ export const locations: Location[] = [
       "West Columbia has some of the oldest housing stock we work on, and a lot of it has been damaged by contractors treating painted wood and soft brick like new construction. We drop pressure well below standard on the older streets near the river and lean on chemistry instead, because the surface can't take force and doesn't need it.",
     housingStock:
       "Older painted wood and soft brick, wide porches, original architectural detail, plus post-war ranch",
+    summary:
+      "Older painted wood and soft brick that high pressure ruins. We use chemistry instead.",
     localChallenge:
       "Older, softer building materials that conventional high-pressure cleaning permanently scars, combined with Congaree river-corridor damp that keeps organic growth active on the shaded elevations.",
     neighborhoods: [
@@ -143,6 +161,8 @@ export const locations: Location[] = [
       "Seven Oaks is a settled 1970s and 80s suburb with the tree canopy that comes with fifty years of growth, and that canopy is the whole story here. Mature hardwoods over the rooflines mean shaded siding, packed gutters twice a year, and roofs that hold damp long enough for streaking to take hold well before the houses look old.",
     housingStock:
       "Established 1970s–80s single-family, brick and vinyl, asphalt shingle roofs under mature hardwoods",
+    summary:
+      "Fifty years of tree cover means shaded siding and gutters that pack twice a year.",
     localChallenge:
       "Fifty years of tree growth over the rooflines: constant shade on the north elevations, leaf and needle fall clogging gutters, and roof slopes that never fully dry between rains.",
     neighborhoods: ["Seven Oaks", "Whitehall", "Quail Hollow", "the St. Andrews Road corridor"],
@@ -159,6 +179,8 @@ export const locations: Location[] = [
       "Irmo is dense, established and heavily HOA-governed, which changes why the phone rings. A lot of our Irmo calls start with a letter from a board rather than a homeowner deciding the house looks tired. We work to HOA specification and send the dated before-and-after photo set boards ask for, so the file closes the first time.",
     housingStock:
       "Established HOA subdivisions, uniform vinyl and brick, asphalt shingle roofs, mature landscaping",
+    summary:
+      "HOA country. Roof streaks and driveway stains are the two most-cited violations.",
     localChallenge:
       "HOA compliance deadlines. Roof streaking and driveway staining are the two most-cited exterior violations in the area, and both are on a clock once the letter arrives.",
     neighborhoods: ["Friarsgate", "Harbison", "Coldstream", "Murraywood", "Ballentine"],
@@ -181,6 +203,8 @@ export const locations: Location[] = [
       "Columbia is the largest market in our range and the most varied — everything from Shandon bungalows with original wood detail to new construction out toward the northeast. That variety is the whole reason we quote off the surfaces rather than the square footage, because two houses of identical size in different Columbia neighborhoods need completely different methods.",
     housingStock:
       "Highly varied: historic bungalows with original wood, mid-century brick, and new-build vinyl and stone",
+    summary:
+      "Historic bungalows through to new build. The method changes street by street here.",
     localChallenge:
       "Midlands heat and humidity drive fast organic regrowth citywide, and the historic districts hold materials that high pressure permanently damages — so the method has to change street by street.",
     neighborhoods: ["Shandon", "Forest Acres", "Rosewood", "Heathwood", "Northeast Columbia"],
@@ -203,6 +227,8 @@ export const locations: Location[] = [
       "Chapin calls itself the Capital of Lake Murray, and the work here reflects it: big houses on the north shore with a lot of glass facing the water, boat docks, screened porches and pool surrounds. Everything sits close enough to open water that humidity never really lets go, and second-story lakefront glass is the single most requested job we run out here.",
     housingStock:
       "Large waterfront and near-waterfront homes, high glass-to-wall ratio, docks, boathouses, screened porches and pool decks",
+    summary:
+      "Lake Murray humidity feeds mildew on docks, decks and shaded siding year-round.",
     localChallenge:
       "Constant lake humidity and overnight condensation feed mildew on docks, railings and shaded siding almost year-round, and lake spray leaves mineral spotting on waterfront glass that ordinary washing won't lift.",
     neighborhoods: [
@@ -231,6 +257,8 @@ export const locations: Location[] = [
       "Gaston is small-town and rural south of Lexington, with large lots, long driveways and a lot of metal outbuildings. Access is easy and the properties are big, which makes it one of the few areas where a full exterior — house, drive, shop and fence — genuinely gets finished in a single visit.",
     housingStock:
       "Rural and semi-rural properties on large lots, long driveways, metal outbuildings and workshops",
+    summary:
+      "Large lots and long driveways where red clay stains wide stretches of concrete.",
     localChallenge:
       "Sandy soil and red clay splash stain long stretches of exposed concrete, and outbuilding roofs and siding go years between cleanings because they are easy to overlook.",
     neighborhoods: ["Gaston town center", "Pine Ridge", "Sandy Run", "the Old State Road corridor"],
@@ -247,6 +275,8 @@ export const locations: Location[] = [
       "Batesburg-Leesville is two former towns that merged into one in 1993, and it still reads that way on the ground — two distinct main streets with older housing stock around each and farmland between. Sitting at the edge of our free-travel ring, it's an area where booking alongside a neighbor makes a real difference to the invoice.",
     housingStock:
       "Older small-town housing around two historic centers, plus surrounding agricultural properties and outbuildings",
+    summary:
+      "Two town centres of older painted wood, with farmland and outbuildings between.",
     localChallenge:
       "Agricultural dust and pollen settle on everything through spring, and the older painted wood around both town centers needs low pressure rather than the force a farm building can take.",
     neighborhoods: ["Batesburg", "Leesville", "the Ridge Spring Road corridor", "the Highway 1 corridor"],
@@ -267,6 +297,8 @@ export const locations: Location[] = [
       "Hopkins sits in Lower Richland on the edge of the Congaree floodplain, and it is the dampest ground we work. Bottomland humidity, dense hardwood canopy and river fog that holds into mid-morning mean organic growth here is not seasonal, it's continuous. Roof treatment and gutter work carry most of what we do out this way.",
     housingStock:
       "Rural and large-lot properties under dense hardwood canopy, plus older frame housing through Lower Richland",
+    summary:
+      "Congaree bottomland damp keeps roofs wet and packs gutters with hardwood fall.",
     localChallenge:
       "Congaree bottomland humidity keeps roofs and north walls damp almost year round, and heavy hardwood leaf fall packs gutters faster here than anywhere else in our range.",
     neighborhoods: ["Lower Richland", "the Garners Ferry Road corridor", "Mill Creek", "Congaree"],
@@ -288,6 +320,8 @@ export const locations: Location[] = [
       "Blythewood is the newest-built area we cover and one of the fastest growing, which changes the job entirely. Large homes on big lots, wide motor courts, and a lot of concrete that is young enough to protect before it stains permanently. First clean-and-seal on new flatwork is the most requested work we run up here.",
     housingStock:
       "New-build and recent large-lot subdivisions, wide driveways and motor courts, light-colored concrete, plus surrounding horse property",
+    summary:
+      "New-build country. Clay-stained young concrete and builder overspray on glass.",
     localChallenge:
       "Red clay from ongoing construction stains new concrete quickly, and builder overspray on glass and siding is common on houses only a few years old.",
     neighborhoods: [
@@ -313,6 +347,8 @@ export const locations: Location[] = [
       "Gadsden is a small rural community down on the Congaree, and the river sets the terms for everything we clean there. Morning fog holds surfaces damp well past sunrise for most of the year, and when spring pine pollen settles onto ground that is already wet it bonds to siding and glass in a way ordinary dirt never does.",
     housingStock:
       "Rural properties and older frame housing near the river, agricultural outbuildings, metal roofs",
+    summary:
+      "River fog holds surfaces damp, so spring pine pollen bonds instead of rinsing.",
     localChallenge:
       "River fog keeps surfaces damp into mid-morning, so spring pine pollen bonds to siding and glass instead of rinsing off, and needle fall packs the gutters twice a year.",
     neighborhoods: ["Gadsden village", "the McCords Ferry Road corridor", "the Congaree bottomland"],
@@ -329,6 +365,8 @@ export const locations: Location[] = [
       "Aiken is the most architecturally careful work we take on. The Winter Colony houses and the historic district hold original woodwork, soft brick and detail that a standard pressure washer would ruin in an afternoon, and the horse-country properties out toward Whiskey Road come with their own problem: stable dust, arena sand and fence line after fence line. We quote Aiken by the surface, never by the square foot.",
     housingStock:
       "Historic Winter Colony and downtown properties with original woodwork and soft brick, plus equestrian estates, barns and extensive fencing",
+    summary:
+      "Historic woodwork and horse country: stable dust, arena sand, fence after fence.",
     localChallenge:
       "Historic materials that high pressure permanently damages, combined with equestrian properties where stable dust and arena sand coat fencing and outbuildings continuously.",
     neighborhoods: [
@@ -356,6 +394,8 @@ export const locations: Location[] = [
       "Dalzell is our furthest regular route, out past Sumter near Shaw Air Force Base, so we batch jobs there into set days each month rather than making the drive twice. A lot of the housing turns over on military rotation, which means move-out cleans on a deadline — book alongside a neighbor and the travel fee comes off both invoices.",
     housingStock:
       "Military-adjacent single-family housing with frequent turnover, plus rural properties and outbuildings through Sumter County",
+    summary:
+      "Sandhills pollen and sandy splash, on housing that turns over with base rotation.",
     localChallenge:
       "Sandhills pollen and sandy soil splash coat siding and lower walls through spring, and rental turnover means a lot of properties go several years between exterior cleans.",
     neighborhoods: ["Dalzell", "the Shaw Air Force Base area", "Wedgefield", "Oakland"],

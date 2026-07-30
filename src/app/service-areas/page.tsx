@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { site } from "@/content/site";
+import { site, cityState } from "@/content/site";
 import { locations } from "@/content/locations";
 import { travelPolicy } from "@/content/packages";
 import { Hero } from "@/components/sections/Hero";
@@ -15,7 +15,21 @@ import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: `Service Areas in ${site.serviceRegion}`,
-  description: `Where ${site.name} works: ${locations.map((l) => l.city).join(", ")} and the surrounding ${site.serviceRegion} area.`,
+  /**
+   * Two things were wrong with the previous version. It interpolated
+   * `serviceRegion` after the article — "and the surrounding **the** SC Midlands
+   * area" — and it listed all thirteen city names, which ran past 230 characters
+   * against the ~160 Google renders, so the sentence was cut mid-list.
+   *
+   * Now: the count plus the five biggest markets, derived, so adding a city moves
+   * the number instead of lengthening the string past the limit.
+   */
+  description:
+    `Pressure washing and window cleaning across ${locations.length} ${site.address.regionName} ` +
+    `Midlands cities including ${locations
+      .filter((l) => l.priority)
+      .map((l) => l.city)
+      .join(", ")} and Aiken. Based in ${cityState}.`,
   alternates: { canonical: "/service-areas" },
 };
 

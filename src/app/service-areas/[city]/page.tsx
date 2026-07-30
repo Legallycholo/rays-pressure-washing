@@ -32,7 +32,10 @@ export async function generateMetadata({
   if (!loc) return {};
   return {
     title: `Pressure Washing in ${loc.city}, ${loc.region}`,
-    description: `${site.name} in ${loc.city}: ${loc.localChallenge}`,
+    // `loc.summary`, not `loc.localChallenge`. The latter is page prose and runs
+    // 170–200 characters on its own, which put every city page's description past
+    // the truncation point. See the note on `summary` in content/locations.ts.
+    description: `Pressure washing and window cleaning in ${loc.city}, ${loc.region}. ${loc.summary}`,
     alternates: { canonical: `/service-areas/${loc.slug}` },
   };
 }

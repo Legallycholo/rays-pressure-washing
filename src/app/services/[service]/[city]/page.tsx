@@ -42,7 +42,11 @@ export async function generateMetadata({
   if (!service || !loc) return {};
   return {
     title: `${service.name} in ${loc.city}, ${loc.region}`,
-    description: `${service.name} for ${loc.city} homes. ${loc.localChallenge} ${service.blurb}`,
+    // Was `localChallenge` plus `service.blurb` — two full sentences, which ran
+    // 290–370 characters and got cut mid-word in the search result. The short
+    // per-city `summary` keeps all 32 of these descriptions distinct and inside
+    // the ~160 budget.
+    description: `${service.name} in ${loc.city}, ${loc.region}. ${loc.summary}`,
     alternates: { canonical: `/services/${service.slug}/${loc.slug}` },
   };
 }

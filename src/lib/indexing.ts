@@ -13,20 +13,18 @@
  *
  * Set this to `true`. That is the whole change.
  *
- * Before doing so, check the two open items in implementation/SEO_AEO_GEO.md
- * ("Still outstanding"). Both are business decisions rather than code:
+ * No code work is outstanding. As of 29 July 2026 the service area is confirmed
+ * (13 cities), the origin resolves, every public figure on the site is either
+ * real or derived from real data, the articles are written, the schema graph
+ * validates, and all 71 pages sit inside their title and description budgets.
+ * Both branches of this switch have been built and verified, so flipping it is
+ * not a leap.
  *
- *   1. `site.serviceRegion` still reads "the Lake Murray area" but the confirmed
- *      service area now reaches Aiken and Sumter counties, so several pages claim
- *      a coverage area narrower than the one they list.
- *   2. `site.ts` `stats` still renders two invented figures on the homepage
- *      ("3,400+ properties cleaned", "1.2M sq ft"), which is the same class of
- *      fabricated public claim as the review count that was removed.
- *
- * The service-area list itself is settled — Ray confirmed all 13 cities on
- * 29 July 2026 — as are the origin, the derived review figures, the articles and
- * the schema graph. Both branches of this switch have been built and verified,
- * so flipping it is not a leap.
+ * What is left is business judgement, listed in implementation/SEO_AEO_GEO.md §11
+ * — chiefly: verify or delete each `site.credentials` claim, since
+ * "Licensed & insured" is a legal statement rather than copy. Nothing there
+ * blocks indexing, but the credentials line is worth one look before the site is
+ * publicly making that claim.
  */
 export const INDEXABLE = false;
 

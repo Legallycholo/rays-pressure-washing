@@ -169,6 +169,17 @@ export const site = {
 export const cityState = `${site.address.city}, ${site.address.region}`;
 
 /**
+ * "The Spotless Guarantee" without its leading article, for copy that supplies
+ * its own: write "the {guaranteeName}", never "the {site.guarantee.title}".
+ *
+ * That second form was live in three places and rendered "and the The Spotless
+ * Guarantee" — including in the homepage meta description, where it was the last
+ * thing a searcher read. Use `site.guarantee.title` only where the name stands
+ * alone, as it does in the guarantee band heading.
+ */
+export const guaranteeName = site.guarantee.title.replace(/^The\s+/i, "");
+
+/**
  * "07:00" → "7am". `site.hours` stores 24-hour times because that is what
  * schema.org's `openingHours` wants; every human-facing render goes through
  * here so the site never shows a visitor a 24-hour clock.

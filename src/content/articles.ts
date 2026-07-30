@@ -57,6 +57,16 @@ export type ArticleSection = {
 export type Article = {
   slug: string;
   title: string;
+  /**
+   * Shorter title for the `<title>` tag, when `title` is too long for one.
+   *
+   * The budget is about 60 characters including the " | Ray's" suffix the layout
+   * template appends, so roughly 50 for the title itself. An on-page H1 can
+   * afford to be longer and more conversational than a search result can, and
+   * forcing them to be the same string makes one of them worse. Set this only
+   * when needed; `title` is the fallback.
+   */
+  metaTitle?: string;
   excerpt: string;
   /** ISO date. */
   date: string;
@@ -75,6 +85,7 @@ export const articles: Article[] = [
   {
     slug: "soft-washing-vs-pressure-washing",
     title: "Soft washing vs pressure washing: which does your surface need?",
+    metaTitle: "Soft Washing vs Pressure Washing: Which Do You Need?",
     excerpt:
       "Using the wrong one is how siding gets scarred and roofs lose their granules. A surface-by-surface breakdown of which method belongs where, and why.",
     date: "2026-05-22",
