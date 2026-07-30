@@ -30,7 +30,7 @@ import {
  *      the chips it offers next.
  *   2. Ground every answer in this site's own content. The scripted tree in
  *      `content/assistant.ts` is the corpus, a model that free-associates
- *      about roof warranties is a liability, not an upgrade.
+ *      about services we don't sell is a liability, not an upgrade.
  *   3. Keep the fallback. If confidence is low, return the `other` topic and
  *      hand off to a person. "I'll get someone" is always a better answer than
  *      a confident wrong one.

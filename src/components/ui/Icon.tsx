@@ -10,13 +10,6 @@ import { cn } from "@/lib/utils";
 
 const paths: Record<string, React.ReactNode> = {
   home: <path d="M3 10.5 12 3l9 7.5V21H3z M9 21v-7h6v7" />,
-  roof: (
-    <>
-      <path d="M2 12 12 4l10 8" />
-      <path d="M5 12v8h14v-8" />
-      <path d="M9 16h6" />
-    </>
-  ),
   driveway: (
     <>
       <path d="M7 21 9 3h6l2 18" />

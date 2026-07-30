@@ -6,7 +6,12 @@
  *   - every /services/[service]/[city] programmatic SEO page
  *   - the nav mega-menu and the footer
  *
- * Adding a service here creates all of its pages automatically.
+ * Adding a service here creates all of its pages automatically, and removing one
+ * takes its detail page, its city matrix pages and its sitemap entries with it.
+ *
+ * Roof cleaning was removed here: it is not a service this business sells, and
+ * a catalog entry for work that has to be turned down on the phone costs more
+ * than it earns. Nothing roofing-related belongs in this array.
  */
 
 export type Segment = "residential";
@@ -75,35 +80,7 @@ export const services: Service[] = [
     pricing: { unit: "sq ft", from: 0.15, to: 0.3, minimum: 249, duration: "2–4 hours" },
     cadence: "Every 12–18 months",
     faqIds: ["soft-vs-pressure", "plants-safe", "how-long-lasts", "need-to-be-home"],
-    related: ["roof-cleaning", "gutter-cleaning", "window-cleaning"],
-    featured: true,
-  },
-  {
-    slug: "roof-cleaning",
-    name: "Roof Cleaning",
-    navLabel: "Roof Cleaning",
-    segment: "residential",
-    blurb:
-      "No-pressure treatment that kills the black streak algae shingles collect, without walking granules off your roof.",
-    intro:
-      "Those black streaks are a living organism eating the limestone filler in your shingles. Pressure would blast the protective granules straight into the gutter. We apply a treatment that kills it at the root and let the weather rinse it clean.",
-    icon: "roof",
-    method: "Soft wash",
-    includes: [
-      "Full roof algae and lichen treatment",
-      "Gutter and downspout flush included",
-      "Surrounding landscaping protected",
-      "Post-treatment inspection photos",
-    ],
-    symptoms: [
-      "Black streaks running down from the ridge",
-      "Green or gray lichen patches",
-      "Neighbors' roofs look newer than yours",
-    ],
-    pricing: { unit: "sq ft", from: 0.2, to: 0.45, minimum: 399, duration: "3–5 hours" },
-    cadence: "Every 2–3 years",
-    faqIds: ["roof-warranty", "soft-vs-pressure", "how-long-lasts"],
-    related: ["house-washing", "gutter-cleaning"],
+    related: ["gutter-cleaning", "window-cleaning", "deck-patio"],
     featured: true,
   },
   {
@@ -161,6 +138,7 @@ export const services: Service[] = [
     cadence: "Every 12 months",
     faqIds: ["wood-damage", "how-long-lasts", "furniture"],
     related: ["driveway-concrete", "pool-deck", "fence-cleaning"],
+    featured: true,
   },
   {
     slug: "fence-cleaning",
@@ -170,7 +148,7 @@ export const services: Service[] = [
     blurb:
       "Vinyl, wood or aluminum. Both sides, top rail to bottom, with the green line at the base gone.",
     intro:
-      "Fences collect the worst of it: soil splash at the base, algae on the shaded face, mildew in the grain. We clean both sides at a pressure the material can take, and we don't skip the neighbor-facing side.",
+      "Fences collect the worst of it: soil splash at the base, algae on the shaded face, mildew in the grain. On a lake lot the base of a fence line barely dries between rains, which is why the green stripe comes back there first. We clean both sides at a pressure the material can take, and we don't skip the neighbor-facing side.",
     icon: "fence",
     method: "Soft wash",
     includes: [
@@ -197,7 +175,7 @@ export const services: Service[] = [
     blurb:
       "Interiors cleared and flushed, exteriors brightened to remove the black tiger-stripe oxidation.",
     intro:
-      "Clearing a gutter and cleaning a gutter are two different jobs. We do both: debris out and downspouts flowing, then the outward face treated to lift the black vertical streaking that ordinary washing leaves behind.",
+      "Clearing a gutter and cleaning a gutter are two different jobs. We do both: debris out and downspouts flowing, then the outward face treated to lift the black vertical streaking that ordinary washing leaves behind. Lake lots keep their hardwoods, and a long run of gutter under mature canopy fills faster than most owners expect.",
     icon: "gutter",
     method: "Hand detail",
     includes: [
@@ -214,7 +192,7 @@ export const services: Service[] = [
     pricing: { unit: "linear ft", from: 1.5, to: 3.5, minimum: 149, duration: "1–3 hours" },
     cadence: "Twice yearly",
     faqIds: ["gutter-frequency", "need-to-be-home"],
-    related: ["roof-cleaning", "house-washing"],
+    related: ["house-washing", "window-cleaning"],
   },
   {
     slug: "window-cleaning",
@@ -253,7 +231,7 @@ export const services: Service[] = [
     blurb:
       "Deck, coping and any screen enclosure cleaned in one visit, because algae reseeds whatever you leave out.",
     intro:
-      "A pool sits in shade and standing humidity all summer, and a screened enclosure holds both. Cleaning the deck on its own means the spores overhead reseed it inside a season. We do the deck, the coping and the enclosure frame and screens as one job so it actually stays clean.",
+      "A pool sits in shade and standing humidity all summer, and a screened enclosure holds both. On a lake property the pool usually sits between the house and the water, which is the dampest ground on the lot. Cleaning the deck on its own means the spores overhead reseed it inside a season. We do the deck, the coping and the enclosure frame and screens as one job so it actually stays clean.",
     icon: "pool",
     method: "Soft wash",
     includes: [

@@ -37,15 +37,20 @@ export function Hero({
   breadcrumbs?: Crumb[];
   extras?: React.ReactNode;
 }) {
+  // `flex-wrap` + `shrink-0`: in the split layout the copy column is narrow
+  // enough that two lg buttons on one row were being squeezed under their
+  // intrinsic width, which wrapped both labels onto two lines inside the pill.
+  // Wrapping whole buttons reads as a deliberate stack; a wrapped label reads
+  // as broken. `Button` keeps `max-w-full`, so narrow viewports still fit.
   const ctas = (primaryCta || secondaryCta) && (
-    <div className="flex flex-col gap-3 sm:flex-row">
+    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
       {primaryCta && (
-        <Button href={primaryCta.href} size="lg">
+        <Button href={primaryCta.href} size="lg" className="sm:shrink-0">
           {primaryCta.label}
         </Button>
       )}
       {secondaryCta && (
-        <Button href={secondaryCta.href} variant="onDark" size="lg">
+        <Button href={secondaryCta.href} variant="onDark" size="lg" className="sm:shrink-0">
           {secondaryCta.href.startsWith("tel:") && <Icon name="phone" className="h-5 w-5" />}
           {secondaryCta.label}
         </Button>
@@ -75,26 +80,35 @@ export function Hero({
       size="flush"
       className="blueprint-grid"
       containerSize="wide"
-      innerClassName="py-14 sm:py-20 lg:min-h-[34rem] lg:py-24"
+      innerClassName="py-10 sm:py-14 lg:min-h-[30rem] lg:py-16"
     >
-      <div className="grid items-center gap-12 lg:grid-cols-[5fr_7fr]">
-        <div className="flex flex-col items-center gap-6 text-center md:mx-auto md:max-w-2xl lg:mx-0 lg:max-w-none lg:items-start lg:text-left">
+      <div className="grid items-center gap-10 lg:grid-cols-[7fr_6fr]">
+        <div className="flex flex-col items-center gap-5 text-center md:mx-auto md:max-w-2xl lg:mx-0 lg:max-w-none lg:items-start lg:text-left">
           {eyebrow && (
             <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-leaf-400">
               <Icon name="pin" className="h-4 w-4" />
               {eyebrow}
             </span>
           )}
-          <h1 className="text-display-sm text-white sm:text-display-md lg:text-display-lg">
+          {/* Caps at display-md, not display-lg. At display-lg this headline
+              clamps to 92px in a column this narrow, which wrapped the H1 to
+              four lines and pushed the lede and CTAs down the fold.
+              It steps back down through the lg band because that is where the
+              two-column split starts and the copy column is at its narrowest
+              relative to the type size; display-md returns at xl. */}
+          <h1 className="text-display-sm text-white sm:text-display-md lg:text-display-sm xl:text-display-md">
             {title}
           </h1>
-          {lede && <p className="max-w-[55ch] text-lg leading-relaxed text-ink-200 sm:text-xl">{lede}</p>}
+          {lede && <p className="max-w-[52ch] text-lg leading-relaxed text-ink-200">{lede}</p>}
           {ctas}
           <RatingBadge onDark />
           <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 lg:justify-start">
             {site.credentials.slice(0, 3).map((c) => (
-              <li key={c} className="inline-flex items-center gap-1.5 text-sm text-ink-200">
-                <Icon name="check" className="h-4 w-4 text-leaf-400" />
+              // `items-start` + `shrink-0`: the middle credential is long enough
+              // to wrap on a phone, and centering left the tick floating beside
+              // the gap between its own two lines. It belongs on line one.
+              <li key={c} className="inline-flex items-start gap-1.5 text-left text-sm text-ink-200">
+                <Icon name="check" className="mt-0.5 h-4 w-4 shrink-0 text-leaf-400" />
                 {c}
               </li>
             ))}
@@ -106,7 +120,7 @@ export function Hero({
             before={project?.before}
             after={project?.after}
             alt={project?.alt ?? "Exterior cleaning before and after"}
-            ratio="3/2"
+            ratio="16/9"
             className="shadow-lift ring-1 ring-white/10"
           />
           {project && (

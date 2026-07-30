@@ -168,7 +168,6 @@ export function personSchema() {
     knowsAbout: [
       "Soft washing",
       "Pressure washing",
-      "Roof cleaning",
       "Pure water window cleaning",
       "Exterior surface restoration",
     ],

@@ -37,7 +37,7 @@ export const siteVideo: SiteVideo = {
   alt: "Crew walkthrough of a full exterior clean, from setup to final rinse",
   highlights: [
     "The actual crew and the actual truck, not stock footage",
-    "Soft washing at low pressure on siding, roof and screens",
+    "Soft washing at low pressure on siding, screens and railings",
     "Surface cleaner passes that leave no wand striping",
     "Plants covered and rinsed before, during and after",
     "The walk-round we do with you before we pack up",

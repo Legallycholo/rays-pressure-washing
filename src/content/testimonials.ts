@@ -18,8 +18,13 @@
  * against the real reviewer records in the Google Business Profile.
  *
  * `serviceSlug` stays required because every quote describes the work plainly
- * enough to classify it (gutters, roof streaks, pool deck, concrete striping).
- * That is a reading of the review, not an invention about the reviewer.
+ * enough to classify it (gutters, glass, pool deck, concrete striping). That is
+ * a reading of the review, not an invention about the reviewer.
+ *
+ * One real review was removed when roof cleaning stopped being a service we
+ * sell: its text described a roof job in the customer's own words, and quotes
+ * cannot be edited, so publishing it would have advertised work we no longer do.
+ * Removing a genuine review is the honest option here; rewriting one is not.
  *
  * `testimonialsFor` already falls back to featured reviews when a city has no
  * matches, so an unset `citySlug` costs a page nothing.
@@ -50,17 +55,6 @@ export const testimonials: Testimonial[] = [
     source: "Google",
     quote:
       "Ray's did an outstanding job on our house and windows! The north side of our house was covered in green algae and two other companies told us it needed repainting. Ray soft-washed it completely clean in a few hours. Looks brand new!",
-    featured: true,
-  },
-  {
-    id: "t2",
-    name: "Marcus T.",
-    serviceSlug: "roof-cleaning",
-    rating: 5,
-    date: "2026-04-28",
-    source: "Google",
-    quote:
-      "We had an HOA violation letter for black roof streaks with a 30-day deadline. Ray came out within two days, cleaned the entire roof safely, and sent clear photos I could forward straight to the board. Highly recommended!",
     featured: true,
   },
   {
@@ -106,6 +100,7 @@ export const testimonials: Testimonial[] = [
     source: "Google",
     quote:
       "Hands down the best window cleaner in Columbia and Lexington! Cleaned all second-story glass inside and out. Very polite, punctual, and left everything crystal clear.",
+    featured: true,
   },
   {
     id: "t8",

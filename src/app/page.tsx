@@ -29,7 +29,7 @@ import { faqSchema } from "@/lib/schema";
 export const metadata: Metadata = {
   title: `Pressure Washing Big Lake Houses in ${cityState}`,
   description:
-    `Window cleaning, soft washing, roof cleaning and concrete cleaning for lake homes ` +
+    `Window cleaning, soft washing, deck and concrete cleaning for big lake homes ` +
     `across ${site.serviceRegion}. Same-day availability and the ${guaranteeName}.`,
   alternates: { canonical: "/" },
 };
@@ -41,10 +41,10 @@ export const metadata: Metadata = {
  *
  * Ten rather than six because this section carries the homepage's answer-engine
  * weight — each entry is a question/answer pair emitted as FAQPage JSON-LD below,
- * and these are the queries people type. `roof-warranty` and `hard-water` are
- * the two additions worth calling out: the first cites ARMA and is the most
- * quotable answer in the bank, and the second is the only window-cleaning
- * question here, which matters when half the business name is window cleaning.
+ * and these are the queries people type. `hard-water` and `gutter-frequency` are
+ * the two additions worth calling out: the first is the only window-cleaning
+ * question here, which matters when half the business name is window cleaning,
+ * and the second is the highest-repeat service we sell.
  *
  * All ten live in content/faqs.ts — the homepage never holds its own copy of an
  * answer, so this list and /faq can never contradict each other.
@@ -55,7 +55,7 @@ const homeFaqIds = [
   "how-long-lasts",
   "plants-safe",
   "need-to-be-home",
-  "roof-warranty",
+  "gutter-frequency",
   "hard-water",
   "contracts",
   "weather",
@@ -79,7 +79,7 @@ export default function HomePage() {
       <Hero
         eyebrow={`Serving ${site.serviceRegion}`}
         title={`Pressure washing big lake houses in ${cityState}`}
-        lede={`Big houses on the water take more than a pressure washer and a ladder. We clean the glass, the siding, the roof and the driveway on lake homes around ${site.address.city}, with the method matched to each surface and backed by the ${guaranteeName}.`}
+        lede={`Big houses on the water need more than a pressure washer and a ladder. Glass, siding, decks and driveways, each on the method that surface can take, backed by the ${guaranteeName}.`}
         primaryCta={{ label: "Request a Callback", href: "/contact" }}
         secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
         project={featuredProjects[0]}

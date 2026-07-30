@@ -70,7 +70,7 @@ export const maintenancePlans: MaintenancePlan[] = [
     includes: [
       "Quarterly scheduled visits",
       "All exterior surfaces on rotation",
-      "Roof treatment included every third year",
+      "Lake-facing and second-story glass every visit",
       "Unlimited spot-treatment call-outs",
       "First call after storms",
       "Held pricing for 24 months",

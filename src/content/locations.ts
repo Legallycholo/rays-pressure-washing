@@ -158,16 +158,16 @@ export const locations: Location[] = [
     driveMinutes: 15,
     population: "≈ 15,000",
     intro:
-      "Seven Oaks is a settled 1970s and 80s suburb with the tree canopy that comes with fifty years of growth, and that canopy is the whole story here. Mature hardwoods over the rooflines mean shaded siding, packed gutters twice a year, and roofs that hold damp long enough for streaking to take hold well before the houses look old.",
+      "Seven Oaks is a settled 1970s and 80s suburb with the tree canopy that comes with fifty years of growth, and that canopy is the whole story here. Mature hardwoods over the houses mean permanently shaded siding, gutters that pack twice a year, and north elevations that never dry out long enough to stay clean on their own.",
     housingStock:
-      "Established 1970s–80s single-family, brick and vinyl, asphalt shingle roofs under mature hardwoods",
+      "Established 1970s–80s single-family, brick and vinyl, mature hardwood canopy",
     summary:
       "Fifty years of tree cover means shaded siding and gutters that pack twice a year.",
     localChallenge:
-      "Fifty years of tree growth over the rooflines: constant shade on the north elevations, leaf and needle fall clogging gutters, and roof slopes that never fully dry between rains.",
+      "Fifty years of tree growth over the houses: constant shade on the north elevations, leaf and needle fall clogging gutters, and shaded walls that never fully dry between rains.",
     neighborhoods: ["Seven Oaks", "Whitehall", "Quail Hollow", "the St. Andrews Road corridor"],
     landmarks: ["Seven Oaks Park", "St. Andrews Road", "Harbison", "the Saluda River"],
-    topServices: ["gutter-cleaning", "roof-cleaning", "house-washing"],
+    topServices: ["gutter-cleaning", "house-washing", "window-cleaning"],
   },
   {
     slug: "irmo",
@@ -178,11 +178,11 @@ export const locations: Location[] = [
     intro:
       "Irmo is dense, established and heavily HOA-governed, which changes why the phone rings. A lot of our Irmo calls start with a letter from a board rather than a homeowner deciding the house looks tired. We work to HOA specification and send the dated before-and-after photo set boards ask for, so the file closes the first time.",
     housingStock:
-      "Established HOA subdivisions, uniform vinyl and brick, asphalt shingle roofs, mature landscaping",
+      "Established HOA subdivisions, uniform vinyl and brick, mature landscaping",
     summary:
-      "HOA country. Roof streaks and driveway stains are the two most-cited violations.",
+      "HOA country. Driveway stains and siding streaks are the two most-cited violations.",
     localChallenge:
-      "HOA compliance deadlines. Roof streaking and driveway staining are the two most-cited exterior violations in the area, and both are on a clock once the letter arrives.",
+      "HOA compliance deadlines. Driveway staining and streaked siding are the two most-cited exterior violations in the area, and both are on a clock once the letter arrives.",
     neighborhoods: ["Friarsgate", "Harbison", "Coldstream", "Murraywood", "Ballentine"],
     landmarks: [
       "Harbison State Forest",
@@ -190,7 +190,7 @@ export const locations: Location[] = [
       "Irmo Community Park",
       "the Okra Strut grounds",
     ],
-    topServices: ["roof-cleaning", "driveway-concrete", "house-washing"],
+    topServices: ["driveway-concrete", "house-washing", "gutter-cleaning"],
     priority: true,
   },
   {
@@ -214,7 +214,7 @@ export const locations: Location[] = [
       "the South Carolina State House",
       "Five Points",
     ],
-    topServices: ["house-washing", "window-cleaning", "roof-cleaning"],
+    topServices: ["house-washing", "window-cleaning", "driveway-concrete"],
     priority: true,
   },
   {
@@ -260,7 +260,7 @@ export const locations: Location[] = [
     summary:
       "Large lots and long driveways where red clay stains wide stretches of concrete.",
     localChallenge:
-      "Sandy soil and red clay splash stain long stretches of exposed concrete, and outbuilding roofs and siding go years between cleanings because they are easy to overlook.",
+      "Sandy soil and red clay splash stain long stretches of exposed concrete, and outbuilding siding and fence lines go years between cleanings because they are easy to overlook.",
     neighborhoods: ["Gaston town center", "Pine Ridge", "Sandy Run", "the Old State Road corridor"],
     landmarks: ["Gaston town center", "Congaree Creek", "Old State Road"],
     topServices: ["driveway-concrete", "house-washing", "fence-cleaning"],
@@ -294,13 +294,13 @@ export const locations: Location[] = [
     driveMinutes: 35,
     population: "≈ 2,900",
     intro:
-      "Hopkins sits in Lower Richland on the edge of the Congaree floodplain, and it is the dampest ground we work. Bottomland humidity, dense hardwood canopy and river fog that holds into mid-morning mean organic growth here is not seasonal, it's continuous. Roof treatment and gutter work carry most of what we do out this way.",
+      "Hopkins sits in Lower Richland on the edge of the Congaree floodplain, and it is the dampest ground we work. Bottomland humidity, dense hardwood canopy and river fog that holds into mid-morning mean organic growth here is not seasonal, it's continuous. Gutter work and house washing carry most of what we do out this way.",
     housingStock:
       "Rural and large-lot properties under dense hardwood canopy, plus older frame housing through Lower Richland",
     summary:
-      "Congaree bottomland damp keeps roofs wet and packs gutters with hardwood fall.",
+      "Congaree bottomland damp keeps siding wet and packs gutters with hardwood fall.",
     localChallenge:
-      "Congaree bottomland humidity keeps roofs and north walls damp almost year round, and heavy hardwood leaf fall packs gutters faster here than anywhere else in our range.",
+      "Congaree bottomland humidity keeps north walls damp almost year round, and heavy hardwood leaf fall packs gutters faster here than anywhere else in our range.",
     neighborhoods: ["Lower Richland", "the Garners Ferry Road corridor", "Mill Creek", "Congaree"],
     landmarks: [
       "Congaree National Park",
@@ -308,7 +308,7 @@ export const locations: Location[] = [
       "Garners Ferry Road",
       "Lower Richland High School",
     ],
-    topServices: ["roof-cleaning", "gutter-cleaning", "house-washing"],
+    topServices: ["gutter-cleaning", "house-washing", "driveway-concrete"],
   },
   {
     slug: "blythewood",
@@ -346,7 +346,7 @@ export const locations: Location[] = [
     intro:
       "Gadsden is a small rural community down on the Congaree, and the river sets the terms for everything we clean there. Morning fog holds surfaces damp well past sunrise for most of the year, and when spring pine pollen settles onto ground that is already wet it bonds to siding and glass in a way ordinary dirt never does.",
     housingStock:
-      "Rural properties and older frame housing near the river, agricultural outbuildings, metal roofs",
+      "Rural properties and older frame housing near the river, agricultural outbuildings, long fence lines",
     summary:
       "River fog holds surfaces damp, so spring pine pollen bonds instead of rinsing.",
     localChallenge:

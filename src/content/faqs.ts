@@ -33,7 +33,7 @@ export const faqs: Faq[] = [
     category: "Process",
     question: "What's the difference between soft washing and pressure washing?",
     answer:
-      "Pressure washing removes dirt with force. Soft washing removes it with chemistry, at roughly garden-hose pressure. Anything alive (algae, mildew, lichen) needs to be killed rather than blasted off, or it regrows within months. Anything porous or fragile (siding, roofs, screens, old wood) will be damaged by high pressure. We use pressure on hard flatwork like concrete, and soft washing on almost everything else.",
+      "Pressure washing removes dirt with force. Soft washing removes it with chemistry, at roughly garden-hose pressure. Anything alive (algae, mildew, lichen) needs to be killed rather than blasted off, or it regrows within months. Anything porous or fragile (siding, stucco, screens, old wood) will be damaged by high pressure. We use pressure on hard flatwork like concrete, and soft washing on almost everything else.",
   },
   {
     id: "plants-safe",
@@ -47,7 +47,7 @@ export const faqs: Faq[] = [
     category: "Process",
     question: "How long will the results last?",
     answer:
-      "It depends on shade, humidity and how much tree cover you have. As a rough guide: house washing holds up 12–18 months, roof treatments 2–3 years, and concrete around 12 months. Heavily shaded north-facing walls are always first to regrow. If you'd rather not track it, our maintenance plan schedules it automatically at a lower rate.",
+      "It depends on shade, humidity and how much tree cover you have. As a rough guide: house washing holds up 12–18 months, decks and fences around 12 months, and concrete around 12 months. Heavily shaded north-facing walls are always first to regrow, and anything within sight of open water regrows faster than the same surface a mile inland. If you'd rather not track it, our maintenance plan schedules it automatically at a lower rate.",
   },
   {
     id: "need-to-be-home",
@@ -55,13 +55,6 @@ export const faqs: Faq[] = [
     question: "Do I need to be home during the service?",
     answer:
       "No. We need access to an outdoor water spigot and to any gated areas, and that's it. Most of our customers are at work. We send a photo set when the job is finished, and payment can be handled online afterwards.",
-  },
-  {
-    id: "roof-warranty",
-    category: "Safety",
-    question: "Will roof cleaning void my shingle warranty?",
-    answer:
-      "The opposite. Most shingle manufacturers require periodic algae removal, and specifically prohibit pressure washing. Our no-pressure method follows the ARMA (Asphalt Roofing Manufacturers Association) recommended approach, which is the standard those warranties are written against. We'll document the method used if your manufacturer asks.",
   },
   {
     id: "stripes",

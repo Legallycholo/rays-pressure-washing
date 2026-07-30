@@ -8,8 +8,8 @@
  * /public/gallery/ and fill in the paths, nothing else needs to change.
  *
  * Every `citySlug` points at a city in Ray's confirmed service area, matched to
- * the job it describes — the HOA roof to Irmo, the 14,000 sq ft motor court to
- * new-build Blythewood, the river-house glass to Gadsden on the Congaree. They
+ * the job it describes — the lakefront pool cage to Chapin, the 14,000 sq ft
+ * motor court to new-build Blythewood, the river-house glass to Gadsden. They
  * previously referenced invented placeholder towns, which left the gallery's
  * city filter offering options no page existed for.
  *
@@ -54,20 +54,6 @@ export const projects: Project[] = [
       "Ten years of unwashed siding under heavy oak canopy. Soft washed at low pressure across two elevations, gutter faces brightened, entry detailed by hand.",
     durationHours: 4,
     surfaceArea: "2,400 sq ft",
-    featured: true,
-  },
-  {
-    id: "p2",
-    title: "Black-streaked shingle roof, HOA violation",
-    serviceSlug: "roof-cleaning",
-    citySlug: "irmo",
-    before: "",
-    after: "",
-    alt: "Asphalt shingle roof before and after no-pressure algae treatment",
-    summary:
-      "Gloeocapsa magma streaking across the full south elevation. No-pressure treatment applied, gutters flushed, dated documentation issued for the HOA board.",
-    durationHours: 5,
-    surfaceArea: "3,100 sq ft",
     featured: true,
   },
   {
@@ -134,6 +120,7 @@ export const projects: Project[] = [
     summary:
       "Baked-on spring pollen across 22 panes. Pure-water deionized system, frames and sills included, screens rinsed and refitted.",
     durationHours: 3,
+    featured: true,
   },
   {
     id: "p8",

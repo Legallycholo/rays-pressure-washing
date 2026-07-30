@@ -33,8 +33,8 @@ export const metadata: Metadata = {
    * snippet set their own description anyway.
    */
   description:
-    `Professional pressure washing, soft washing and window cleaning across ${site.serviceRegion}. ` +
-    `Licensed, insured, and backed by the ${guaranteeName}.`,
+    `Soft washing, pressure washing and window cleaning for big lake houses and the ` +
+    `homes around them, across ${site.serviceRegion}. Backed by the ${guaranteeName}.`,
   applicationName: site.name,
   /**
    * Google has ignored the keywords meta since 2009, so this earns its place
@@ -48,9 +48,11 @@ export const metadata: Metadata = {
     "power washing",
     "soft washing",
     "house washing",
-    "roof cleaning",
     "window cleaning",
     "driveway cleaning",
+    "lake house pressure washing",
+    "Lake Murray pressure washing",
+    "waterfront home washing",
     `pressure washing ${cityState}`,
     ...locations.slice(0, 5).map((l) => `pressure washing ${l.city} ${l.region}`),
   ],

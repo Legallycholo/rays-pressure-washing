@@ -39,8 +39,8 @@ export const INDEXABLE = false;
  * The trade being made deliberately: allowing these means the content can be
  * summarised without a click. For a local service business whose conversion is a
  * phone call, being *named* in the answer is worth more than the click — someone
- * who reads "Ray's in Lexington handles roof soft washing" in an AI answer calls
- * the number. Revisit if that stops being true.
+ * who reads "Ray's in Lexington washes lake houses on Lake Murray" in an AI
+ * answer calls the number. Revisit if that stops being true.
  */
 export const AI_CRAWLERS = [
   "GPTBot",

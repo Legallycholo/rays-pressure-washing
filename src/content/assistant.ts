@@ -8,8 +8,8 @@
  * language model. That distinction is load-bearing:
  *
  *   - Every answer below is written by a human and is true. A visitor asking
- *     about roof warranties gets the ARMA answer from `faqs.ts`, not a
- *     plausible-sounding paragraph.
+ *     whether soft washing will strip their paint gets the answer already
+ *     written in `faqs.ts`, not a plausible-sounding paragraph.
  *   - There is a free-text composer, but it does not generate text. It runs
  *     `matchTopic()` below (keyword scoring over this same tree) and returns
  *     one of these hand-written answers or hands off to a human. Still nothing
@@ -150,8 +150,8 @@ export const assistantTopics: AssistantTopic[] = [
     // Mirrors the catalog in `services.ts`. If a service is added there and
     // this line isn't updated, this line is the one that's wrong.
     reply: [
-      "Roofs, siding, driveways and walkways, decks, patios, fences, gutters, windows and pool enclosures.",
-      "We work on lake homes, and the whole exterior can go in one visit rather than four separate trips.",
+      "Siding, driveways and walkways, decks, patios, fences, gutters, windows and pool enclosures.",
+      "We work on big lake homes, and the whole exterior can go in one visit rather than four separate trips.",
     ],
     actions: [
       { label: "Browse every service", href: "/services", icon: "spray", internal: true },
@@ -172,8 +172,6 @@ export const assistantTopics: AssistantTopic[] = [
       "do you clean",
       "do you wash",
       "do you do",
-      "roof",
-      "shingle",
       "siding",
       "house wash",
       "driveway",
@@ -314,11 +312,11 @@ export const assistantTopics: AssistantTopic[] = [
 
   {
     id: "safety",
-    chip: "Is it safe for my plants and roof?",
-    // Condensed from `plants-safe`, `roof-warranty` and `wood-damage`.
+    chip: "Is it safe for my plants and paint?",
+    // Condensed from `plants-safe` and `wood-damage`.
     reply: [
       "Plants: detergents are biodegradable and break down on contact with water. We saturate every bed and lawn edge before we start and rinse again at the end. Dilution is what keeps them safe. Pets indoors while we work, back out once surfaces are dry.",
-      "Roofs: our no-pressure method follows the ARMA standard your shingle warranty is written against. Most manufacturers require algae removal and specifically prohibit pressure washing. Wood gets the lowest pressure we run, wide fan, along the grain.",
+      "Paint and wood: siding, trim and anything painted gets soft washed at roughly garden-hose pressure, so nothing is being forced behind a lap or under a seal. Wood gets the lowest pressure we run, wide fan, along the grain.",
     ],
     actions: [{ label: "All safety questions", href: "/faq", icon: "shield", internal: true }],
     followUps: ["lasts", "trust", "booking"],
@@ -340,8 +338,6 @@ export const assistantTopics: AssistantTopic[] = [
       "children",
       "warranty",
       "void",
-      "arma",
-      "shingles",
       "paint",
       "wood",
       "will it strip",
@@ -355,7 +351,7 @@ export const assistantTopics: AssistantTopic[] = [
     id: "lasts",
     chip: "How long do results last?",
     reply: [
-      "Depends on shade, humidity and tree cover. Roughly: house washing 12–18 months, roof treatments 2–3 years, concrete about a year. Shaded north-facing walls always regrow first.",
+      "Depends on shade, humidity and tree cover. Roughly: house washing 12–18 months, decks and fences about a year, concrete about a year. Shaded north-facing walls always regrow first, and anything close to the water regrows faster than the same surface inland.",
     ],
     actions: [
       {
@@ -480,7 +476,7 @@ export const assistantTopics: AssistantTopic[] = [
       "Yes. Bundling surfaces into one visit is cheaper than booking them separately, because most of the cost is getting the truck and the crew to you.",
     ],
     actions: [
-      { label: "See the packages", href: "/packages", icon: "check", internal: true },
+      { label: "Browse every service", href: "/services", icon: "check", internal: true },
       {
         label: "Recurring maintenance",
         detail: "15–25% under one-off rates, month-to-month",
@@ -603,7 +599,7 @@ export const getTopic = (id: string) => assistantTopics.find((t) => t.id === id)
  *
  * The padding is what makes `includes(" cost ")` a word-boundary test: without
  * it "cost" matches inside "costume" and, worse, "ai" matches inside "rain" and
- * "paint", which would route half the roof questions to the identity answer.
+ * "paint", which would route half the safety questions to the identity answer.
  */
 const normalize = (text: string) =>
   ` ${text.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim()} `;
