@@ -86,6 +86,17 @@ const NUDGE = {
 } as const;
 
 /**
+ * Pages where the launcher itself stands down, not just the nudge.
+ *
+ * `/contact` is the whole list. Every channel the hub offers is already on that
+ * page as a full-size target, so the floating button adds nothing, and on a
+ * phone it sits directly over the form's submit button. A chat bubble covering
+ * "Request my callback" is a pure loss: it obscures the conversion to offer a
+ * slower route to the same crew.
+ */
+const LAUNCHER_HIDDEN_ON: readonly string[] = ["/contact"];
+
+/**
  * The pause between the visitor's tap and the answer landing.
  *
  * Not a fake "someone is typing", nothing is typing. It's here because
@@ -609,6 +620,10 @@ export function ContactHub() {
       "flex min-h-[52px] flex-col items-center justify-center gap-1 text-[11px] font-bold uppercase tracking-wide transition-colors",
       active ? "text-ink-900" : "text-ink-300 hover:text-ink-500",
     );
+
+  // Placed after every hook above it, so the hook order is identical on the
+  // pages that render nothing. See LAUNCHER_HIDDEN_ON for why /contact opts out.
+  if (LAUNCHER_HIDDEN_ON.includes(pathname) && !open) return null;
 
   return (
     <div

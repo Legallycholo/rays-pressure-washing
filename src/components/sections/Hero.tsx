@@ -63,7 +63,9 @@ export function Hero({
       <Section tone="ink" size="compact" className="blueprint-grid">
         <div className="flex flex-col items-center gap-5 py-6 text-center">
           {breadcrumbs && <Breadcrumbs crumbs={breadcrumbs} onDark />}
-          <h1 className="max-w-3xl text-display-sm text-white sm:text-display-md">{title}</h1>
+          {/* Same curve as the home hero, so no inner page ever renders an H1
+              larger than the homepage's. */}
+          <h1 className="max-w-3xl text-display-hero text-white">{title}</h1>
           {lede && <p className="max-w-2xl text-lg leading-relaxed text-ink-200">{lede}</p>}
           {extras && <div className="flex flex-wrap items-center justify-center gap-3">{extras}</div>}
           {ctas}
@@ -90,13 +92,11 @@ export function Hero({
               {eyebrow}
             </span>
           )}
-          {/* Caps at display-md, not display-lg. At display-lg this headline
-              clamps to 92px in a column this narrow, which wrapped the H1 to
-              four lines and pushed the lede and CTAs down the fold.
-              It steps back down through the lg band because that is where the
-              two-column split starts and the copy column is at its narrowest
-              relative to the type size; display-md returns at xl. */}
-          <h1 className="text-display-sm text-white sm:text-display-md lg:text-display-sm xl:text-display-md">
+          {/* `display-hero`, not `display-md`: one fluid curve sized for the
+              split grid's left track rather than for full container width.
+              See the token note in globals.css. This was `display-lg`, which
+              clamped to 92px here and wrapped the H1 onto six lines. */}
+          <h1 className="text-display-hero text-white">
             {title}
           </h1>
           {lede && <p className="max-w-[52ch] text-lg leading-relaxed text-ink-200">{lede}</p>}

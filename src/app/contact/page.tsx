@@ -34,12 +34,28 @@ export default function ContactPage() {
         variant="page"
         breadcrumbs={crumbs}
         title="Talk to a human"
-        lede="Pick whichever channel you actually use. They all reach the same small crew, and they all get answered the same business day."
+        lede="Leave your number and we'll call you back, or reach us however you actually prefer. It's the same small crew either way, and every channel gets answered the same business day."
       />
 
       <Section tone="light">
+        {/*
+          The form is the conversion and it leads the page.
+
+          `order` rather than markup order: on a phone the form comes first,
+          because someone who scrolled past three contact channels to get here
+          has already decided not to call. On desktop it sits right, where the
+          eye lands last and the channels read as the faster alternative.
+        */}
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-5">
+          <div className="order-2 lg:order-1 lg:col-span-5">
+            <div className="mb-6">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-harbor-600">
+                Rather not wait
+              </p>
+              <h2 className="mt-2 font-display text-2xl text-ink-900 sm:text-3xl">
+                Reach us direct
+              </h2>
+            </div>
             <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
               {channels.map((c) => (
                 <li key={c.label}>
@@ -83,11 +99,20 @@ export default function ContactPage() {
             </address>
           </div>
 
-          <div className="lg:col-span-7">
-            <h2 className="font-display text-2xl text-ink-900">Or write it down</h2>
-            <div className="mt-5">
-              <ContactForm />
+          <div className="order-1 lg:order-2 lg:col-span-7">
+            <div className="mb-6">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-harbor-600">
+                Request a callback
+              </p>
+              <h2 className="mt-2 font-display text-2xl text-ink-900 sm:text-3xl">
+                Tell us what needs cleaning
+              </h2>
+              <p className="mt-2 max-w-md leading-relaxed text-ink-600">
+                Three quick steps, about thirty seconds. We call you back within 24 hours
+                with a time that works.
+              </p>
             </div>
+            <ContactForm />
           </div>
         </div>
       </Section>

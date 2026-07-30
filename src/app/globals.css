@@ -83,6 +83,14 @@
   --text-display-md: clamp(2.5rem, 1.6rem + 3.6vw, 4.25rem);
   --text-display-lg: clamp(3rem, 1.7rem + 5.2vw, 5.75rem);
 
+  /* Home hero H1 only.
+     The three sizes above are tuned for headings that get the full container
+     width. The home hero's H1 does not: it lives in the left track of a split
+     grid, so it needs its own curve rather than a chain of breakpoint
+     overrides fighting the clamp. Tuned so the headline holds three lines from
+     360px to 1920px, which is what keeps the lede and CTAs above the fold. */
+  --text-display-hero: clamp(2rem, 1.35rem + 2.5vw, 3.375rem);
+
   --radius-card: 0.875rem;
   --radius-pill: 999px;
 

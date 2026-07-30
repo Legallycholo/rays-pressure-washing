@@ -42,7 +42,10 @@ export function SymptomChecker({ services, limit = 6 }: { services: Service[]; l
       </ul>
       <p className="mt-10 text-center text-ink-500">
         None of these?{" "}
-        <Link href="/contact" className="font-semibold text-harbor-700 underline underline-offset-2 hover:no-underline">
+        <Link
+          href="/contact"
+          className="inline-flex min-h-11 items-center font-semibold text-harbor-700 underline underline-offset-2 hover:no-underline"
+        >
           Describe it and we&apos;ll tell you what it needs
         </Link>
       </p>

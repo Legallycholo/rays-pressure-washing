@@ -86,10 +86,10 @@ export default function ReviewsPage() {
             <h2 className="text-2xl font-bold text-ink-900">Verified Customer Testimonials</h2>
             <p className="text-sm text-ink-500">Real feedback from properties cleaned across our service region.</p>
           </div>
+          {/* `md`, not `sm`: sm renders a 40px pill, under the 44px thumb floor. */}
           <Button
             href={site.reviewLink}
             variant="outline"
-            size="sm"
           >
             + Leave a Review
           </Button>

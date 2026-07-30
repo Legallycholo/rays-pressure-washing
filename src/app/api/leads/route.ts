@@ -3,8 +3,8 @@ import { Resend } from "resend";
 import { site } from "@/content/site";
 
 /**
- * Every lead the site produces leaves through here: the contact page's message
- * form is now the only sender. It becomes an email to the business, with
+ * Every lead the site produces leaves through here: the contact page's callback
+ * form is the only sender. It becomes an email to the business, with
  * validation, a spam floor, and an honest failure when Resend is unreachable.
  *
  * ── SENDING IDENTITY, AND WHY IT LOOKS TEMPORARY ────────────────────────────
@@ -31,7 +31,16 @@ const config = () => ({
   to: process.env.LEADS_TO_EMAIL || site.contact.email,
 });
 
-const MAX = { name: 120, email: 200, message: 5_000 } as const;
+const MAX = {
+  name: 120,
+  email: 200,
+  phone: 40,
+  city: 120,
+  services: 400,
+  bestTime: 40,
+  howHeard: 80,
+  message: 5_000,
+} as const;
 
 /* ---------------------------------------------------------------------------
    Rate limiting
@@ -93,20 +102,51 @@ const str = (v: unknown, cap: number) => (typeof v === "string" ? v.trim().slice
  * it was the quote wizard's final step, and the wizard, the estimator and the
  * bundles are all gone. Nothing has sent that shape since. Recover it from git
  * history if quoting comes back rather than rebuilding it from memory.
+ *
+ * `phone` is required and `message` is not, which is the inverse of what this
+ * route used to enforce. That follows the form: every CTA on the site asks for
+ * a callback, so the number is the lead and the note is a nicety. A submission
+ * with a paragraph and no phone number is not something anyone can act on.
  */
-type Lead = { kind: "contact"; name: string; email: string; message: string };
+type Lead = {
+  kind: "contact";
+  name: string;
+  email: string;
+  phone: string;
+  city: string;
+  services: string;
+  bestTime: string;
+  howHeard: string;
+  message: string;
+};
+
+/** Loose on purpose: 7 digits after stripping formatting. Anything stricter
+ *  starts rejecting real numbers people type with spaces, dots or a +1. */
+const looksLikePhone = (v: string) => (v.match(/\d/g)?.length ?? 0) >= 7;
 
 function parse(body: Record<string, unknown>): { lead: Lead } | { error: string } {
   const name = str(body.name, MAX.name);
   const email = str(body.email, MAX.email);
+  const phone = str(body.phone, MAX.phone);
 
   if (!name) return { error: "A name is required." };
   if (!looksLikeEmail(email)) return { error: "That email address doesn't look right." };
+  if (!looksLikePhone(phone)) return { error: "That phone number doesn't look right." };
 
   if (body.kind === "contact") {
-    const message = str(body.message, MAX.message);
-    if (!message) return { error: "A message is required." };
-    return { lead: { kind: "contact", name, email, message } };
+    return {
+      lead: {
+        kind: "contact",
+        name,
+        email,
+        phone,
+        city: str(body.city, MAX.city),
+        services: str(body.services, MAX.services),
+        bestTime: str(body.bestTime, MAX.bestTime),
+        howHeard: str(body.howHeard, MAX.howHeard),
+        message: str(body.message, MAX.message),
+      },
+    };
   }
 
   return { error: "Unrecognised submission." };
@@ -123,17 +163,26 @@ function parse(body: Record<string, unknown>): { lead: Lead } | { error: string 
 const esc = (v: string) =>
   v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
+/** Ordered the way it would be asked on a call, and empty optional fields drop
+ *  out entirely rather than rendering a row saying nothing. */
 function rowsFor(lead: Lead): [string, string][] {
-  return [
-    ["Name", lead.name],
-    ["Email", lead.email],
-    ["Message", lead.message],
-  ];
+  return (
+    [
+      ["Call back on", lead.phone],
+      ["Best time", lead.bestTime],
+      ["Name", lead.name],
+      ["Town", lead.city],
+      ["Wants cleaned", lead.services],
+      ["Notes", lead.message],
+      ["Email", lead.email],
+      ["Found us via", lead.howHeard],
+    ] as [string, string][]
+  ).filter(([, value]) => value);
 }
 
 function render(lead: Lead) {
   const rows = rowsFor(lead);
-  const heading = "New website message";
+  const heading = "New callback request";
 
   const html = `<!doctype html><html><body style="margin:0;padding:24px;background:#f4f1ec;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#16232e">
   <div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0">
@@ -151,8 +200,11 @@ function render(lead: Lead) {
         )
         .join("")}
     </table>
-    <div style="padding:16px 24px;font-size:13px;color:#64748b">
-      Reply to this email and it goes straight to ${esc(lead.name)}.
+    <div style="padding:20px 24px 24px">
+      <a href="tel:${esc(lead.phone.replace(/[^\d+]/g, ""))}" style="display:block;background:#f6ae1e;color:#030b12;font-size:16px;font-weight:700;text-align:center;text-decoration:none;padding:14px 20px;border-radius:999px">Call ${esc(lead.name)} back</a>
+      <div style="font-size:13px;color:#64748b;margin-top:14px;text-align:center">
+        Or reply to this email and it goes straight to them.
+      </div>
     </div>
   </div>
 </body></html>`;
@@ -161,7 +213,10 @@ function render(lead: Lead) {
   // plain text by default, and a lead nobody can read is a lead nobody calls.
   const text = [`${heading} · ${site.name}`, "", ...rows.map(([l, v]) => `${l}: ${v}`)].join("\n");
 
-  return { subject: `Website message: ${lead.name}`, html, text };
+  // Name and town in the subject: it is the whole preview on a locked phone,
+  // and it is what makes two pending leads distinguishable without opening them.
+  const where = lead.city ? ` (${lead.city})` : "";
+  return { subject: `Callback request: ${lead.name}${where}`, html, text };
 }
 
 /* ------------------------------------------------------------------------- */

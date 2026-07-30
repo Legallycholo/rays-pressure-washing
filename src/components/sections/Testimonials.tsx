@@ -107,11 +107,9 @@ export function Testimonials({
           <Button href="/reviews" variant="ghost">
             Read all reviews
           </Button>
-          <Button
-            href={site.reviewLink}
-            variant="outline"
-            size="sm"
-          >
+          {/* `md`, not `sm`: sm is a 40px pill, which is under the 44px minimum
+              a thumb needs, and this row is mobile-first. */}
+          <Button href={site.reviewLink} variant="outline">
             Leave us a review on Google ⭐
           </Button>
         </div>
