@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { site, stats, credentialBadges, cityState } from "@/content/site";
+import { site, credentialBadges, cityState } from "@/content/site";
+import { stats } from "@/content/stats";
 import { featuredServices, residentialServices } from "@/content/services";
 import { maintenancePlans, maintenancePlanTerms } from "@/content/packages";
 import { locations } from "@/content/locations";
 import { featuredProjects } from "@/content/gallery";
 import { featuredTestimonials } from "@/content/testimonials";
 import { getFaqs } from "@/content/faqs";
-import { featuredPosts } from "@/content/posts";
+import { featuredArticles } from "@/content/articles";
 import { Hero } from "@/components/sections/Hero";
 import { TrustBar } from "@/components/sections/TrustBar";
 import { SymptomChecker } from "@/components/sections/SymptomChecker";
@@ -21,7 +22,9 @@ import { Testimonials } from "@/components/sections/Testimonials";
 import { PressBar } from "@/components/sections/PressBar";
 import { ServiceAreaSection } from "@/components/sections/ServiceAreaSection";
 import { FaqSection } from "@/components/sections/FaqSection";
-import { BlogPreview } from "@/components/sections/BlogPreview";
+import { ArticlePreview } from "@/components/sections/ArticlePreview";
+import { JsonLd } from "@/components/JsonLd";
+import { faqSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: `Pressure Washing Big Lake Houses in ${cityState}`,
@@ -31,13 +34,31 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-// Highest-intent questions for the homepage FAQ slice.
+/**
+ * The ten highest-intent questions, in the order a buyer actually asks them:
+ * what is this, what will it cost me, how long does it last, is it safe, how
+ * does booking work, and finally how do I pay.
+ *
+ * Ten rather than six because this section carries the homepage's answer-engine
+ * weight — each entry is a question/answer pair emitted as FAQPage JSON-LD below,
+ * and these are the queries people type. `roof-warranty` and `hard-water` are
+ * the two additions worth calling out: the first cites ARMA and is the most
+ * quotable answer in the bank, and the second is the only window-cleaning
+ * question here, which matters when half the business name is window cleaning.
+ *
+ * All ten live in content/faqs.ts — the homepage never holds its own copy of an
+ * answer, so this list and /faq can never contradict each other.
+ */
 const homeFaqIds = [
   "soft-vs-pressure",
   "quote-accuracy",
-  "need-to-be-home",
-  "plants-safe",
   "how-long-lasts",
+  "plants-safe",
+  "need-to-be-home",
+  "roof-warranty",
+  "hard-water",
+  "contracts",
+  "weather",
   "payment",
 ];
 
@@ -46,6 +67,11 @@ const homeFaqIds = [
 export default function HomePage() {
   return (
     <>
+      {/* FAQPage for the ten questions rendered below. This will not produce an
+          expandable rich result — Google restricted those to government and
+          health sites in 2023 — but it hands answer engines ten pre-parsed
+          question/answer pairs, which is what gets quoted. See content/faqs.ts. */}
+      <JsonLd data={faqSchema(getFaqs(homeFaqIds))} />
       {/* The H1 is the search phrase, not the tagline. `site.tagline` still
           carries the brand line in the footer and the OG card, where it has
           room to be a slogan rather than the thing someone typed to get here.
@@ -83,9 +109,10 @@ export default function HomePage() {
       {/* Renders nothing until there is real press coverage. See content/press.ts. */}
       <PressBar />
       <ServiceAreaSection locations={locations} />
-      <FaqSection items={getFaqs(homeFaqIds)} groupName="faq-home" />
+      {/* limit={10}: FaqSection defaults to 6 and would silently truncate. */}
+      <FaqSection items={getFaqs(homeFaqIds)} limit={10} groupName="faq-home" />
       <StatsRow stats={stats} />
-      <BlogPreview posts={featuredPosts} />
+      <ArticlePreview articles={featuredArticles} />
     </>
   );
 }

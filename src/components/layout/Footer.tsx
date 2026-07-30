@@ -7,7 +7,8 @@ import { Icon } from "@/components/ui/Icon";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { Stars } from "@/components/ui/Rating";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
+import { lastUpdated } from "@/lib/last-updated";
 
 /**
  * Every link in the footer's stacked lists.
@@ -140,8 +141,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className={footerLink}>
-                  Guides
+                <Link href="/articles" className={footerLink}>
+                  Articles
                 </Link>
               </li>
               <li>
@@ -199,8 +200,16 @@ export function Footer() {
             against the background, under the 4.5:1 floor for body text, and
             this row is the smallest text on the site. ink-300 is 6.1:1. */}
         <div className="mt-8 flex flex-col gap-4 text-xs text-ink-300 sm:flex-row sm:items-center sm:justify-between">
+          {/* Freshness signal, and the honest kind: the date moves on every
+              push because it is read from the last commit at build time, not
+              typed in and left to rot. `<time>` so it is machine-readable as
+              well as visible. See lib/last-updated.ts. */}
           <p>
             © {year} {site.legalName}. All rights reserved.
+            <span className="mx-2 text-ink-500" aria-hidden="true">
+              ·
+            </span>
+            Last updated <time dateTime={lastUpdated}>{formatDate(lastUpdated)}</time>
           </p>
           <div className="flex flex-wrap gap-x-5 lg:gap-y-0">
             <Link href="/privacy" className={cn(footerLink, "justify-center sm:justify-start")}>

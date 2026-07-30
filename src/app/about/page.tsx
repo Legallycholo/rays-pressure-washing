@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { site, stats, cityState } from "@/content/site";
+import { site, cityState } from "@/content/site";
+import { stats } from "@/content/stats";
 import { locations } from "@/content/locations";
 import { getFaqs } from "@/content/faqs";
 import { Hero } from "@/components/sections/Hero";
@@ -13,7 +14,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Icon } from "@/components/ui/Icon";
 import { Placeholder } from "@/components/ui/Placeholder";
 import { JsonLd } from "@/components/JsonLd";
-import { breadcrumbSchema } from "@/lib/schema";
+import { breadcrumbSchema, personSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -29,7 +30,11 @@ const crumbs = [
 export default function AboutPage() {
   return (
     <>
-      <JsonLd data={breadcrumbSchema(crumbs)} />
+      {/* The #ray Person node lives here, on the page about him, and is
+          referenced by @id as the author of every article and the founder of the
+          business. Named, attributable expertise is what answer engines are
+          willing to cite — see personSchema in lib/schema.ts. */}
+      <JsonLd data={[personSchema(), breadcrumbSchema(crumbs)]} />
       <Hero
         variant="page"
         breadcrumbs={crumbs}

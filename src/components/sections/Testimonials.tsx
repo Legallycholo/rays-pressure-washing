@@ -11,7 +11,12 @@ import { Reveal } from "@/components/Reveal";
 import { formatDate } from "@/lib/utils";
 
 export function TestimonialCard({ t }: { t: Testimonial }) {
-  const city = getLocation(t.citySlug);
+  // Both parts are optional and only set where the real review supports them
+  // (see content/testimonials.ts). Render whichever exist, and drop the line
+  // entirely rather than emit a stray comma or an empty row.
+  const place = [t.neighborhood, t.citySlug ? getLocation(t.citySlug)?.city : undefined]
+    .filter(Boolean)
+    .join(", ");
   return (
     <figure className="flex h-full flex-col rounded-card bg-white p-6 shadow-card ring-1 ring-ink-900/5">
       <Stars value={t.rating} />
@@ -21,10 +26,7 @@ export function TestimonialCard({ t }: { t: Testimonial }) {
         <div className="flex items-end justify-between gap-3 border-t border-ink-100 pt-4">
           <div>
             <p className="font-bold text-ink-900">{t.name}</p>
-            <p className="text-sm text-ink-500">
-              {t.neighborhood}
-              {city && `, ${city.city}`}
-            </p>
+            {place && <p className="text-sm text-ink-500">{place}</p>}
           </div>
           <div className="flex flex-col items-end gap-1">
             <Badge tone="neutral">{t.source}</Badge>

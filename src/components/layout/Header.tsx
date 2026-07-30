@@ -17,7 +17,7 @@ const navLinks = [
   { href: "/service-areas", label: "Service Areas" },
   { href: "/reviews", label: "Reviews" },
   { href: "/about", label: "About" },
-  { href: "/blog", label: "Guides" },
+  { href: "/articles", label: "Articles" },
 ];
 
 export function Header() {

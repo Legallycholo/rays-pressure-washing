@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getPost, postSlugs, posts } from "@/content/posts";
+import { getArticle, articleSlugs, articles, type ArticleSection } from "@/content/articles";
 import { getService } from "@/content/services";
 import { getLocation } from "@/content/locations";
 import { Hero } from "@/components/sections/Hero";
-import { PostCard } from "@/components/sections/BlogPreview";
+import { ArticleCard } from "@/components/sections/ArticlePreview";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { Section } from "@/components/ui/Section";
 import { Badge } from "@/components/ui/Badge";
@@ -15,7 +15,7 @@ import { articleSchema, breadcrumbSchema } from "@/lib/schema";
 import { formatDate } from "@/lib/utils";
 
 export function generateStaticParams() {
-  return postSlugs.map((slug) => ({ slug }));
+  return articleSlugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -23,44 +23,135 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const post = getPost((await params).slug);
-  if (!post) return {};
+  const article = getArticle((await params).slug);
+  if (!article) return {};
   return {
-    title: post.title,
-    description: post.excerpt,
-    alternates: { canonical: `/blog/${post.slug}` },
+    title: article.title,
+    description: article.excerpt,
+    alternates: { canonical: `/articles/${article.slug}` },
+    // `article` rather than the sitewide `website`, and the dates a crawler
+    // reads for freshness come from here as well as from the Article JSON-LD.
+    openGraph: {
+      type: "article",
+      title: article.title,
+      description: article.excerpt,
+      url: `/articles/${article.slug}`,
+      publishedTime: article.date,
+      modifiedTime: article.updated ?? article.date,
+      authors: [article.author],
+    },
   };
 }
 
-export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const post = getPost((await params).slug);
-  if (!post) notFound();
+/**
+ * One section = one question, its direct answer, then the supporting detail.
+ *
+ * The `answer` paragraph is styled as a visible lead rather than ordinary body
+ * copy. That does two jobs at once: a reader skimming for the answer finds it,
+ * and an answer engine extracting a quotable block gets a clean one. See the AEO
+ * note in content/articles.ts.
+ */
+function ArticleSectionBlock({ section }: { section: ArticleSection }) {
+  return (
+    <section className="mt-12 scroll-mt-28 first:mt-0">
+      <h2 className="font-display text-2xl text-ink-900">{section.heading}</h2>
+
+      <p className="mt-4 border-l-2 border-harbor-500 pl-4 text-lg font-medium leading-relaxed text-ink-800">
+        {section.answer}
+      </p>
+
+      {section.body?.map((paragraph) => (
+        <p key={paragraph.slice(0, 48)} className="mt-4 leading-relaxed text-ink-600">
+          {paragraph}
+        </p>
+      ))}
+
+      {section.list && (
+        <ul className="mt-4 space-y-3">
+          {section.list.map((item) => (
+            <li key={item.slice(0, 48)} className="flex gap-3 leading-relaxed text-ink-600">
+              <Icon name="check" className="mt-1.5 h-4 w-4 shrink-0 text-leaf-500" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {section.table && (
+        // Wide tables scroll inside their own container so the page body never
+        // scrolls horizontally on a phone.
+        <div className="mt-6 overflow-x-auto rounded-card ring-1 ring-ink-900/10">
+          <table className="w-full min-w-[42rem] border-collapse text-left text-sm">
+            <caption className="sr-only">{section.table.caption}</caption>
+            <thead className="bg-sand-100">
+              <tr>
+                {section.table.columns.map((col) => (
+                  <th
+                    key={col}
+                    scope="col"
+                    className="px-4 py-3 font-display text-xs uppercase tracking-[0.12em] text-ink-700"
+                  >
+                    {col}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {section.table.rows.map((row) => (
+                <tr key={row[0]} className="border-t border-ink-100 align-top">
+                  {row.map((cell, i) => (
+                    <td
+                      key={`${row[0]}-${i}`}
+                      className={
+                        i === 0 ? "px-4 py-3 font-semibold text-ink-900" : "px-4 py-3 text-ink-600"
+                      }
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
+  );
+}
+
+export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+  const article = getArticle((await params).slug);
+  if (!article) notFound();
 
   const crumbs = [
     { name: "Home", href: "/" },
-    { name: "Guides", href: "/blog" },
-    { name: post.title, href: `/blog/${post.slug}` },
+    { name: "Articles", href: "/articles" },
+    { name: article.title, href: `/articles/${article.slug}` },
   ];
-  const relatedServices = post.relatedServices.map(getService).filter((s): s is NonNullable<typeof s> => Boolean(s));
-  const relatedCities = (post.relatedCities ?? []).map(getLocation).filter((l): l is NonNullable<typeof l> => Boolean(l));
-  const morePosts = posts.filter((p) => p.slug !== post.slug && p.category === post.category).slice(0, 3);
+  const relatedServices = article.relatedServices
+    .map(getService)
+    .filter((s): s is NonNullable<typeof s> => Boolean(s));
+  const relatedCities = (article.relatedCities ?? [])
+    .map(getLocation)
+    .filter((l): l is NonNullable<typeof l> => Boolean(l));
+  const moreArticles = articles.filter((a) => a.slug !== article.slug).slice(0, 3);
 
   return (
     <>
-      <JsonLd data={[articleSchema(post), breadcrumbSchema(crumbs)]} />
+      <JsonLd data={[articleSchema(article), breadcrumbSchema(crumbs)]} />
       <Hero
         variant="page"
         breadcrumbs={crumbs.slice(0, 2)}
-        title={post.title}
-        lede={post.excerpt}
+        title={article.title}
+        lede={article.excerpt}
         extras={
           <>
-            <Badge tone="onDark">{post.category}</Badge>
+            <Badge tone="onDark">{article.category}</Badge>
             <Badge tone="onDark">
               <Icon name="clock" className="h-3.5 w-3.5" />
-              {post.readMinutes} min read
+              {article.readMinutes} min read
             </Badge>
-            <Badge tone="onDark">{formatDate(post.date)}</Badge>
+            <Badge tone="onDark">{formatDate(article.updated ?? article.date)}</Badge>
           </>
         }
       />
@@ -69,14 +160,15 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <div className="grid gap-12 lg:grid-cols-12">
           {/* Long-form shell (§3.2): prose column + sticky related rail */}
           <article className="mx-auto w-full max-w-2xl lg:col-span-8">
-            {post.sections.map((s) => (
-              <section key={s.heading} className="mt-10 scroll-mt-28 first:mt-0">
-                <h2 className="font-display text-2xl text-ink-900">{s.heading}</h2>
-                <p className="mt-3 leading-relaxed text-ink-600">{s.body}</p>
-              </section>
+            {article.sections.map((s) => (
+              <ArticleSectionBlock key={s.heading} section={s} />
             ))}
-            <p className="mt-10 border-t border-ink-100 pt-5 text-sm text-ink-400">
-              By {post.author} · {formatDate(post.updated ?? post.date)}
+            <p className="mt-12 border-t border-ink-100 pt-5 text-sm text-ink-400">
+              By {article.author}
+              {article.updated ? " · Updated " : " · Published "}
+              <time dateTime={article.updated ?? article.date}>
+                {formatDate(article.updated ?? article.date)}
+              </time>
             </p>
           </article>
 
@@ -129,13 +221,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         lede="Call now, or submit the form and we will get back to you within 24 hours."
       />
 
-      {morePosts.length > 0 && (
+      {moreArticles.length > 0 && (
         <Section tone="sand">
           <h2 className="mb-8 text-center font-display text-2xl text-ink-900">More like this</h2>
           <ul className="grid items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {morePosts.map((p) => (
-              <li key={p.slug}>
-                <PostCard post={p} />
+            {moreArticles.map((a) => (
+              <li key={a.slug}>
+                <ArticleCard article={a} />
               </li>
             ))}
           </ul>

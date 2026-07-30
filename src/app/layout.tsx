@@ -1,31 +1,52 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { site } from "@/content/site";
+import { site, cityState } from "@/content/site";
+import { locations } from "@/content/locations";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { StickyCallBar } from "@/components/layout/StickyCallBar";
 import { ContactHub } from "@/components/ContactHub";
 import { JsonLd } from "@/components/JsonLd";
-import { localBusinessSchema } from "@/lib/schema";
+import { localBusinessSchema, websiteSchema } from "@/lib/schema";
+import { INDEXABLE } from "@/lib/indexing";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
+  /**
+   * The default was `${site.name} | Pressure Washing & Exterior Cleaning in
+   * ${site.serviceRegion}` — 103 characters, against the ~60 Google shows before
+   * truncating. Everything that identified the business sat past the cut. This
+   * leads with what someone searched and the city, and puts the short brand name
+   * last where a truncation costs nothing.
+   *
+   * The `%s | Ray's` template keeps child titles short for the same reason —
+   * check any new page title lands under about 60 characters including the suffix.
+   */
   title: {
-    default: `${site.name} | Pressure Washing & Exterior Cleaning in ${site.serviceRegion}`,
-    template: `%s | ${site.name}`,
+    default: `Pressure Washing & Window Cleaning in ${cityState} | ${site.shortName}`,
+    template: `%s | ${site.shortName}`,
   },
   description:
     `Professional pressure washing, soft washing and exterior cleaning across ${site.serviceRegion}. ` +
     `Licensed, insured, and backed by the Spotless Guarantee. Call now, or submit the form and we will get back to you within 24 hours.`,
   applicationName: site.name,
+  /**
+   * Google has ignored the keywords meta since 2009, so this earns its place
+   * only as a cheap hint to the smaller engines and scrapers that still read it.
+   * Which means the useful entries are the ones a human would actually type:
+   * service plus place. `site.serviceRegion` alone ("the SC Midlands") was doing
+   * nothing — the city names are the terms with search behind them.
+   */
   keywords: [
     "pressure washing",
     "power washing",
     "soft washing",
     "house washing",
     "roof cleaning",
+    "window cleaning",
     "driveway cleaning",
-    site.serviceRegion,
+    `pressure washing ${cityState}`,
+    ...locations.slice(0, 5).map((l) => `pressure washing ${l.city} ${l.region}`),
   ],
   openGraph: {
     type: "website",
@@ -41,10 +62,22 @@ export const metadata: Metadata = {
   verification: {
     google: "-G-b-F6PaBVkTb_Ns5yMUL6JD_0weuqYgIsT5LopW5s",
   },
+  // Read from lib/indexing.ts, which app/robots.ts also reads. The two files
+  // must agree and the failure mode when they don't is silent, so there is one
+  // switch rather than two settings. Flip INDEXABLE to launch.
   robots: {
-    // NOTE: flip to true once real content and real business details are in.
-    index: false,
-    follow: false,
+    index: INDEXABLE,
+    follow: INDEXABLE,
+    googleBot: {
+      index: INDEXABLE,
+      follow: INDEXABLE,
+      // Let Google use full-length text snippets and large image previews once
+      // indexing is on. The defaults are conservative, and for a business that
+      // wins on straight answers a truncated snippet is a lost click.
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
   },
   alternates: { canonical: "/" },
 };
@@ -85,7 +118,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main" className="skip-link">
           Skip to main content
         </a>
-        <JsonLd data={localBusinessSchema()} />
+        {/* The two sitewide nodes every other page's markup points at by @id:
+            #business and #website. Emitted once, here, so a crawler resolves one
+            business and one publication rather than a copy per page. */}
+        <JsonLd data={[localBusinessSchema(), websiteSchema()]} />
         <Header />
         <main id="main" className="flex-1">
           {children}

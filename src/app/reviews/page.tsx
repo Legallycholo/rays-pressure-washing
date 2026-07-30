@@ -9,7 +9,7 @@ import { Stars } from "@/components/ui/Rating";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { JsonLd } from "@/components/JsonLd";
-import { breadcrumbSchema } from "@/lib/schema";
+import { breadcrumbSchema, reviewSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "Customer Reviews",
@@ -32,7 +32,10 @@ export default function ReviewsPage() {
 
   return (
     <>
-      <JsonLd data={breadcrumbSchema(crumbs)} />
+      {/* Individual Review nodes for the reviews rendered below. These and the
+          sitewide `aggregateRating` both derive from testimonials.ts, so the
+          aggregate always describes exactly the reviews on this page. */}
+      <JsonLd data={[...reviewSchema(testimonials), breadcrumbSchema(crumbs)]} />
       <Hero
         variant="page"
         breadcrumbs={crumbs}

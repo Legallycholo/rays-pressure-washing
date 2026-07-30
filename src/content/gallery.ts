@@ -6,6 +6,15 @@
  * detect that and render a labeled placeholder frame at the correct aspect
  * ratio, so layout is final before photography exists. Drop real images into
  * /public/gallery/ and fill in the paths, nothing else needs to change.
+ *
+ * Every `citySlug` points at a city in Ray's confirmed service area, matched to
+ * the job it describes — the HOA roof to Irmo, the 14,000 sq ft motor court to
+ * new-build Blythewood, the river-house glass to Gadsden on the Congaree. They
+ * previously referenced invented placeholder towns, which left the gallery's
+ * city filter offering options no page existed for.
+ *
+ * These are still descriptive scaffolding, not records: once real photography
+ * lands, set each `citySlug` to the city the job actually came from.
  */
 
 export type Project = {
@@ -37,7 +46,7 @@ export const projects: Project[] = [
     id: "p1",
     title: "Two-story vinyl with heavy north-side algae",
     serviceSlug: "house-washing",
-    citySlug: "springfield",
+    citySlug: "lexington",
     before: "",
     after: "",
     alt: "Two-story vinyl-sided home before and after soft washing",
@@ -51,7 +60,7 @@ export const projects: Project[] = [
     id: "p2",
     title: "Black-streaked shingle roof, HOA violation",
     serviceSlug: "roof-cleaning",
-    citySlug: "oakmont",
+    citySlug: "irmo",
     before: "",
     after: "",
     alt: "Asphalt shingle roof before and after no-pressure algae treatment",
@@ -65,7 +74,7 @@ export const projects: Project[] = [
     id: "p3",
     title: "Striped driveway corrected with surface cleaner",
     serviceSlug: "driveway-concrete",
-    citySlug: "north-valley",
+    citySlug: "west-columbia",
     before: "",
     after: "",
     alt: "Concrete driveway before and after even surface cleaning",
@@ -79,7 +88,7 @@ export const projects: Project[] = [
     id: "p4",
     title: "Screen enclosure and pool deck, full reset",
     serviceSlug: "pool-deck",
-    citySlug: "lakeside",
+    citySlug: "chapin",
     before: "",
     after: "",
     alt: "Pool screen enclosure and deck before and after cleaning",
@@ -93,7 +102,7 @@ export const projects: Project[] = [
     id: "p5",
     title: "1920s timber porch, low-pressure restoration",
     serviceSlug: "house-washing",
-    citySlug: "riverbend",
+    citySlug: "columbia",
     before: "",
     after: "",
     alt: "Historic timber porch before and after gentle cleaning",
@@ -105,7 +114,7 @@ export const projects: Project[] = [
     id: "p6",
     title: "Motor court and walkway run",
     serviceSlug: "driveway-concrete",
-    citySlug: "cedar-park",
+    citySlug: "blythewood",
     before: "",
     after: "",
     alt: "Long residential driveway before and after surface cleaning",
@@ -118,7 +127,7 @@ export const projects: Project[] = [
     id: "p7",
     title: "Pollen-filmed river-house glass",
     serviceSlug: "window-cleaning",
-    citySlug: "port-haven",
+    citySlug: "gadsden",
     before: "",
     after: "",
     alt: "River-facing home windows before and after pure water cleaning",
@@ -130,7 +139,7 @@ export const projects: Project[] = [
     id: "p8",
     title: "Vinyl fence with base-line algae",
     serviceSlug: "fence-cleaning",
-    citySlug: "maple-grove",
+    citySlug: "batesburg-leesville",
     before: "",
     after: "",
     alt: "White vinyl fence before and after soft washing",

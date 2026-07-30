@@ -26,11 +26,18 @@ export function CoverageMap({
   onDark?: boolean;
 }) {
   // Place each city on a ring proportional to driveMinutes, spread by index.
+  //
+  // The outer ring is normalised against the furthest city in the list rather
+  // than a fixed number of minutes. It used to divide by a hardcoded 45, which
+  // silently assumed nothing was further out than that — the moment the real
+  // service area arrived with Aiken at 50 minutes and Dalzell at 60, those pins
+  // computed a radius past the edge of the 400×300 viewBox and clipped.
   const cx = 200;
   const cy = 150;
+  const furthest = Math.max(...locations.map((l) => l.driveMinutes), 1);
   const pts = locations.map((l, i) => {
     const angle = (i / locations.length) * Math.PI * 2 - Math.PI / 2;
-    const r = 24 + (l.driveMinutes / 45) * 100;
+    const r = 24 + (l.driveMinutes / furthest) * 100;
     return { l, x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r * 0.72 };
   });
 

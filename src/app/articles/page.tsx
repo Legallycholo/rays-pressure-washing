@@ -1,40 +1,41 @@
 import type { Metadata } from "next";
-import { posts, postCategories } from "@/content/posts";
+import { articles, articleCategories } from "@/content/articles";
 import { Hero } from "@/components/sections/Hero";
-import { PostCard } from "@/components/sections/BlogPreview";
+import { ArticleCard } from "@/components/sections/ArticlePreview";
 import { Section } from "@/components/ui/Section";
 import { JsonLd } from "@/components/JsonLd";
-import { breadcrumbSchema } from "@/lib/schema";
+import { breadcrumbSchema, articleListSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Guides: Exterior Cleaning, Explained Straight",
-  description: "Methods, costs, timing and maintenance. Written to make you a sharper buyer, whoever you end up hiring.",
-  alternates: { canonical: "/blog" },
+  title: "Articles: Exterior Cleaning, Explained Straight",
+  description:
+    "How exterior cleaning actually works, which method belongs on which surface, and how often it needs doing. Written to make you a sharper buyer, whoever you end up hiring.",
+  alternates: { canonical: "/articles" },
 };
 
 const crumbs = [
   { name: "Home", href: "/" },
-  { name: "Guides", href: "/blog" },
+  { name: "Articles", href: "/articles" },
 ];
 
 /**
  * Static index. Category chips are anchor links to grouped sections (keeps the
- * page fully static, open decision #5's array model doesn't warrant client
- * filtering at 6 posts).
+ * page fully static; the array content model doesn't warrant client filtering at
+ * three articles).
  */
-export default function BlogIndexPage() {
+export default function ArticleIndexPage() {
   return (
     <>
-      <JsonLd data={breadcrumbSchema(crumbs)} />
+      <JsonLd data={[articleListSchema(articles), breadcrumbSchema(crumbs)]} />
       <Hero
         variant="page"
         breadcrumbs={crumbs}
         title="Know what you're paying for"
-        lede="No fluff, no scare tactics. Just how exterior cleaning actually works, what it costs, and when it's worth doing."
+        lede="No fluff, no scare tactics. Just how exterior cleaning actually works, what damages a surface, and when it's worth doing."
       />
       <Section tone="light">
         <nav aria-label="Categories" className="flex flex-wrap justify-center gap-2">
-          {postCategories.map((cat) => (
+          {articleCategories.map((cat) => (
             <a
               key={cat}
               href={`#cat-${cat.replace(/\s+/g, "-").toLowerCase()}`}
@@ -45,8 +46,8 @@ export default function BlogIndexPage() {
           ))}
         </nav>
 
-        {postCategories.map((cat) => {
-          const items = posts.filter((p) => p.category === cat);
+        {articleCategories.map((cat) => {
+          const items = articles.filter((a) => a.category === cat);
           return (
             <section
               key={cat}
@@ -56,9 +57,9 @@ export default function BlogIndexPage() {
             >
               <h2 className="mb-6 font-display text-2xl text-ink-900">{cat}</h2>
               <ul className="grid items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {items.map((p) => (
-                  <li key={p.slug}>
-                    <PostCard post={p} />
+                {items.map((a) => (
+                  <li key={a.slug}>
+                    <ArticleCard article={a} />
                   </li>
                 ))}
               </ul>

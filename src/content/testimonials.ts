@@ -3,13 +3,35 @@
  *
  * `source` drives the platform badge; `serviceSlug` and `citySlug` let city and
  * service pages surface locally relevant reviews instead of the same three.
+ *
+ * ── Attribution discipline ──────────────────────────────────────────────────
+ *
+ * The quotes are real. The *provenance* used to be invented: every review was
+ * tagged with a neighborhood and city from the old placeholder locations array
+ * ("Cypress Landing, Springfield"), which turned a genuine review into a
+ * fabricated one the moment it rendered. A real quote under a false byline is
+ * the same FTC problem as a made-up quote.
+ *
+ * So `citySlug` and `neighborhood` are now OPTIONAL and set only where the
+ * review itself supports them — t6 names Columbia and Lexington in its own
+ * text, so it carries a city; the rest carry none until Ray matches them
+ * against the real reviewer records in the Google Business Profile.
+ *
+ * `serviceSlug` stays required because every quote describes the work plainly
+ * enough to classify it (gutters, roof streaks, pool deck, concrete striping).
+ * That is a reading of the review, not an invention about the reviewer.
+ *
+ * `testimonialsFor` already falls back to featured reviews when a city has no
+ * matches, so an unset `citySlug` costs a page nothing.
  */
 
 export type Testimonial = {
   id: string;
   name: string;
-  neighborhood: string;
-  citySlug: string;
+  /** Only when known from the real review record. Never inferred. */
+  neighborhood?: string;
+  /** Only when the review itself names the place. Never inferred. */
+  citySlug?: string;
   serviceSlug: string;
   rating: 1 | 2 | 3 | 4 | 5;
   date: string;
@@ -22,8 +44,6 @@ export const testimonials: Testimonial[] = [
   {
     id: "t1",
     name: "Dana R.",
-    neighborhood: "Cypress Landing",
-    citySlug: "springfield",
     serviceSlug: "house-washing",
     rating: 5,
     date: "2026-05-14",
@@ -35,8 +55,6 @@ export const testimonials: Testimonial[] = [
   {
     id: "t2",
     name: "Marcus T.",
-    neighborhood: "Oakmont Reserve",
-    citySlug: "oakmont",
     serviceSlug: "roof-cleaning",
     rating: 5,
     date: "2026-04-28",
@@ -48,8 +66,6 @@ export const testimonials: Testimonial[] = [
   {
     id: "t3",
     name: "Priya S.",
-    neighborhood: "Harbour Point",
-    citySlug: "lakeside",
     serviceSlug: "pool-deck",
     rating: 5,
     date: "2026-06-02",
@@ -61,8 +77,6 @@ export const testimonials: Testimonial[] = [
   {
     id: "t4",
     name: "Ellen K.",
-    neighborhood: "Historic Riverbend",
-    citySlug: "riverbend",
     serviceSlug: "house-washing",
     rating: 5,
     date: "2026-03-19",
@@ -73,8 +87,6 @@ export const testimonials: Testimonial[] = [
   {
     id: "t5",
     name: "Tom W.",
-    neighborhood: "Valley Crest",
-    citySlug: "north-valley",
     serviceSlug: "driveway-concrete",
     rating: 5,
     date: "2026-05-30",
@@ -84,10 +96,10 @@ export const testimonials: Testimonial[] = [
     featured: true,
   },
   {
+    // The only review that names its own location, so the only one carrying a city.
     id: "t6",
     name: "Sofia M.",
-    neighborhood: "Dockside",
-    citySlug: "port-haven",
+    citySlug: "columbia",
     serviceSlug: "window-cleaning",
     rating: 5,
     date: "2026-06-21",
@@ -98,8 +110,6 @@ export const testimonials: Testimonial[] = [
   {
     id: "t8",
     name: "Gareth L.",
-    neighborhood: "Millers Creek",
-    citySlug: "springfield",
     serviceSlug: "gutter-cleaning",
     rating: 5,
     date: "2026-01-27",

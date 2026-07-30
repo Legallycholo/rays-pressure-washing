@@ -2,19 +2,29 @@ import type { MetadataRoute } from "next";
 import { site } from "@/content/site";
 import { serviceSlugs } from "@/content/services";
 import { locationSlugs, priorityLocations } from "@/content/locations";
-import { postSlugs, posts } from "@/content/posts";
+import { articleSlugs, articles } from "@/content/articles";
+import { lastUpdated } from "@/lib/last-updated";
 
 /**
  * Enumerates every route from the content arrays, so adding a service, city or
- * post updates the sitemap automatically (STRUCTURE.md §13).
+ * article updates the sitemap automatically (STRUCTURE.md §13).
  *
  * Matrix routes cover priority cities only, matching generateStaticParams in
- * app/services/[service]/[city]/page.tsx, the sitemap and the built pages
- * must never disagree.
+ * app/services/[service]/[city]/page.tsx — the sitemap and the built pages must
+ * never disagree.
+ *
+ * `lastModified` comes from the last git commit, not from `new Date()`. That
+ * distinction is the whole point: stamping build time on ~53 unchanged URLs told
+ * Google the entire site changed on every deploy, and a `lastModified` that
+ * always reads "now" gets learned and then ignored — strictly worse than
+ * omitting it. See lib/last-updated.ts.
+ *
+ * `changeFrequency` and `priority` are retained below but Google ignores both
+ * outright. Do not spend time tuning them expecting an effect.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = site.url;
-  const now = new Date();
+  const now = new Date(lastUpdated);
 
   const staticRoutes = [
     "",
@@ -24,7 +34,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/gallery",
     "/reviews",
     "/about",
-    "/blog",
+    "/articles",
     "/faq",
     "/contact",
     "/privacy",
@@ -60,11 +70,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  const postRoutes = postSlugs.map((slug) => {
-    const post = posts.find((p) => p.slug === slug);
+  // Articles carry their own dates. A real content date always beats a
+  // repo-wide one, so these ignore `now` entirely.
+  const articleRoutes = articleSlugs.map((slug) => {
+    const article = articles.find((a) => a.slug === slug);
     return {
-      url: `${base}/blog/${slug}`,
-      lastModified: post ? new Date(post.updated ?? post.date) : now,
+      url: `${base}/articles/${slug}`,
+      lastModified: article ? new Date(article.updated ?? article.date) : now,
       changeFrequency: "yearly" as const,
       priority: 0.5,
     };
@@ -75,6 +87,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...serviceRoutes,
     ...matrixRoutes,
     ...locationRoutes,
-    ...postRoutes,
+    ...articleRoutes,
   ];
 }

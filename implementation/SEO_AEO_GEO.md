@@ -1,9 +1,144 @@
 # SEO / AEO / GEO Implementation Plan
 
 **Created:** 29 July 2026
-**Status:** approved scope, not yet implemented
+**Status:** Phases 1–4 and 5 implemented 29 July 2026. Indexing gate still closed
+by design — see §7.3. Phase 6 verification partially done (build-time checks
+pass; the live-crawler steps need a deployment).
 **Owner:** dev
 **Supersedes:** the SEO portions of `CHECKLIST.md` Phase 11 and Phase 13
+
+---
+
+## Implementation notes, 29 July 2026
+
+What actually shipped, where it diverged from the plan above, and why. The
+sections below are left as written so the reasoning is still readable; this block
+is the correction layer.
+
+### Corrections to the plan's own figures
+
+- **The sitemap emits 61 URLs, not 56.** Ray supplied the confirmed service area
+  on 29 July 2026 and it is **13 cities**, not the 8 §7.1 assumed. 13 static + 8
+  service + 24 matrix + 13 location + 3 article = 61. Static page count is 71.
+- **The drafted city list in §1.5 was superseded.** Four cities I had drafted are
+  **not** in Ray's area and were removed: Ballentine, Gilbert, Cayce, Prosperity.
+  Eight were added: Seven Oaks, Blythewood, Gaston, Hopkins, Gadsden,
+  Batesburg-Leesville, Aiken, Dalzell. Kept: Lexington, Irmo, Chapin, Columbia,
+  West Columbia. The lesson is recorded in the file header — drafting plausible
+  cities was the right call to unblock the work, and confirming them was never
+  optional.
+- **The supplied list contained a duplicate.** "Batesburg-Leesville, SC" and
+  "Leesville, Batesburg-Leesville, SC" are one municipality — Batesburg and
+  Leesville merged in 1993. Single entry, both former town centers named in
+  `neighborhoods`.
+- **There are 7 published reviews, not 8.** `testimonials.ts` runs t1–t6 plus t8;
+  there is no t7. The derived `aggregateRating` is therefore **5.0 from 7
+  reviews**, which is honest and page-verifiable but understates the business —
+  Ray's real Google aggregate should replace it.
+
+### Divergences, with reasons
+
+- **Article 3 used the substitute.** `services.ts` pricing is still
+  `PLACEHOLDER`, so the cost guide stayed unwritten per §5.3 and
+  `how-often-should-you-pressure-wash-your-house` shipped instead. The cost guide
+  is the highest-intent piece in the backlog; write it the day real figures exist.
+- **Testimonial city attribution went further than §1.3 asked.** The plan said
+  re-map each review to a real city. On inspection that is the same error in
+  better clothing: assigning a real city we cannot verify is still fabricated
+  provenance on a genuine quote. So `citySlug` and `neighborhood` became optional
+  and are set only where the review names the place itself — t6 says "Columbia
+  and Lexington" and carries a city; the rest carry none until Ray matches them
+  against the Google Business Profile records. `testimonialsFor` already falls
+  back to featured reviews, so no page lost content.
+- **`posts.ts` → `articles.ts` and `Post` → `Article` were done**, not left as the
+  optional item in §5.2. `BlogPreview.tsx` → `ArticlePreview.tsx` with it.
+- **The `ArticleSection` shape was extended.** The old `{heading, body}` pair
+  could not carry a 40–60 word direct answer, a table, or multiple paragraphs.
+  `answer` is now a *required* field, which makes the AEO requirement structural
+  rather than a convention an editor can silently drop. `table` and `list` are
+  optional.
+- **`INDEXABLE` was introduced** (`src/lib/indexing.ts`) rather than editing the
+  noindex posture in two files. `layout.tsx` and `robots.ts` both read it, so
+  they cannot drift — which was the risk both files' existing comments warned
+  about. Launch is now one line in one place. **Both branches were built and
+  verified**, so flipping it is not an untested path.
+- **`articleListSchema` was added** (an `ItemList` for the /articles index),
+  which the plan did not specify.
+- **Per-article Open Graph** (`type: article`, `publishedTime`, `modifiedTime`,
+  `authors`) was added alongside the canonical, which §3 did not call for.
+- **`max-snippet` / `max-image-preview: large`** added to the googleBot directives.
+  Google's defaults truncate; for a business that wins on straight answers a
+  clipped snippet is a lost click.
+
+### Added outside the plan
+
+- **Favicon rebuilt from the logo** (requested separately). The old
+  `src/app/icon.png` was an unrelated orange gear graphic, badly cropped. The
+  lockup is 2:1 landscape and mostly words, so letterboxing it into a square
+  favicon renders the text ~9px tall and illegible; the icons are therefore built
+  from the mascot, which survives being shrunk. Generated reproducibly by
+  `scripts/generate-logos.js` — a circular badge for `icon.png` and a full-bleed
+  square for `apple-icon.png`, using `#004090` sampled from the artwork itself.
+  Legibility was checked at 16/32/48/96px rather than assumed.
+
+### Verified at build time
+
+- `npm run build` and `npm run typecheck` clean; 67 static pages.
+- 57 sitemap URLs, zero containing `.example`.
+- `lastModified` reads the git commit date, not build time.
+- Footer renders "Last updated July 29, 2026" in a `<time>` element.
+- Homepage emits 10 `Question`/`Answer` pairs, `WebSite` and
+  `HomeAndConstructionBusiness` with 9 `City` in `areaServed`.
+- `/about` emits `Person`; `/reviews` emits 7 `Review` + 7 `Rating`;
+  `/articles` emits `ItemList`; article pages emit `Article` with a resolving
+  `author: {"@id": …/#ray}` and a real `wordCount`.
+- With `INDEXABLE = true`: `robots.txt` emits per-agent rules for all 9 AI
+  crawlers plus `*`, `Host`, and the sitemap; the homepage meta reads
+  `index, follow`; `/llms.txt` emits the full business map.
+
+### Fixed while wiring the real city list
+
+- **`CoverageMap` scaled its rings against a hardcoded 45 minutes**
+  (`CoverageMap.tsx:33`), which silently assumed no city was further out than
+  that. Aiken at 50 and Dalzell at 60 computed a radius past the edge of the
+  400×300 viewBox and would have clipped off the map. Now normalised against the
+  furthest city in the list, so adding a more distant city re-scales the art
+  instead of losing a pin. Verified: 44 circles, zero out of bounds.
+- **Gallery and article city references re-pointed** off the four dropped cities —
+  the motor court to new-build Blythewood, the river-house glass to Gadsden on
+  the Congaree, the fence run to Batesburg-Leesville, and the "how often" article
+  to Hopkins.
+- **Travel-fee copy confirmed firing correctly** against
+  `travelPolicy.freeRadiusMinutes` of 30: Lexington reads "Our home base",
+  Aiken and Dalzell both render the travel-fee sentence, and the batch-route
+  discount language appears where it should.
+
+### Still outstanding
+
+Everything in §11, plus two items that section missed:
+
+- **`site.serviceRegion` is now too narrow and should be decided.** It reads
+  "the Lake Murray area", and it is rendered as a *coverage* claim — "Serving
+  {serviceRegion}", "across {serviceRegion}" — in the homepage hero and in the
+  title/description of several pages. With Aiken (Aiken County, 50 min) and
+  Dalzell (Sumter County, 60 min) in the confirmed area, that string describes
+  roughly half of where the business actually works, and the Aiken and Dalzell
+  pages currently claim to serve them "across the Lake Murray area".
+  Recommended replacement: **"the SC Midlands"**. Deliberately not changed here —
+  the lake-house positioning was set on purpose two commits before this pass, and
+  swapping the phrase touches marketing copy sitewide, which is the business's
+  call and not a mechanical fix. Note the two jobs one string is doing: the
+  homepage H1 can stay lake-focused as a *targeting* choice while
+  `serviceRegion` describes actual *coverage*. Splitting them is the cleaner fix
+  if the lake framing should be kept.
+- **`site.ts` `stats` still holds two invented public figures** — "3,400+
+  Properties cleaned" and "1.2M sq ft Cleaned last year", both rendered on the
+  homepage. These are the same class of fabricated claim as the old 4.9-from-218
+  rating and were not in this plan's scope, so they were left in place rather
+  than silently changed. They should be replaced with real numbers or the tiles
+  removed before the index flip. Note the middle tile now derives correctly and
+  reads "7+ Five-star reviews", which is truthful but looks thin — another reason
+  to get the real Google figures.
 
 ---
 

@@ -1,7 +1,21 @@
 /**
- * FAQ bank. Services reference these by id (see services.ts → faqIds), and the
- * /faq page renders all of them grouped by category. Also feeds FAQPage JSON-LD,
- * which is what wins the expandable rich result in search.
+ * FAQ bank. Services reference these by id (see services.ts → faqIds), the
+ * homepage renders the ten highest-intent questions, and the /faq page renders
+ * all of them grouped by category. Also feeds FAQPage JSON-LD.
+ *
+ * What that JSON-LD is actually for: Google restricted FAQ *rich results* — the
+ * expandable question list under a search result — to authoritative government
+ * and health sites in August 2023, so this markup will not produce one for a
+ * cleaning business, and this comment used to claim it would. It is still worth
+ * emitting, for a different reason: it hands answer engines pre-parsed
+ * question/answer pairs, which is exactly the shape AI Overviews, Perplexity and
+ * ChatGPT lift when they answer a question about pressure washing. Optimise
+ * these answers for being quoted, not for an expandable result that no longer
+ * exists.
+ *
+ * Which means: lead every answer with the direct answer in the first sentence,
+ * keep the specifics numeric, and never bury the useful part in paragraph three.
+ * The existing answers already do this — preserve it when editing.
  *
  * Copy is DRAFT: accurate in structure, needs a real operator's review.
  */

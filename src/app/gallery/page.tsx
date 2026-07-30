@@ -4,8 +4,9 @@ import { Hero } from "@/components/sections/Hero";
 import { GalleryExplorer } from "@/components/sections/GalleryExplorer";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { Section } from "@/components/ui/Section";
+import { projects } from "@/content/gallery";
 import { JsonLd } from "@/components/JsonLd";
-import { breadcrumbSchema } from "@/lib/schema";
+import { breadcrumbSchema, imageObjectSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "Before & After Gallery",
@@ -22,7 +23,10 @@ const crumbs = [
 export default function GalleryPage() {
   return (
     <>
-      <JsonLd data={breadcrumbSchema(crumbs)} />
+      {/* imageObjectSchema returns [] while gallery.ts still ships empty image
+          paths, so this emits breadcrumbs alone today and starts emitting
+          ImageObject nodes the moment real photography lands — no edit here. */}
+      <JsonLd data={[...imageObjectSchema(projects), breadcrumbSchema(crumbs)]} />
       <Hero
         variant="page"
         breadcrumbs={crumbs}
