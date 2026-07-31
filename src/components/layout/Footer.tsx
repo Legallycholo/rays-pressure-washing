@@ -91,10 +91,17 @@ export function Footer() {
               </span>
             </div>
 
-            <address className="mt-4 text-sm not-italic lg:mt-6 lg:space-y-2.5">
+            <address className="mt-4 text-sm not-italic lg:mt-6 space-y-2.5">
+              <p className="font-bold text-white text-base">{site.legalName}</p>
+              <p className="flex items-start gap-2.5">
+                <Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-harbor-400" />
+                <span>
+                  {site.address.street}, {site.address.city}, {site.address.region} {site.address.postalCode}, {site.address.country}
+                </span>
+              </p>
               <a href={`tel:${site.contact.phoneHref}`} className={footerContactRow}>
                 <Icon name="phone" className="h-4 w-4 shrink-0 text-harbor-400" />
-                {site.contact.phone}
+                <span className="font-semibold text-white">{site.contact.phone}</span>
               </a>
               <a href={`mailto:${site.contact.email}`} className={footerContactRow}>
                 <Icon name="mail" className="h-4 w-4 shrink-0 text-harbor-400" />
@@ -103,17 +110,6 @@ export function Footer() {
               {/*
                 Business hours: the condensed week is always visible, the seven
                 individual days sit behind a disclosure.
-
-                Native <details>/<summary>, the same primitive `Accordion` uses.
-                No client component, no state, no hydration cost, and it opens
-                with JavaScript off — which matters here because this is the
-                footer of a statically prerendered page.
-
-                Deliberately NOT "Open now" or today's hours. Both would need the
-                visitor's clock: computed on the server it bakes the build date
-                into every page, and computed on the client it is a hydration
-                mismatch on the one element claiming to be authoritative. The
-                honest version of "are they open" is the full week, stated plainly.
               */}
               <details className="group">
                 <summary className="flex min-h-[44px] cursor-pointer list-none items-start gap-2.5 py-1 transition-colors hover:text-white lg:min-h-0 [&::-webkit-details-marker]:hidden">
@@ -130,8 +126,6 @@ export function Footer() {
                     </span>
                   </span>
                 </summary>
-                {/* Indented to the text column, not the icon: the list reads as
-                    detail belonging to the row above it. */}
                 <dl className="mb-1 ml-[1.625rem] mt-1 space-y-1">
                   {weeklyHours.map(({ day, hours }) => (
                     <div key={day} className="flex justify-between gap-4">
@@ -143,15 +137,6 @@ export function Footer() {
                   ))}
                 </dl>
               </details>
-
-              <p className="flex items-start gap-2.5">
-                <Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-harbor-400" />
-                <span>
-                  {site.address.street}
-                  <br />
-                  {site.address.city}, {site.address.region} {site.address.postalCode}
-                </span>
-              </p>
             </address>
           </div>
 

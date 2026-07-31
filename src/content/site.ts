@@ -34,11 +34,11 @@ const publishedRating = {
 };
 
 export const site = {
-  name: "Ray's Window Cleaning & Pressure Washing",
+  name: "Ray's Window Cleaning And Pressure Washing LLC",
   shortName: "Ray's",
   tagline: "It's not pressure. It's precision.",
   /** Used in <title> templates and schema.org. */
-  legalName: "Ray's Window Cleaning and Pressure Washing LLC",
+  legalName: "Ray's Window Cleaning And Pressure Washing LLC",
   /**
    * Full lockup, header, footer, and any brand placements.
    *
@@ -53,7 +53,7 @@ export const site = {
    */
   logoSrc: "/logo.png",
   logoSrcWebp: "/logo.webp",
-  logoAlt: "Ray's Window Cleaning and Pressure Washing LLC",
+  logoAlt: "Ray's Window Cleaning And Pressure Washing LLC",
 
   /**
    * Canonical production origin, no trailing slash.
@@ -72,8 +72,8 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ryan-pressure-washing.vercel.app",
 
   contact: {
-    /** Human-readable. */
-    phone: "(803) 368-3600",
+    /** Human-readable phone format. */
+    phone: "803-368-3600",
     /** E.164, used for tel: and sms: hrefs. */
     phoneHref: "+18033683600",
     email: "rayswindows81@gmail.com",
@@ -85,7 +85,7 @@ export const site = {
     region: "SC",
     regionName: "South Carolina",
     postalCode: "29073",
-    country: "US",
+    country: "United States",
     /** Lexington, SC town-center coordinates; refine to the exact parcel once geocoded. */
     lat: 33.9815,
     lng: -81.2362,
