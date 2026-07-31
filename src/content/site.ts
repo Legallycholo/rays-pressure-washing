@@ -242,6 +242,27 @@ export const openDaysCount = new Set(
   site.hours.filter((h) => Boolean(h.close)).flatMap((h) => expandDays(h.days)),
 ).size;
 
+/**
+ * Every day of the week with its opening hours, Monday first.
+ *
+ * Powers the footer's expandable business-hours list. Derived from `site.hours`
+ * through the same `expandDays` that `lib/schema.ts` uses for
+ * `openingHoursSpecification`, so the seven lines a visitor reads and the hours
+ * Google reads come from one source and cannot drift apart. Change the week in
+ * `site.hours` and both follow.
+ *
+ * `hours` is null for a day no row covers, or a row with no `close` — rendered
+ * as "Closed". The week is uniform today, which is exactly why this is derived:
+ * the day it stops being uniform, nothing here needs editing.
+ */
+export const weeklyHours = WEEK.map((day) => {
+  const row = site.hours.find((h) => h.close && expandDays(h.days).includes(day));
+  return {
+    day,
+    hours: row ? `${formatHour(row.open)} – ${formatHour(row.close)}` : null,
+  };
+});
+
 /** e.g. "Mon–Sun 7am–10pm". Closed days drop out. */
 export const hoursLine = site.hours
   .filter((h) => h.close)

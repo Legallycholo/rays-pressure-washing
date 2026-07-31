@@ -81,24 +81,40 @@ export function Header() {
       {/* Utility bar: phone number above the fold on every page, on purpose.
           In this trade the phone call IS the conversion.
 
-          Three items, not four. "Licensed & insured" came out: it is
-          `site.credentials[0]`, which already renders in the TrustBar directly
-          under the hero, in the hero's own credential list and in the footer —
-          four impressions of one claim before a visitor has scrolled once. What
-          survives is the pair that can't be got anywhere else at a glance:
-          where we go, when we answer, and the number. */}
+          What is NOT here: "Licensed & insured". It is `site.credentials[0]`,
+          which already renders in the TrustBar directly under the hero, in the
+          hero's own credential list and in the footer — four impressions of one
+          claim before a visitor has scrolled once. What survives is the set that
+          can't be got anywhere else at a glance: where we go, when we answer,
+          and the two ways to reach us.
+
+          The email sits beside the phone but is deliberately quieter — icon,
+          regular weight, `ink-300` — while the phone keeps `text-white
+          font-semibold` and the rightmost slot. Two contact details styled the
+          same would read as a choice; styled like this they read as the number
+          to call, with a fallback. Do not level them up.
+
+          `ink-300` on `ink-950` is 6.1:1, so the quieter treatment still clears
+          the 4.5:1 body-text floor — same reasoning as the footer's bottom row. */}
       <div className="hidden bg-ink-950 text-ink-300 lg:block">
         <Container size="wide">
-          <div className="flex h-9 items-center justify-between text-[0.8125rem]">
-            <span className="inline-flex items-center gap-2">
+          <div className="flex h-9 items-center justify-between gap-6 text-[0.8125rem]">
+            <span className="inline-flex shrink-0 items-center gap-2">
               <Icon name="pin" className="h-3.5 w-3.5 text-leaf-400" />
               Serving {site.serviceRegion}
             </span>
-            <div className="flex items-center gap-6">
+            <div className="flex shrink-0 items-center gap-6">
               <span className="inline-flex items-center gap-2">
                 <Icon name="clock" className="h-3.5 w-3.5 text-harbor-400" />
                 {hoursLine}
               </span>
+              <a
+                href={`mailto:${site.contact.email}`}
+                className="inline-flex items-center gap-2 transition-colors hover:text-white"
+              >
+                <Icon name="mail" className="h-3.5 w-3.5 text-harbor-400" />
+                {site.contact.email}
+              </a>
               <a
                 href={`tel:${site.contact.phoneHref}`}
                 className="font-semibold text-white transition-colors hover:text-harbor-300"

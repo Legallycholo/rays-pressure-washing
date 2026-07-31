@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { site } from "@/content/site";
+import { site, hoursLine, weeklyHours } from "@/content/site";
 import { residentialServices } from "@/content/services";
 import { locations } from "@/content/locations";
 import { Container } from "@/components/ui/Container";
@@ -100,6 +100,50 @@ export function Footer() {
                 <Icon name="mail" className="h-4 w-4 shrink-0 text-harbor-400" />
                 <span className="min-w-0 [overflow-wrap:anywhere]">{site.contact.email}</span>
               </a>
+              {/*
+                Business hours: the condensed week is always visible, the seven
+                individual days sit behind a disclosure.
+
+                Native <details>/<summary>, the same primitive `Accordion` uses.
+                No client component, no state, no hydration cost, and it opens
+                with JavaScript off — which matters here because this is the
+                footer of a statically prerendered page.
+
+                Deliberately NOT "Open now" or today's hours. Both would need the
+                visitor's clock: computed on the server it bakes the build date
+                into every page, and computed on the client it is a hydration
+                mismatch on the one element claiming to be authoritative. The
+                honest version of "are they open" is the full week, stated plainly.
+              */}
+              <details className="group">
+                <summary className="flex min-h-[44px] cursor-pointer list-none items-start gap-2.5 py-1 transition-colors hover:text-white lg:min-h-0 [&::-webkit-details-marker]:hidden">
+                  <Icon name="clock" className="mt-0.5 h-4 w-4 shrink-0 text-harbor-400" />
+                  <span className="min-w-0">
+                    {hoursLine}
+                    <span className="mt-0.5 flex items-center gap-1 text-xs font-semibold text-harbor-400">
+                      <span className="group-open:hidden">See all business hours</span>
+                      <span className="hidden group-open:inline">Hide business hours</span>
+                      <Icon
+                        name="chevron"
+                        className="h-3.5 w-3.5 transition-transform duration-200 group-open:rotate-180"
+                      />
+                    </span>
+                  </span>
+                </summary>
+                {/* Indented to the text column, not the icon: the list reads as
+                    detail belonging to the row above it. */}
+                <dl className="mb-1 ml-[1.625rem] mt-1 space-y-1">
+                  {weeklyHours.map(({ day, hours }) => (
+                    <div key={day} className="flex justify-between gap-4">
+                      <dt>{day}</dt>
+                      <dd className={hours ? "text-white" : "text-ink-400"}>
+                        {hours ?? "Closed"}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </details>
+
               <p className="flex items-start gap-2.5">
                 <Icon name="pin" className="mt-0.5 h-4 w-4 shrink-0 text-harbor-400" />
                 <span>
