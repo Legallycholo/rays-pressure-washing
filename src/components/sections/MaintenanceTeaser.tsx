@@ -14,8 +14,10 @@ export function MaintenanceTeaser({ plan, terms }: { plan: MaintenancePlan; term
     <Section tone="sand">
       <div className="grid items-center gap-10 md:grid-cols-2 lg:gap-16">
         <div className="flex flex-col items-start gap-4">
-          <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-harbor-600">
-            <span className="h-px w-6 bg-harbor-500/50" aria-hidden="true" />
+          {/* Hand-rolled rather than `SectionHeading` (the layout differs), so
+              it has to track that component's eyebrow colour by hand. */}
+          <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-leaf-600">
+            <span className="h-px w-6 bg-leaf-500/60" aria-hidden="true" />
             Stop thinking about it
           </span>
           <h2 className="text-display-sm text-ink-900 sm:text-4xl">

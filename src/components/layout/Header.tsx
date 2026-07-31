@@ -79,24 +79,25 @@ export function Header() {
   return (
     <>
       {/* Utility bar: phone number above the fold on every page, on purpose.
-          In this trade the phone call IS the conversion. */}
-      <div className="hidden bg-ink-900 text-ink-200 lg:block">
+          In this trade the phone call IS the conversion.
+
+          Three items, not four. "Licensed & insured" came out: it is
+          `site.credentials[0]`, which already renders in the TrustBar directly
+          under the hero, in the hero's own credential list and in the footer —
+          four impressions of one claim before a visitor has scrolled once. What
+          survives is the pair that can't be got anywhere else at a glance:
+          where we go, when we answer, and the number. */}
+      <div className="hidden bg-ink-950 text-ink-300 lg:block">
         <Container size="wide">
-          <div className="flex h-10 items-center justify-between text-sm">
+          <div className="flex h-9 items-center justify-between text-[0.8125rem]">
+            <span className="inline-flex items-center gap-2">
+              <Icon name="pin" className="h-3.5 w-3.5 text-leaf-400" />
+              Serving {site.serviceRegion}
+            </span>
             <div className="flex items-center gap-6">
               <span className="inline-flex items-center gap-2">
-                <Icon name="pin" className="h-4 w-4 text-harbor-400" />
-                Serving {site.serviceRegion}
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <Icon name="clock" className="h-4 w-4 text-harbor-400" />
+                <Icon name="clock" className="h-3.5 w-3.5 text-harbor-400" />
                 {hoursLine}
-              </span>
-            </div>
-            <div className="flex items-center gap-5">
-              <span className="inline-flex items-center gap-2 text-leaf-400">
-                <Icon name="shield" className="h-4 w-4" />
-                Licensed &amp; insured
               </span>
               <a
                 href={`tel:${site.contact.phoneHref}`}
@@ -119,36 +120,57 @@ export function Header() {
       >
         <Container size="wide">
           <nav
-            className="flex h-[var(--header-height)] items-center justify-between gap-6"
+            className="flex h-[var(--header-height)] items-center justify-between gap-10"
             aria-label="Main"
           >
             <Logo linked className="min-w-0" />
 
-            {/* Desktop nav */}
-            <ul className="hidden items-center gap-1 xl:flex">
+            {/* Desktop nav.
+
+                Density, not size, was the problem (OPTIMIZATION.md item 1 made
+                the logo bigger on purpose and that stands). Three changes, all
+                spacing: the row gets `gap-10` instead of `gap-6` so the logo,
+                the links and the actions read as three separate zones; the
+                links themselves sit on `gap-1.5`/`px-3.5`; and the active state
+                is now an underline rather than a colour swap, so "where am I"
+                survives for anyone who can't separate harbor from ink. */}
+            <ul className="hidden items-center gap-1.5 xl:flex">
               <li className="group relative">
                 <Link
                   href="/services"
-                  className="inline-flex items-center gap-1 rounded-pill px-3 py-2 text-sm font-semibold text-ink-700 transition-colors hover:bg-sand-50 hover:text-harbor-700"
+                  className={cn(
+                    "relative inline-flex items-center gap-1 rounded-pill px-3.5 py-2 text-sm font-semibold transition-colors",
+                    "hover:bg-sand-50 hover:text-harbor-700",
+                    "after:absolute after:inset-x-3.5 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-leaf-500 after:transition-transform after:duration-200 after:ease-out-expo",
+                    pathname.startsWith("/services")
+                      ? "text-harbor-700 after:scale-x-100"
+                      : "text-ink-700 after:scale-x-0",
+                  )}
                 >
                   Services
                   <Icon name="chevron" className="h-4 w-4 transition-transform group-hover:rotate-180" />
                 </Link>
 
                 {/* Mega menu. CSS-driven so there's no JS state to get wrong;
-                    focus-within keeps it keyboard-operable. */}
-                <div className="invisible absolute left-1/2 top-full w-[46rem] -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 ease-out-expo group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-                  <div className="grid grid-cols-2 gap-6 rounded-2xl bg-white p-6 shadow-lift ring-1 ring-ink-900/10">
-                    <div>
-                      <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
+                    focus-within keeps it keyboard-operable.
+
+                    Services run two columns rather than one, which halves the
+                    panel's height — seven stacked rows next to a short promo
+                    card left a column of dead white space and made the menu the
+                    tallest thing on the page. Icons plus the short `navLabel`
+                    carry each row; nothing here needs a sentence. */}
+                <div className="invisible absolute left-1/2 top-full w-[50rem] -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 ease-out-expo group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                  <div className="grid grid-cols-3 gap-8 rounded-2xl bg-white p-7 shadow-lift ring-1 ring-ink-900/10">
+                    <div className="col-span-2">
+                      <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-leaf-600">
                         Services
                       </p>
-                      <ul className="space-y-0.5">
+                      <ul className="grid grid-cols-2 gap-x-3 gap-y-0.5">
                         {residentialServices.map((s) => (
                           <li key={s.slug}>
                             <Link
                               href={`/services/${s.slug}`}
-                              className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-ink-600 transition-colors hover:bg-sand-50 hover:text-harbor-700"
+                              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-ink-600 transition-colors hover:bg-sand-50 hover:text-harbor-700"
                             >
                               <Icon name={s.icon} className="h-4 w-4 text-harbor-500" />
                               {s.navLabel}
@@ -157,20 +179,20 @@ export function Header() {
                         ))}
                       </ul>
                     </div>
-                    <div className="flex flex-col">
-                      <div className="rounded-xl bg-ink-900 p-4 text-white harbor-mesh">
-                        <p className="font-display text-lg">Own a big place on the lake?</p>
-                        <p className="mt-1 text-sm text-ink-200">
-                          Call now or send your address and we&apos;ll get back to you within 24 hours.
-                        </p>
-                        <a
-                          href={`tel:${site.contact.phoneHref}`}
-                          className="mt-3 inline-flex items-center gap-1.5 text-sm font-bold text-amber-400 hover:text-amber-300"
-                        >
-                          Call {site.contact.phone}
-                          <Icon name="arrow" className="h-4 w-4" />
-                        </a>
-                      </div>
+                    <div className="harbor-mesh flex flex-col justify-center rounded-xl bg-ink-900 p-5 text-white">
+                      <p className="font-display text-xl leading-tight">
+                        Own a big place on the lake?
+                      </p>
+                      <p className="mt-2 text-sm leading-relaxed text-ink-200">
+                        Send your address. We come back with a price.
+                      </p>
+                      <a
+                        href={`tel:${site.contact.phoneHref}`}
+                        className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-amber-400 hover:text-amber-300"
+                      >
+                        Call {site.contact.phone}
+                        <Icon name="arrow" className="h-4 w-4" />
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -180,9 +202,13 @@ export function Header() {
                 <li key={l.href}>
                   <Link
                     href={l.href}
+                    aria-current={pathname.startsWith(l.href) ? "page" : undefined}
                     className={cn(
-                      "rounded-pill px-3 py-2 text-sm font-semibold transition-colors hover:bg-sand-50 hover:text-harbor-700",
-                      pathname.startsWith(l.href) ? "text-harbor-700" : "text-ink-700",
+                      "relative rounded-pill px-3.5 py-2 text-sm font-semibold transition-colors hover:bg-sand-50 hover:text-harbor-700",
+                      "after:absolute after:inset-x-3.5 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-leaf-500 after:transition-transform after:duration-200 after:ease-out-expo",
+                      pathname.startsWith(l.href)
+                        ? "text-harbor-700 after:scale-x-100"
+                        : "text-ink-700 after:scale-x-0",
                     )}
                   >
                     {l.label}
@@ -272,7 +298,7 @@ export function Header() {
             </div>
           </div>
 
-          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
+          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-leaf-600">
             Services
           </p>
           <ul className="divide-y divide-ink-100 border-y border-ink-100">
@@ -289,7 +315,7 @@ export function Header() {
             ))}
           </ul>
 
-          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
+          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-leaf-600">
             Explore
           </p>
           <ul className="divide-y divide-ink-100 border-y border-ink-100">
@@ -302,7 +328,7 @@ export function Header() {
             ))}
           </ul>
 
-          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-harbor-600">
+          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-leaf-600">
             Popular Areas
           </p>
           <div className="flex flex-wrap gap-2 pb-10">

@@ -429,12 +429,21 @@ In `globals.css` under `@theme`. Full 50–950 scales for `ink` and `hydro`.
 
 ### 10.3 Typography
 
-System stacks today, so the scaffold builds with no network dependency. Two
-lines in `globals.css` are the entire swap surface. Recommended:
+**Shipped 2026-07-31.** Both faces are loaded through `next/font/google` in
+`layout.tsx`, which downloads and self-hosts them at build time — no runtime
+request to Google, no render-blocking stylesheet, and a metric-matched local
+fallback so `display: swap` costs no layout shift. `globals.css` reads them via
+`--font-display-family` / `--font-sans-family`.
 
-- **Display:** Barlow Condensed 600/700 — industrial, trade-professional rather
-  than corporate-generic; narrow enough that big headlines survive mobile.
-- **Body:** Inter 400/500/600.
+- **Display:** Barlow Condensed 400/600/700 — industrial, trade-professional
+  rather than corporate-generic; narrow enough that big headlines survive
+  mobile. 400 is loaded because `.font-display` is applied to a few non-heading
+  elements that inherit body weight.
+- **Body:** Inter (variable, covers 400–700 from one file).
+
+Heading tracking is `+0.002em`, not the `-0.015em` that was tuned against the
+system fallback: Barlow Condensed is already narrow and negative tracking closed
+its counters up at display sizes.
 
 Fluid sizes use `clamp()` so headings scale continuously.
 
@@ -456,6 +465,13 @@ JS to become visible. Entrance reveals apply only to content that scrolls into v
 *after* first paint, driven by `IntersectionObserver`, and the underlying content
 must already be in the DOM (progressive enhancement — CSS-disabled or JS-failed
 should still show fully readable content, just without the fade/slide).
+
+The homepage hero is the one exception, added 2026-07-31, and it does **not** relax
+the sentence above: the H1 animates transform only (`.hero-rise`) so it paints opaque
+in frame one, opacity animations are confined to chrome that is never the LCP element
+(`.hero-in`), and the slider is revealed by sweeping a panel off it (`.hero-wipe`)
+rather than by clipping or fading the image. Anything that would delay the paint of
+the largest element is still prohibited. Full rules in `ANIMATIONS.md` §0.
 
 **No JS scroll-jacking:** never intercept wheel/touch events to remap scroll
 position or speed. Native scroll-linked techniques are allowed and encouraged:

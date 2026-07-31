@@ -13,7 +13,6 @@ import { TrustBar } from "@/components/sections/TrustBar";
 import { SymptomChecker } from "@/components/sections/SymptomChecker";
 import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { BeforeAfterShowcase } from "@/components/sections/BeforeAfterShowcase";
-import { VideoShowcase } from "@/components/sections/VideoShowcase";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { GuaranteeBand } from "@/components/sections/GuaranteeBand";
 import { MaintenanceTeaser } from "@/components/sections/MaintenanceTeaser";
@@ -79,7 +78,10 @@ export default function HomePage() {
       <Hero
         eyebrow={`Serving ${site.serviceRegion}`}
         title={`Pressure washing big lake houses in ${cityState}`}
-        lede={`Big houses on the water need more than a pressure washer and a ladder. Glass, siding, decks and driveways, each on the method that surface can take, backed by the ${guaranteeName}.`}
+        // Was two sentences. The first ("Big houses on the water need more than
+        // a pressure washer and a ladder") restated the H1 immediately above it
+        // and spent the lede's whole attention budget agreeing with itself.
+        lede={`Glass, siding, decks and driveways, each on the method that surface can take. Backed by the ${guaranteeName}.`}
         primaryCta={{ label: "Request a Callback", href: "/contact" }}
         secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
         project={featuredProjects[0]}
@@ -91,12 +93,20 @@ export default function HomePage() {
         heading={{
           eyebrow: "What we clean",
           title: "Every surface on a lake house, its own method",
-          lede: "Pressure where pressure works, chemistry where it doesn't. Stone, stucco and hardwood near the water each get a different setting, and the method badge on each card tells you which.",
+          lede: "Pressure where pressure works, chemistry where it doesn't. The badge on each card tells you which.",
         }}
       />
       <BeforeAfterShowcase projects={featuredProjects} />
-      {/* sand → ink → light: photo proof, motion proof, then the process. */}
-      <VideoShowcase />
+      {/* `VideoShowcase` used to sit here, between the photo proof and the
+          process. It came out because `siteVideo` in content/media.ts is still
+          an empty placeholder, so the live homepage was rendering a grey
+          "VIDEO: ..." box in the middle of its strongest run of sections.
+
+          The component and its content file are deliberately still in the
+          codebase, unused, for whenever real full-job walkthrough footage
+          exists — this is a render change, not a deletion. Note this is NOT the
+          same thing as the two task-specific gutter/window clips, which belong
+          in the gallery. */}
       <HowItWorks />
       <GuaranteeBand guarantee={site.guarantee} />
       <MaintenanceTeaser

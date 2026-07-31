@@ -66,16 +66,24 @@
   --color-sand-200: #e8e0d4;
   --color-sand-300: #d6c9b6;
 
-  /* Typography.
-     PLACEHOLDER STACKS — system fonts so the scaffold builds with zero network
-     dependency. STRUCTURE.md § Typography names the two fonts to swap in via
-     next/font once you're ready; only these two lines change. */
+  /* Typography — the two faces STRUCTURE.md §10.3 names, now actually loaded.
+     These were system-font placeholder stacks: nothing fetched "Barlow
+     Condensed" or "Inter", so every visitor got the generic `ui-sans-serif`
+     fallback and the display face — the thing that makes this read as a trade
+     brand rather than a template — never rendered anywhere.
+
+     `--font-display-family` / `--font-sans-family` come from `next/font/google`
+     in `layout.tsx`, which downloads and self-hosts the files at BUILD time.
+     No runtime request to Google, no render-blocking stylesheet, and a
+     size-adjusted local fallback so the swap costs no layout shift. The named
+     families after each var stay as the belt-and-braces fallback for anyone
+     who already has them installed. */
   --font-display:
-    "Barlow Condensed", "Oswald", ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", sans-serif;
+    var(--font-display-family), "Barlow Condensed", "Oswald", ui-sans-serif,
+    system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-sans:
-    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
-    sans-serif;
+    var(--font-sans-family), "Inter", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
 
   /* Fluid display sizes — clamp() so headings scale continuously rather than
      stepping at breakpoints. */
@@ -132,6 +140,12 @@ html {
   /* Anchor targets clear the sticky header. */
   scroll-padding-top: calc(var(--header-height) + 1rem);
   -webkit-text-size-adjust: 100%;
+  /* Reserve the scrollbar's width whether or not one is showing. The mobile
+     drawer and the gallery lightbox both lock body scroll, and on any desktop
+     browser with classic scrollbars that removed ~15px of viewport width and
+     shunted the entire page sideways at the moment the menu opened. Reserving
+     the gutter up front costs nothing and removes the jump. */
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -140,6 +154,8 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Inter ships as a variable font with an optical size axis. */
+  font-optical-sizing: auto;
 }
 
 h1,
@@ -149,7 +165,10 @@ h4,
 .font-display {
   font-family: var(--font-display);
   font-weight: 700;
-  letter-spacing: -0.015em;
+  /* Was -0.015em, tuned against a system fallback. Barlow Condensed is already
+     narrow; the same negative tracking on top of it closed the counters up at
+     display sizes. A hair of positive tracking is what a condensed face wants. */
+  letter-spacing: 0.002em;
   line-height: 1.05;
   text-wrap: balance;
 }
@@ -199,12 +218,34 @@ p {
   clip-path: polygon(0 0, 100% 0, 100% calc(100% - 3.5rem), 0 100%);
 }
 
-/* Subtle water-texture wash for dark sections. */
+/* Subtle water-texture wash for dark sections.
+
+   The green layer runs at 0.24 rather than the original 0.16: `leaf` earns more
+   territory in the current direction, and an ambient wash is where extra green
+   costs nothing in contrast — nothing is read against it, it sits under an
+   already-dark surface. Blue still leads, which is the rule that matters. */
 .hydro-mesh {
   background-image:
     radial-gradient(60rem 40rem at 12% -10%, rgb(30 115 184 / 0.35), transparent 60%),
-    radial-gradient(45rem 35rem at 92% 8%, rgb(69 186 73 / 0.16), transparent 62%),
+    radial-gradient(45rem 35rem at 92% 8%, rgb(69 186 73 / 0.24), transparent 62%),
     radial-gradient(40rem 30rem at 50% 110%, rgb(30 115 184 / 0.18), transparent 60%);
+}
+
+/* The same wash, scaled for a small dark panel rather than a full-width band.
+
+   `.harbor-mesh` was referenced in four places — the footer's top band, the
+   header's mega-menu card, the reviews CTA card and the ContactHub header — and
+   defined in none. Every one of them was rendering flat `ink-900`. The name is
+   left over from the `hydro` → `harbor` rename, which moved the usages and not
+   the rule.
+
+   It gets its own gradient rather than aliasing `.hydro-mesh`: those radii are
+   40–60rem, so on a 16rem-tall card you land inside one stop and get a flat
+   tint. These are sized to the box they actually sit in. */
+.harbor-mesh {
+  background-image:
+    radial-gradient(18rem 12rem at 0% 0%, rgb(30 115 184 / 0.45), transparent 65%),
+    radial-gradient(14rem 10rem at 100% 100%, rgb(69 186 73 / 0.22), transparent 65%);
 }
 
 /* Grid used behind dark hero/CTA bands. */
@@ -304,6 +345,103 @@ p {
 [data-reveal-ready] .reveal.is-revealed {
   opacity: 1;
   transform: none;
+}
+
+/* Hero entrance — homepage only.
+   ────────────────────────────────────────────────────────────────────────────
+   A deliberate, documented exception to "no entrance animation on the hero"
+   (STRUCTURE.md §10.4, ANIMATIONS.md §1). The rule existed to protect LCP, and
+   that constraint has NOT been relaxed — it is honoured structurally here
+   instead of by abstention:
+
+   - `.hero-rise` animates transform ONLY. The H1 is painted at full opacity in
+     the very first frame; it just arrives 12px low. LCP for the text block is
+     measured at paint, and transform is compositor-only, so this is free.
+   - `.hero-in` (opacity + rise) is used exclusively on the *chrome* around the
+     headline — eyebrow, lede, CTAs, rating, credentials. None of those is ever
+     the LCP element.
+   - `.hero-wipe` sweeps a panel OFF the image rather than clipping the image
+     in. The photo is fully decoded and painted at t=0 with nothing standing
+     between it and the compositor; only a sibling pseudo-element moves. Had
+     this been a `clip-path` on the image itself, the largest element on the
+     page would not have been fully painted until the wipe finished, which is
+     exactly the trade the original rule refused to make.
+
+   Everything sits under `[data-reveal-ready]`, the same pre-paint contract
+   `Reveal` uses: no JS means no attribute means no hidden base state, and the
+   4s failure valve in `layout.tsx` un-hides anything a broken bundle stranded.
+
+   Run once, on mount. There is no observer here — the hero is above the fold by
+   definition, so waiting for it to intersect would be waiting for something
+   that already happened. */
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes hero-rise {
+  from {
+    transform: translateY(12px);
+  }
+}
+
+/* Longhands, not the `animation` shorthand.
+
+   Two `var()`s inside one shorthand is the fragile form: substitution happens
+   at computed-value time and the whole declaration is re-parsed afterwards, so
+   a single unresolvable custom property takes out the entire animation rather
+   than one component of it — and a minifier is free to close the gap between
+   `var(--a)var(--b)`, which then depends on re-tokenisation behaviour to stay
+   valid. Per-property is unambiguous and costs four extra lines. */
+[data-reveal-ready] .hero-in {
+  animation-name: hero-in;
+  animation-duration: 620ms;
+  animation-timing-function: var(--ease-out-expo);
+  animation-delay: var(--hero-delay, 0ms);
+  animation-fill-mode: both;
+}
+[data-reveal-ready] .hero-rise {
+  animation-name: hero-rise;
+  animation-duration: 720ms;
+  animation-timing-function: var(--ease-out-expo);
+  animation-delay: var(--hero-delay, 0ms);
+  animation-fill-mode: both;
+}
+
+/* The panel that sweeps off the before/after image.
+
+   Its leading edge is the site's one signature shape — the `.edge-wipe-*`
+   diagonal (globals.css above), which was defined and then never used on the
+   hero. Rendered as a 4rem corner cut on a panel inset 4rem past the left edge,
+   so at rest it covers the frame completely and the slant only becomes visible
+   once it starts moving. Reads as a squeegee pass, which is the job.
+
+   The panel is `ink-900`, the same colour as the section behind it, so the
+   image resolves out of the background rather than out of a grey box.
+
+   z-30 clears `BeforeAfterSlider`'s own stack (divider z-10, range input z-20);
+   `pointer-events: none` means the slider is draggable through it from frame
+   one, even mid-sweep. Requires a positioned, `overflow: hidden` host — the
+   slider's root figure is both already. */
+@keyframes hero-wipe {
+  to {
+    transform: translateX(calc(100% + 4rem));
+  }
+}
+[data-reveal-ready] .hero-wipe::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 -4rem;
+  z-index: 30;
+  pointer-events: none;
+  background: var(--color-ink-900);
+  clip-path: polygon(4rem 0, 100% 0, 100% 100%, 0 100%);
+  animation-name: hero-wipe;
+  animation-duration: 900ms;
+  animation-timing-function: var(--ease-out-expo);
+  animation-delay: 140ms;
+  animation-fill-mode: forwards;
 }
 
 /* ContactHub's menu and nudge bubble share one entrance, so the hub reads as a
@@ -476,6 +614,21 @@ p {
   [data-reveal-ready] .reveal {
     opacity: 1;
     transform: none;
+  }
+
+  /* Same reasoning for the hero: cancel the animations outright rather than
+     run them at 0.001ms. `animation-name: none` is what does the work here —
+     the duration longhand above is `!important` and would win on its own, but
+     with no name there is nothing to fill from, so every element sits at its
+     natural style from the first frame. */
+  [data-reveal-ready] .hero-in,
+  [data-reveal-ready] .hero-rise {
+    animation: none;
+  }
+  /* The wipe panel is pure decoration with no content behind it to restore —
+     it simply never exists. */
+  [data-reveal-ready] .hero-wipe::after {
+    display: none;
   }
 }
 

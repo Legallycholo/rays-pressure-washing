@@ -741,7 +741,11 @@ export function ContactHub() {
             ref={scrollRef}
             id={bodyId}
             role="tabpanel"
-            aria-labeledby={tab === "chat" ? chatTabId : contactTabId}
+            // `aria-labelledby`, three Ls. It was spelled `aria-labeledby`,
+            // which is not an ARIA attribute — React passes unknown `aria-*`
+            // through verbatim, so it emitted silently and the tabpanel had no
+            // accessible name at all.
+            aria-labelledby={tab === "chat" ? chatTabId : contactTabId}
             // `overscroll-contain` rather than a body scroll lock: this is a
             // popover, not a modal. Freezing the page behind a non-modal
             // element traps someone who tapped it by accident.

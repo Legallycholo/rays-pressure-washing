@@ -16,9 +16,15 @@ export function ServiceCard({ service, promoted = false }: { service: Service; p
         <span className="grid h-12 w-12 place-items-center rounded-xl bg-harbor-50 text-harbor-600">
           <Icon name={service.icon} className="h-6 w-6" />
         </span>
+        {/* The method badge is the one that runs green. It names how the
+            surface gets cleaned — soft wash, hand detail — which is this
+            business's whole "we don't just blast it" argument, and green is
+            already the site's safe/gentle/verified signal. "In season" moves to
+            harbor so the two never read as the same class of information; it is
+            a timing nudge, not a claim about method. */}
         <span className="flex flex-wrap justify-end gap-1.5">
-          {promoted && <Badge tone="mint">In season</Badge>}
-          <Badge tone="hydro">{service.method}</Badge>
+          {promoted && <Badge tone="hydro">In season</Badge>}
+          <Badge tone="mint">{service.method}</Badge>
         </span>
       </div>
       <h3 className="mt-4 font-display text-xl text-ink-900">{service.name}</h3>

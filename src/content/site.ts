@@ -122,10 +122,22 @@ export const site = {
    */
   rating: publishedRating,
 
-  /** Rendered as trust chips. Remove any that aren't true, these are claims. */
+  /**
+   * Rendered as trust chips. Remove any that aren't true, these are claims.
+   *
+   * "No Contracts" was dropped from the middle entry on 2026-07-31 at the
+   * business's direction. It had come from a working session with Geni
+   * (OPTIMIZATION.md items 24–31), so this reverses an earlier owner
+   * instruction rather than cleaning up scaffolding — noted here because the
+   * next person to read that doc will otherwise think the string drifted.
+   *
+   * One string, five consumers: `TrustBar`, `Hero`, `Footer`, `/about` and
+   * `credentialBadges` all read this array, so the separator has to stay
+   * balanced — two claims, one `·`, no trailing dot.
+   */
   credentials: [
     "Licensed & insured",
-    "Same-Day Availability · Instant Pricing · No Contracts",
+    "Same-Day Availability · Instant Pricing",
     "Locally owned and operated",
   ],
 

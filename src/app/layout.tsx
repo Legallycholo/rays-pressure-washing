@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Barlow_Condensed, Inter } from "next/font/google";
 import "./globals.css";
 import { site, cityState, guaranteeName } from "@/content/site";
 import { locations } from "@/content/locations";
@@ -10,6 +11,42 @@ import { JsonLd } from "@/components/JsonLd";
 import { localBusinessSchema, websiteSchema } from "@/lib/schema";
 import { INDEXABLE } from "@/lib/indexing";
 import { Analytics } from "@vercel/analytics/next";
+
+/**
+ * The two faces STRUCTURE.md §10.3 specified and nothing ever loaded.
+ *
+ * `globals.css` listed "Barlow Condensed" and "Inter" in its font stacks with
+ * no `@font-face` and no loader behind either, so unless a visitor happened to
+ * have them installed locally, every heading on the site fell through to
+ * `ui-sans-serif`. The display face is most of the brand's voice, and it was
+ * rendering as the same system sans as every competitor's template.
+ *
+ * `next/font/google` downloads both at BUILD time and serves them from this
+ * origin: no runtime request to fonts.googleapis.com, no render-blocking
+ * stylesheet in <head>, and no third-party connection to negotiate before text
+ * can paint. It also generates a metric-matched local fallback, so `display:
+ * swap` swaps without the reflow that normally comes with it — which is the
+ * whole reason this is safe to do on a site that guards LCP as carefully as
+ * this one.
+ *
+ * Weights are enumerated for Barlow Condensed because it ships as static
+ * instances, not a variable font; Inter is variable, so its axis covers 400–700
+ * from one file. 400 is on the display list because `.font-display` is applied
+ * to a few non-heading elements that inherit body weight, and a missing weight
+ * would be synthesised into a smeared faux-bold.
+ */
+const displayFont = Barlow_Condensed({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  display: "swap",
+  variable: "--font-display-family",
+});
+
+const sansFont = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-sans-family",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -102,7 +139,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     // The reveal bootstrap below writes an attribute onto <html> before React
     // hydrates, which is a mismatch by construction, suppress it here rather
     // than let it surface as a false alarm on every page.
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      // The two `--font-*-family` custom properties `globals.css` reads. On
+      // <html> rather than <body> so anything portalled outside the body tree
+      // still inherits them.
+      className={`${displayFont.variable} ${sansFont.variable}`}
+    >
       <body className="flex min-h-dvh flex-col pb-[calc(var(--callbar-height)+var(--safe-bottom))] lg:pb-0">
         {/*
           Arms the entrance-reveal base state before first paint (see

@@ -407,6 +407,103 @@ verified: production build clean, emitted CSS inspected rule by rule. The five
 
 ---
 
+## Phase 15 — Homepage refresh: motion, colour, copy
+
+Built from `implementation/ANI_DES_COPY.MD` on 2026-07-31. Same convention as
+Phase 14: `[~]` means it needs hardware or tooling this environment doesn't have.
+
+**Typography (not in the brief — the gap that made everything else look flat)**
+- [x] `next/font/google` wired for Barlow Condensed + Inter, self-hosted at build
+      time. `globals.css` had named both faces since the scaffold with nothing
+      loading either, so every heading on the site had been rendering in the
+      `ui-sans-serif` fallback
+- [x] Heading tracking retuned `-0.015em` → `+0.002em` for the condensed face
+- [x] `STRUCTURE.md` §10.3 updated from "system stacks today" to shipped
+
+**A — Hero entrance**
+- [x] `.hero-in` / `.hero-rise` / `.hero-wipe`, homepage `home` variant only
+- [x] H1 animates transform only; text present and opaque in the initial HTML
+- [x] Wipe sweeps a panel **off** the slider — image never clipped or faded, so
+      LCP is structurally protected rather than traded away
+- [x] Gated behind `[data-reveal-ready]`; inherits `layout.tsx`'s 4s failure valve
+- [x] Explicit reduced-motion cancellation by name, not just the global duration
+      kill-switch
+- [x] Animation longhands rather than the `animation` shorthand (two `var()`s in
+      one shorthand is a re-parse hazard)
+- [x] `ANIMATIONS.md` §0 and `STRUCTURE.md` §10.4 updated in place — the old
+      "no entrance animation on the hero" rule is marked superseded, with the
+      LCP constraint that outlived it restated
+- [~] Verified on a real browser: staggering, one-shot playback, and the OS
+      reduced-motion toggle
+
+**B — Green expanded**
+- [x] `SectionHeading` on-light eyebrow `harbor-600` → `leaf-600` (5.0:1 on
+      white — `leaf-500` would be 3.6:1 and fail the `design.md` §4.3 floor)
+- [x] `MaintenanceTeaser`'s hand-rolled eyebrow and the `/contact` kickers
+      tracked to match
+- [x] `ServiceCard` method badge → `mint`; "In season" → `hydro` so the two
+      never read as the same class of information
+- [x] `GuaranteeBand` shield → `leaf-300` in a ringed disc — the site's one
+      harbor surface and so the only place a large green mark can sit on blue
+- [x] Nav active-state underline is `leaf-500`
+- [x] `.hydro-mesh` green layer 0.16 → 0.24
+- [x] Held: `amber` still CTA-exclusive, `ink` still the dominant surface, no
+      solid leaf fill under light text below `leaf-600`
+
+**C/D/E/F/H — navbar, copy, credentials, video, service map**
+- [x] Utility bar 4 items → 3 (dropped "Licensed & insured", which already
+      renders in the TrustBar, the hero list and the footer), `h-10` → `h-9`
+- [x] Nav row `gap-6` → `gap-10`, links `gap-1.5`/`px-3.5`
+- [x] Active nav state is an underline + `aria-current="page"`, not colour alone
+- [x] Mega menu 2-column service list, `w-[50rem]`, `p-7`; promo card trimmed
+- [x] Sticky/scroll-blur and the `inFlowPrimary` CTA-yield logic untouched
+- [x] Hero lede, `ServicesGrid` lede and `ServiceAreaSection` intro trimmed;
+      homepage only, no inner pages touched
+- [x] `site.credentials[1]` → "Same-Day Availability · Instant Pricing"
+      (confirmed with the business; reverses the earlier Geni directive)
+- [x] `<VideoShowcase />` removed from the homepage render only; component and
+      `media.ts` left in place
+- [x] City pills split into priority + "Also serving" groups
+
+**Copy — "talk to a human"**
+- [x] `/contact` H1 "Talk to a human" → "Send us your details", with a lede that
+      promises the callback within 24 hours and nothing about price
+- [x] `FaqSection` "Ask a human" → "Ask us directly"; `/faq` CTA → "Ask us your
+      question"
+- [x] **Caught in review:** the first rewrite of that H1 was pricing-framed and
+      promised a real price on the callback, which broke the standing owner
+      directive in OPTIMIZATION.md item 3 (no pricing or estimates anywhere on
+      the site; every CTA is "Call now" or "Submit the form, get contacted
+      within 24 hours"). Item 75's verification grep catches exactly this and
+      should be run against `src` on any CTA copy change — it is the cheapest
+      guard on the site and it is not wired into the build
+- [x] The replacement comment in `contact/page.tsx` deliberately describes the
+      rejected wording instead of reproducing it, so the item 75 grep isn't
+      permanently tripped by an explanation of a string that no longer ships
+
+**Bugs found while in there**
+- [x] `.harbor-mesh` was referenced in four places (footer band, mega-menu card,
+      reviews CTA, ContactHub header) and **defined nowhere** — a leftover from
+      the `hydro` → `harbor` rename. All four were rendering flat `ink-900`
+- [x] `aria-labeledby` (two Ls) on ContactHub's tabpanel — not an ARIA
+      attribute, so the panel had no accessible name
+- [x] `scrollbar-gutter: stable` on `<html>` — the mobile drawer and lightbox
+      both lock body scroll, which was shifting the whole page sideways on any
+      desktop browser with classic scrollbars
+
+**Known broken, pre-existing, not addressed**
+- [ ] `npm run lint` fails: `next lint` was removed in Next 16 and there is no
+      ESLint config or dependency in the repo. Needs `eslint` +
+      `eslint-config-next` installed and the script repointed at `eslint .`
+
+**GATE 15 ⚠️ PARTIAL** — `npm run typecheck` and `npm run build` clean (73 pages
+prerendered); emitted CSS and prerendered HTML inspected for every change above.
+Still open: the five Phase 14 `[~]` items, now also needing re-verification
+against the new hero and navbar markup, plus a real-browser pass on the hero
+entrance.
+
+---
+
 ## Open decisions to resolve
 
 From `SECTIONS.md` §4. Each blocks the phase listed.

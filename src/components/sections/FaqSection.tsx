@@ -30,7 +30,13 @@ export function FaqSection({
                 title: "Questions we hear every week",
               })}
             />
-            <p className="text-ink-500">Still not sure? Ask a human. No obligation, no hard sell.</p>
+            {/* Was "Still not sure? Ask a human." Same problem as the old
+                /contact H1: "ask a human" is the phrase you reach for when a
+                bot has stonewalled you, and using it unprompted invites the
+                reader to assume one has been. Ask the question directly. */}
+            <p className="text-ink-500">
+              Still not sure? Ask us directly. No obligation, no hard sell.
+            </p>
             <Button href={showAllLink ? "/faq" : "/contact"} variant="ghost">
               {showAllLink ? "See every question" : "Get in touch"}
             </Button>

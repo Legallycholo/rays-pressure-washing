@@ -48,7 +48,7 @@ export default function FaqPage() {
         <div className="mt-14 text-center">
           <p className="text-ink-500">Didn&apos;t find it?</p>
           <Button href="/contact" variant="secondary" className="mt-3">
-            Ask a human
+            Ask us your question
           </Button>
         </div>
       </Section>

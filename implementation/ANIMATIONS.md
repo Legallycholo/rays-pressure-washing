@@ -67,8 +67,33 @@ checklist includes updating `STRUCTURE.md` §10.4 in place** so the docs and the
 don't contradict each other again.
 
 `CHECKLIST.md` and `improvement.md` also codify "no entrance animation on the hero"
-and "don't animate the stats count-up — it delays LCP." Both survive unchanged in the
-new policy (see the LCP rule in §1).
+and "don't animate the stats count-up — it delays LCP."
+
+The stats rule survives unchanged. **The hero rule was superseded on 2026-07-31**
+(`ANI_DES_COPY.MD` item A) and now reads:
+
+> **The homepage hero has a staggered entrance; the LCP constraint behind the old
+> rule is enforced structurally instead of by abstention.** Three classes in
+> `globals.css`, all under `[data-reveal-ready]`, applied only by `Hero`'s `home`
+> variant — the thirteen pages on the `page` variant get nothing:
+>
+> - `.hero-rise` — **transform only, never opacity.** This is what the H1 gets. The
+>   headline is painted opaque in the first frame and merely arrives 12px low.
+>   Putting an opacity animation on the H1 is the one thing this exception does not
+>   permit, because that is precisely the LCP cost the original rule refused.
+> - `.hero-in` — transform + opacity, for the *chrome* around the headline only
+>   (eyebrow, lede, CTAs, rating badge, credentials, figcaption). None of those is
+>   ever the LCP element. Stagger runs 0/60/150/230/310/370/560ms.
+> - `.hero-wipe` — sweeps an `ink-900` panel **off** the `BeforeAfterSlider`, with
+>   the `.edge-wipe-*` diagonal as its leading edge. The image itself is never
+>   clipped, faded or hidden, so it is decoded, painted and LCP-eligible at t=0;
+>   only a sibling pseudo-element moves. A `clip-path` on the image would have
+>   traded LCP for the same visual and was rejected for that reason.
+>
+> Reduced motion cancels all three by name (`animation: none`, and `display: none`
+> on the wipe panel) rather than relying on the global duration kill-switch.
+
+This is why the `BeforeAfterSlider` line in §3 below now reads differently too.
 
 ### Phase 0 checklist
 - [ ] Read this whole document once before writing code.
@@ -224,8 +249,11 @@ do not do a mass find-replace.
 - [ ] **Gallery lightbox open/close** (`GalleryLightbox.tsx`): audit — if it currently
       snaps open with no transition, add a `scale-95 → scale-100` + `opacity`
       transition on the `<dialog>` (respecting reduced motion).
-- [ ] **BeforeAfterSlider**: leave untouched — it's LCP content per the existing rule
-      ("Hero slider is LCP: no lazy-load, no entrance animation").
+- [x] **BeforeAfterSlider**: the *image* is still untouched — no lazy-load, no clip,
+      no fade, painted at t=0. What was added (2026-07-31) is `.hero-wipe`, a panel
+      that sweeps **off** it from the outside. "Hero slider is LCP" is still the
+      governing rule; the wipe is built the way it is specifically so the rule holds.
+      See the superseded-rule block in §0 above.
 
 ### Stretch (optional, do last if time remains)
 - [ ] Investigate the View Transitions API for cross-page navigation polish
