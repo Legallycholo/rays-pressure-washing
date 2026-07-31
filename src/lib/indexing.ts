@@ -26,7 +26,7 @@
  * blocks indexing, but the credentials line is worth one look before the site is
  * publicly making that claim.
  */
-export const INDEXABLE = false;
+export const INDEXABLE = true;
 
 /**
  * Crawlers that feed answer engines and LLM citations, allowed explicitly.
