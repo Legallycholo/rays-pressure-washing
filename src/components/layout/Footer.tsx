@@ -29,6 +29,18 @@ const footerLink =
 
 const footerList = "mt-2 text-sm lg:mt-4 lg:space-y-2.5";
 
+/**
+ * A row in the footer's `<address>`: the same 44px tap target as `footerLink`,
+ * but block-level `flex` at every width.
+ *
+ * These rows are direct children of `<address>` with no `<li>` wrapping them,
+ * so `footerLink`'s `lg:inline-flex` — right for the link columns — put the
+ * phone and email side by side on one line at `lg`, leaving the email out of
+ * line with the street address stacked beneath it.
+ */
+const footerContactRow =
+  "flex min-h-[44px] items-center gap-2.5 transition-colors hover:text-white lg:min-h-0";
+
 export function Footer() {
   const year = new Date().getFullYear();
 
@@ -80,17 +92,11 @@ export function Footer() {
             </div>
 
             <address className="mt-4 text-sm not-italic lg:mt-6 lg:space-y-2.5">
-              <a
-                href={`tel:${site.contact.phoneHref}`}
-                className={cn(footerLink, "gap-2.5")}
-              >
-                <Icon name="phone" className="h-4 w-4 text-harbor-400" />
+              <a href={`tel:${site.contact.phoneHref}`} className={footerContactRow}>
+                <Icon name="phone" className="h-4 w-4 shrink-0 text-harbor-400" />
                 {site.contact.phone}
               </a>
-              <a
-                href={`mailto:${site.contact.email}`}
-                className={cn(footerLink, "gap-2.5")}
-              >
+              <a href={`mailto:${site.contact.email}`} className={footerContactRow}>
                 <Icon name="mail" className="h-4 w-4 shrink-0 text-harbor-400" />
                 <span className="min-w-0 [overflow-wrap:anywhere]">{site.contact.email}</span>
               </a>
