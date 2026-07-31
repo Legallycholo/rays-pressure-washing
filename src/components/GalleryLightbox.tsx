@@ -5,7 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Project } from "@/content/gallery";
 import { getService } from "@/content/services";
 import { getLocation } from "@/content/locations";
-import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
+import { ProjectMedia } from "@/components/ProjectMedia";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
 import { replaceQuery } from "@/lib/url";
@@ -140,13 +140,7 @@ export function GalleryLightbox({ projects }: { projects: Project[] }) {
       {project && (
         <div className="flex flex-col">
           <div className="relative">
-            <BeforeAfterSlider
-              before={project.before}
-              after={project.after}
-              alt={project.alt}
-              ratio="3/2"
-              className="rounded-b-none"
-            />
+            <ProjectMedia project={project} ratio="3/2" className="rounded-b-none" />
             <button
               type="button"
               onClick={close}

@@ -22,6 +22,7 @@ export function BeforeAfterSlider({
   label,
   className,
   ratio = "3/2",
+  priority = false,
 }: {
   before?: string;
   after?: string;
@@ -29,6 +30,15 @@ export function BeforeAfterSlider({
   label?: string;
   className?: string;
   ratio?: "4/3" | "3/2" | "16/9" | "1/1";
+  /**
+   * Homepage hero only. That slider is the LCP element, so its images load
+   * eagerly and the base layer is hinted `fetchPriority="high"`.
+   *
+   * Off by default because everywhere else these appear in grids — /gallery
+   * renders nine at once — and eagerly fetching eighteen full-width photos
+   * below the fold would cost far more than the one above it gains.
+   */
+  priority?: boolean;
 }) {
   const [pos, setPos] = useState(50);
   const id = useId();
@@ -40,13 +50,57 @@ export function BeforeAfterSlider({
     "16/9": "aspect-video",
   };
 
+  /**
+   * WebP with a JPEG fallback, same `<picture>` pattern as `Logo.tsx`.
+   *
+   * The homepage hero renders one of these and it is the page's LCP element,
+   * so the ~20% WebP saves over JPEG at matched quality lands directly on the
+   * metric this site's whole motion system was designed around protecting.
+   *
+   * The `.webp` sibling is derived from the `.jpg` path rather than stored as a
+   * second field: `scripts/prepare-gallery-media.mjs` emits both formats for
+   * every still it processes, so the pair is guaranteed by the pipeline that
+   * created them. Anything not ending in `.jpg` (an external URL, a `.png`)
+   * falls through to a plain `<img>` with no `<source>`, so this can never
+   * point at a file that doesn't exist.
+   *
+   * `fetchPriority="high"` only on the base layer: the "after" image is what
+   * fills the frame on first paint, and the "before" is clipped to whatever
+   * side of the divider it starts on.
+   */
+  const Img = ({
+    src,
+    alt: imgAlt,
+    lead = false,
+  }: {
+    src: string;
+    alt: string;
+    /** The base layer, the one that fills the frame on first paint. */
+    lead?: boolean;
+  }) => (
+    <picture>
+      {src.endsWith(".jpg") && (
+        <source srcSet={src.replace(/\.jpg$/, ".webp")} type="image/webp" />
+      )}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={src}
+        alt={imgAlt}
+        className="h-full w-full object-cover"
+        loading={priority ? "eager" : "lazy"}
+        // Only the base layer gets the hint. Marking both high would have them
+        // competing for the same bandwidth to render one frame.
+        {...(priority && lead ? { fetchPriority: "high" as const } : {})}
+      />
+    </picture>
+  );
+
   return (
     <figure className={cn("group relative overflow-hidden rounded-card bg-ink-100", ratios[ratio], className)}>
       {/* AFTER: the full-bleed base layer. */}
       <div className="absolute inset-0">
         {after ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={after} alt={`${alt}, after cleaning`} className="h-full w-full object-cover" />
+          <Img src={after} alt={`${alt}, after cleaning`} lead />
         ) : (
           <Placeholder label={`AFTER: ${alt}`} ratio={ratio} className="h-full w-full rounded-none" />
         )}
@@ -58,8 +112,7 @@ export function BeforeAfterSlider({
         style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}
       >
         {before ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={before} alt={`${alt}, before cleaning`} className="h-full w-full object-cover" />
+          <Img src={before} alt={`${alt}, before cleaning`} />
         ) : (
           <Placeholder
             label={`BEFORE: ${alt}`}

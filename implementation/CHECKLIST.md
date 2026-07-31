@@ -491,6 +491,59 @@ Phase 14: `[~]` means it needs hardware or tooling this environment doesn't have
       both lock body scroll, which was shifting the whole page sideways on any
       desktop browser with classic scrollbars
 
+**Phase 1 media (from `~/.claude/plans/what-we-are-doing-foamy-sonnet.md`)**
+
+Ray's assets had been sitting unreferenced in `public/ray-image-assets/` — 83MB,
+zero references from `src/` — so every before/after on the site was a
+placeholder frame.
+
+- [x] `scripts/prepare-gallery-media.mjs` — derives web assets from the raw
+      phone dump. Originals stay as untouched masters and are never referenced
+- [x] Stills 4000x3000 / 3-5MB → 1600px WebP + JPEG, ~70-290kB each. `.rotate()`
+      applied so EXIF-portrait photos don't ship on their side
+- [x] Video 1080x1920 @ 8Mbps → 720x1280 CRF 27, 15MB→3.8MB and 9MB→1.2MB,
+      `+faststart`, audio dropped
+- [x] `p1` now carries Ray's real house-wash pair, which makes the **homepage
+      hero** a real photo instead of a placeholder
+- [x] `p2` (gutter) and `p9` (window) added as video-led projects, giving
+      `gutter-cleaning` its first gallery entry
+- [x] `Project.video` wired up at last via a new `ProjectMedia` component —
+      the field had been typed since the gallery was built and read by nothing,
+      so a project with footage would have rendered an empty slider
+- [x] `VideoPlayer` gained `fit="contain"`: both clips are portrait phone video
+      in a landscape card, and `object-cover` cropped away the entire subject
+- [x] `BeforeAfterSlider` gained `<picture>` WebP/JPEG and a `priority` flag —
+      eager + `fetchPriority="high"` on the hero only, lazy in the 9-card grid
+- [x] `featured` now means "has real media" and nothing else. `p3`/`p4`/`p7`
+      were featured while empty, so the homepage proof section was 3/4 grey
+      placeholders under the heading "Every job below is a real property"
+- [x] Showcase default lede no longer says "drag the divider" on a grid that is
+      now mostly video
+
+**Assets deliberately NOT shipped, with reasons**
+- [ ] `before-2`/`after-2` (commercial walkway) — a genuine pair, but both are
+      phone *screenshots*: letterboxed, and the "after" has an Android status
+      bar and nav bar in the pixels. Automatic trim can't remove them (the
+      status bar isn't a uniform edge) and the trimmed outputs came back at two
+      different aspect ratios. **Ask Ray for the original photos**
+- [ ] `before-3`/`after-3` — **not a pair.** `before-3` is a single frame of a
+      half-cleaned driveway (clean left, black right); `after-3` is a garage
+      apron somewhere else entirely. Putting them in a before/after slider would
+      be a fabricated comparison. `before-3` is a genuinely strong standalone
+      shot and is worth using once its real "after" exists
+- [ ] `before-only/*` (9 files), `collage-before-after-4.jpg`, and the two
+      remaining context shots — per the plan's own triage
+
+**Still placeholders after this pass**
+- [ ] `p3`–`p8` remain scaffolding: plausible-sounding jobs with no photography
+      and invented `durationHours`/`surfaceArea`/`citySlug`. They still render
+      on /gallery and on service pages. Either shoot them or retire them —
+      flagged in the `gallery.ts` header
+- [ ] `p1`'s `durationHours` (4), and its `citySlug` (home-base default) are
+      still scaffolded values on a now-real job. **Confirm with Ray**
+- [ ] `media.ts` `siteVideo` stays empty — neither clip is a full-job
+      walkthrough, and `VideoShowcase` is off the homepage anyway
+
 **Known broken, pre-existing, not addressed**
 - [ ] `npm run lint` fails: `next lint` was removed in Next 16 and there is no
       ESLint config or dependency in the repo. Needs `eslint` +

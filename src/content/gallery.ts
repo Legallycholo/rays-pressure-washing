@@ -2,19 +2,30 @@
  * Before/after project gallery, the single highest-converting asset a cleaning
  * business owns, and the thing the reference site under-uses most.
  *
- * `before` and `after` are intentionally empty strings right now. Components
- * detect that and render a labeled placeholder frame at the correct aspect
- * ratio, so layout is final before photography exists. Drop real images into
- * /public/gallery/ and fill in the paths, nothing else needs to change.
+ * ── WHICH OF THESE ARE REAL ─────────────────────────────────────────────────
+ * `p1`, `p2` and `p9` are backed by Ray's own photography and footage, added
+ * 2026-07-31 from `public/ray-image-assets/` via
+ * `scripts/prepare-gallery-media.mjs`. They are the only `featured` entries —
+ * see the note on `featuredProjects` at the bottom of this file.
  *
- * Every `citySlug` points at a city in Ray's confirmed service area, matched to
- * the job it describes — the lakefront pool cage to Chapin, the 14,000 sq ft
- * motor court to new-build Blythewood, the river-house glass to Gadsden. They
- * previously referenced invented placeholder towns, which left the gallery's
- * city filter offering options no page existed for.
+ * `p3`–`p8` are still **scaffolding**: the copy describes plausible jobs that
+ * may never have happened, and `before`/`after` are empty strings, so
+ * components render a labeled placeholder frame at the correct aspect ratio.
+ * Their `citySlug`, `durationHours` and `surfaceArea` values were written for
+ * layout, not recorded from a job sheet. Treat every one of them as unverified
+ * until it is replaced with a real job.
  *
- * These are still descriptive scaffolding, not records: once real photography
- * lands, set each `citySlug` to the city the job actually came from.
+ * That distinction matters more than it looks: this file feeds
+ * `BeforeAfterShowcase` on the service and city pages under headings that call
+ * the work real, and `lib/schema.ts` reads nothing from here precisely because
+ * inventing structured data about jobs is a different order of problem. Keep
+ * it that way.
+ *
+ * To add real work: drop originals into `public/ray-image-assets/`, register
+ * them in `scripts/prepare-gallery-media.mjs`, run it, and point `before`/
+ * `after` (or `video`) at the generated `/gallery/` and `/video/` paths. Do not
+ * reference anything under `/ray-image-assets/` directly — those are 3-5MB
+ * unprocessed phone files.
  */
 
 export type Project = {
@@ -42,18 +53,61 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+  /**
+   * REAL PHOTOGRAPHY. The first entry in this file backed by Ray's own images
+   * rather than scaffolding, which also makes it the homepage hero's slider
+   * (`page.tsx` reads `featuredProjects[0]`).
+   *
+   * Title, `alt` and `summary` were rewritten to describe what is actually in
+   * the two frames. The scaffolded version claimed "ten years of unwashed
+   * siding under heavy oak canopy" and an entry "detailed by hand" — none of
+   * which is visible, and the photo has no oak canopy in it at all.
+   *
+   * `surfaceArea` was dropped rather than carried over: the old "2,400 sq ft"
+   * was invented for layout, and a measured figure attached to a real job is a
+   * claim. `durationHours` is required by the type, so it keeps the scaffolded
+   * 4 — CONFIRM BOTH WITH RAY, along with `citySlug`, which is still the
+   * home-base default rather than the city this job was actually in.
+   */
   {
     id: "p1",
-    title: "Two-story vinyl with heavy north-side algae",
+    title: "Two-story vinyl, full elevation soft wash",
     serviceSlug: "house-washing",
     citySlug: "lexington",
+    before: "/gallery/house-washing-vinyl-before.jpg",
+    after: "/gallery/house-washing-vinyl-after.jpg",
+    alt: "Two-story cream vinyl siding before and after soft washing",
+    summary:
+      "Grey-green runoff streaking the full height of a two-story elevation, heaviest under the gutter line and along the lap seams. Soft washed at low pressure so nothing was driven behind the vinyl, down to the brick return.",
+    durationHours: 4,
+    featured: true,
+  },
+
+  /**
+   * REAL FOOTAGE, video-led. `before`/`after` stay empty on purpose: there is
+   * no before/after pair for this job, and `ProjectCard`/`GalleryLightbox`
+   * render `video` in place of the slider when it is present.
+   *
+   * Fills the `p2` id gap and gives `gutter-cleaning` its first gallery
+   * representation — that service had none at all, so its service page was
+   * showing an empty showcase.
+   */
+  {
+    id: "p2",
+    title: "Gutter clear from the ladder, not the ground",
+    serviceSlug: "gutter-cleaning",
+    citySlug: "chapin",
     before: "",
     after: "",
-    alt: "Two-story vinyl-sided home before and after soft washing",
+    alt: "Crew clearing gutters by hand from an extension ladder at a two-story home",
     summary:
-      "Ten years of unwashed siding under heavy oak canopy. Soft washed at low pressure across two elevations, gutter faces brightened, entry detailed by hand.",
-    durationHours: 4,
-    surfaceArea: "2,400 sq ft",
+      "Two-story run reached from an extension ladder and cleared by hand, section by section, rather than blown through from a pole. Slower, and the only way to see what is actually in the trough.",
+    video: {
+      src: "/video/gutter-cleaning.mp4",
+      poster: "/gallery/gutter-cleaning-poster.jpg",
+      alt: "Fifteen-second clip of a crew member clearing a gutter by hand from an extension ladder",
+    },
+    durationHours: 2,
     featured: true,
   },
   {
@@ -68,7 +122,6 @@ export const projects: Project[] = [
       "Previous contractor left wand striping across the whole slab. Re-cleaned edge to edge with a rotary surface cleaner, joints and borders hand-detailed.",
     durationHours: 3,
     surfaceArea: "900 sq ft",
-    featured: true,
   },
   {
     id: "p4",
@@ -82,7 +135,6 @@ export const projects: Project[] = [
       "Cage frame, screen panels and deck treated as one job so overhead spores couldn't reseed the deck. Pool covered throughout.",
     durationHours: 4,
     surfaceArea: "1,200 sq ft",
-    featured: true,
   },
   {
     id: "p5",
@@ -120,7 +172,6 @@ export const projects: Project[] = [
     summary:
       "Baked-on spring pollen across 22 panes. Pure-water deionized system, frames and sills included, screens rinsed and refitted.",
     durationHours: 3,
-    featured: true,
   },
   {
     id: "p8",
@@ -135,8 +186,47 @@ export const projects: Project[] = [
     durationHours: 3,
     surfaceArea: "180 linear ft",
   },
+
+  /**
+   * REAL FOOTAGE, video-led — see the note on `p2`. Placed on `irmo` because
+   * `p7` already covers window cleaning in Gadsden and Irmo is a priority city
+   * with no gallery entry of its own.
+   */
+  {
+    id: "p9",
+    title: "Upper-level glass on a modern build",
+    serviceSlug: "window-cleaning",
+    citySlug: "irmo",
+    before: "",
+    after: "",
+    alt: "Crew washing exterior windows from a ladder at a modern two-story home",
+    summary:
+      "A contemporary elevation that is mostly glass, with deep overhangs that keep a pole off the upper panes. Worked from a ladder set on the terrace, one elevation at a time.",
+    video: {
+      src: "/video/window-washing.mp4",
+      poster: "/gallery/window-cleaning-poster.jpg",
+      alt: "Nine-second clip of a crew member washing exterior glass from a ladder",
+    },
+    durationHours: 3,
+    featured: true,
+  },
 ];
 
+/**
+ * Drives the homepage only — the hero slider (`featuredProjects[0]`) and
+ * `BeforeAfterShowcase`.
+ *
+ * **`featured` now means "has real media", and only that.** `p3`, `p4` and `p7`
+ * were featured while every one of them was an empty-string placeholder, so the
+ * homepage's proof section — the part of the page whose entire job is showing
+ * that the work is real — was three-quarters grey placeholder frames under the
+ * heading "Every job below is a real property and a real result."
+ *
+ * Do not re-add `featured` to an entry until it has genuine photography or
+ * footage. The rest of the scaffolded entries still render on /gallery and on
+ * their service pages, where the placeholder frame reads as "photo pending"
+ * rather than as the homepage's headline evidence.
+ */
 export const featuredProjects = projects.filter((p) => p.featured);
 
 export const projectsFor = (opts: { serviceSlug?: string; citySlug?: string }) =>

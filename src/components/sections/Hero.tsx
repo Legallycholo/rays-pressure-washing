@@ -7,6 +7,7 @@ import { Icon } from "@/components/ui/Icon";
 import { RatingBadge } from "@/components/ui/Rating";
 import { Breadcrumbs, type Crumb } from "@/components/ui/Breadcrumbs";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
+import { ProjectMedia } from "@/components/ProjectMedia";
 import { cn } from "@/lib/utils";
 
 type Cta = { label: string; href: string };
@@ -171,14 +172,27 @@ export function Hero({
         <figure className={cn("w-full", "lg:pl-4")}>
           {/* `hero-wipe` puts a panel over the frame and slides it off; the
               image itself is never hidden, clipped or faded, so it is painted
-              and LCP-eligible from the first frame. See globals.css. */}
-          <BeforeAfterSlider
-            before={project?.before}
-            after={project?.after}
-            alt={project?.alt ?? "Exterior cleaning before and after"}
-            ratio="16/9"
-            className={cn("shadow-lift ring-1 ring-white/10", home && "hero-wipe")}
-          />
+              and LCP-eligible from the first frame. See globals.css.
+
+              Routed through `ProjectMedia` rather than straight to
+              `BeforeAfterSlider` so the hero can't break silently: it takes
+              `featuredProjects[0]`, and a featured project is now allowed to be
+              video-led. Hardcoding the slider here would render an empty
+              placeholder the day the array order changes. */}
+          {project ? (
+            <ProjectMedia
+              project={project}
+              ratio="16/9"
+              priority={home}
+              className={cn("shadow-lift ring-1 ring-white/10", home && "hero-wipe")}
+            />
+          ) : (
+            <BeforeAfterSlider
+              alt="Exterior cleaning before and after"
+              ratio="16/9"
+              className={cn("shadow-lift ring-1 ring-white/10", home && "hero-wipe")}
+            />
+          )}
           {project && (
             <figcaption
               className={cn("mt-3 text-center text-sm text-ink-300 lg:text-left", enter(560).className)}

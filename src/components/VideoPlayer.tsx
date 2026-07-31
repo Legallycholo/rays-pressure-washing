@@ -38,6 +38,7 @@ export function VideoPlayer({
   captionsSrc,
   variant = "showcase",
   ratio = "16/9",
+  fit = "cover",
   className,
 }: {
   src?: string;
@@ -46,6 +47,18 @@ export function VideoPlayer({
   captionsSrc?: string;
   variant?: "background" | "showcase";
   ratio?: Ratio;
+  /**
+   * `cover` fills the frame and crops — right for footage shot in the frame's
+   * own orientation, and the original behaviour.
+   *
+   * `contain` letterboxes instead. Ray's two gallery clips are portrait phone
+   * video (720x1280) sitting in the gallery's landscape `3/2` card, and
+   * covering those crops to a narrow horizontal band that cuts off both the
+   * ladder and the roofline — i.e. the entire subject. Pillarboxing against the
+   * frame's `ink-900` reads as deliberate on a dark card and shows the whole
+   * shot. Keeps the card grid uniform, which a portrait `ratio` would not.
+   */
+  fit?: "cover" | "contain";
   className?: string;
 }) {
   // Starts false so the server render and the first client render agree
@@ -82,7 +95,7 @@ export function VideoPlayer({
         <div className={frame} aria-hidden="true">
           {poster ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={poster} alt="" className="h-full w-full object-cover" />
+            <img src={poster} alt="" className={cn("h-full w-full", fit === "contain" ? "object-contain" : "object-cover")} />
           ) : null}
         </div>
       );
@@ -98,7 +111,7 @@ export function VideoPlayer({
           playsInline
           preload="metadata"
           tabIndex={-1}
-          className="h-full w-full object-cover"
+          className={cn("h-full w-full", fit === "contain" ? "object-contain" : "object-cover")}
         />
       </div>
     );
@@ -113,7 +126,7 @@ export function VideoPlayer({
         playsInline
         preload="metadata"
         aria-label={alt}
-        className="h-full w-full object-cover"
+        className={cn("h-full w-full", fit === "contain" ? "object-contain" : "object-cover")}
       >
         {/* Rendered only when a real .vtt exists: an empty track src is a
             broken request, not a graceful fallback. */}

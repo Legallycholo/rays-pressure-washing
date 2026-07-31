@@ -7,7 +7,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Icon } from "@/components/ui/Icon";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
+import { ProjectMedia } from "@/components/ProjectMedia";
 
 /**
  * `expandHref` turns the card title into the lightbox trigger (Phase 2). It is
@@ -30,13 +30,8 @@ export function ProjectCard({
 
   return (
     <figure className="flex h-full flex-col overflow-hidden rounded-card bg-white shadow-card ring-1 ring-ink-900/5">
-      <BeforeAfterSlider
-        before={project.before}
-        after={project.after}
-        alt={project.alt}
-        ratio="3/2"
-        className="rounded-b-none"
-      />
+      {/* Slider or video, depending on what this project actually has. */}
+      <ProjectMedia project={project} ratio="3/2" className="rounded-b-none" />
       <figcaption className="flex flex-1 flex-col p-5">
         <div className="flex flex-wrap items-center gap-2">
           {service && <Badge tone="hydro">{service.name}</Badge>}
@@ -110,12 +105,16 @@ export function BeforeAfterShowcase({
 
   return (
     <Section tone={tone}>
+      {/* The default lede used to be "Drag the divider to compare", which
+          stopped being true the moment `ProjectMedia` started rendering
+          video-led projects here — two of the three cards on the homepage have
+          no divider to drag. It now names both affordances. */}
       <SectionHeading
         onDark={tone === "ink"}
         {...(heading ?? {
           eyebrow: "Proof, not promises",
-          title: "Drag the line. See the difference.",
-          lede: "Every job below is a real property and a real result. Drag the divider to compare.",
+          title: "Real jobs, real results",
+          lede: "Every job below is a real property. Drag a divider to compare, or press play to watch the work.",
         })}
       />
       <ul className="mt-12 grid items-stretch gap-6 sm:mt-16 lg:grid-cols-2">
