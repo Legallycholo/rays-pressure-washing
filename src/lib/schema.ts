@@ -184,15 +184,25 @@ export function serviceSchema(service: Service, location?: Location) {
     serviceType: service.name,
     provider: { "@id": BUSINESS_ID },
     areaServed: { "@type": "City", name: areaName },
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "USD",
-      priceSpecification: {
-        "@type": "PriceSpecification",
-        minPrice: service.pricing.minimum,
-        priceCurrency: "USD",
-      },
-    },
+    /*
+      No `offers`. An `Offer` with a `minPrice` drawn from
+      `service.pricing.minimum` used to be emitted here, on every service page
+      and every service-in-city page.
+
+      It was the one place on the site that published a price. Nothing renders a
+      figure — that is a standing directive, and it is why /pricing is a 404 and
+      why the form quotes nothing — but structured data is still published data:
+      Google reads it and can surface it as a "From $X" in a result, which is
+      exactly the number the business does not want a customer arriving with.
+      Worse, the figures behind it are marked PLACEHOLDER in content/services.ts,
+      so it was publishing prices that were never real.
+
+      Removed with the plans and offers. `Service` schema without `offers` is
+      still valid and still resolves the service to the business.
+
+      If it comes back, it needs real confirmed prices first, and it needs the
+      no-pricing directive lifted — not one without the other.
+    */
   };
 }
 

@@ -111,9 +111,6 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
                   <span className="font-semibold text-ink-800">Typical visit:</span>{" "}
                   {service.pricing.duration}
                 </p>
-                <p className="mt-1.5">
-                  <span className="font-semibold text-ink-800">Recommended:</span> {service.cadence}
-                </p>
                 <Link
                   href="/contact"
                   className="mt-2 inline-flex min-h-[44px] items-center font-semibold text-harbor-700 underline underline-offset-2 hover:no-underline"

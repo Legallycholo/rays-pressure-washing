@@ -31,9 +31,22 @@ export function ServiceCard({ service, promoted = false }: { service: Service; p
       <p className="mt-2 text-sm leading-relaxed text-ink-500 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] overflow-hidden">
         {service.blurb}
       </p>
+      {/*
+        No cadence line here. `service.cadence` ("Every 12 months", "Twice
+        yearly", and so on) used to sit at the bottom-left of this rule and was
+        removed from the cards at the business's direction.
+
+        A bare frequency next to a service name reads as a quoted interval for a
+        house nobody has looked at yet, which is not something this site says.
+
+        The field is gone from `content/services.ts` entirely — the two other
+        places that rendered it ("Recommended:" on the service detail page, and
+        the schedule list on `/maintenance-plan`) came out in the same pass, and
+        `/maintenance-plan` no longer exists at all. Do not put it back. If this
+        footer needs something on the left, it is not this.
+      */}
       <div className="mt-auto pt-5">
-        <div className="flex items-center justify-between border-t border-ink-100 pt-4">
-          <span className="text-sm font-semibold text-ink-800">{service.cadence}</span>
+        <div className="flex items-center justify-end border-t border-ink-100 pt-4">
           <Icon
             name="arrow"
             className="h-4 w-4 text-harbor-600 transition-transform group-hover:translate-x-1"

@@ -21,6 +21,11 @@ import { lastUpdated } from "@/lib/last-updated";
  *
  * `changeFrequency` and `priority` are retained below but Google ignores both
  * outright. Do not spend time tuning them expecting an effect.
+ *
+ * `/thank-you` is missing from `staticRoutes` on purpose, not by oversight. It
+ * is `noindex` (see the metadata note in app/thank-you/page.tsx), and listing a
+ * noindex URL here asks Google to index a page that then tells it not to —
+ * conflicting signals on a page with nothing to gain from either.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = site.url;
@@ -29,7 +34,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     "",
     "/services",
-    "/maintenance-plan",
     "/service-areas",
     "/gallery",
     "/reviews",

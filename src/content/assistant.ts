@@ -121,7 +121,7 @@ export const assistantTopics: AssistantTopic[] = [
         icon: "phone",
       },
     ],
-    followUps: ["payment", "bundles", "booking", "human"],
+    followUps: ["payment", "booking", "human"],
     keywords: [
       "how much",
       "how much does",
@@ -353,16 +353,11 @@ export const assistantTopics: AssistantTopic[] = [
     reply: [
       "Depends on shade, humidity and tree cover. Roughly: house washing 12–18 months, decks and fences about a year, concrete about a year. Shaded north-facing walls always regrow first, and anything close to the water regrows faster than the same surface inland.",
     ],
-    actions: [
-      {
-        label: "See the maintenance plan",
-        detail: "Scheduled automatically, at a lower rate",
-        href: "/maintenance-plan",
-        icon: "clock",
-        internal: true,
-      },
-    ],
-    followUps: ["price", "bundles", "booking"],
+    // No action card. The one that stood here pointed at `/maintenance-plan`
+    // with "Scheduled automatically, at a lower rate" — a route that no longer
+    // exists and a rate claim the site no longer makes. The answer above is
+    // useful on its own; the follow-up chips carry the way forward.
+    followUps: ["price", "booking"],
     keywords: [
       "how long does it last",
       "how long will it last",
@@ -469,42 +464,22 @@ export const assistantTopics: AssistantTopic[] = [
     ],
   },
 
-  {
-    id: "bundles",
-    chip: "Is there a package deal?",
-    reply: [
-      "Yes. Bundling surfaces into one visit is cheaper than booking them separately, because most of the cost is getting the truck and the crew to you.",
-    ],
-    actions: [
-      { label: "Browse every service", href: "/services", icon: "check", internal: true },
-      {
-        label: "Recurring maintenance",
-        detail: "15–25% under one-off rates, month-to-month",
-        href: "/maintenance-plan",
-        icon: "clock",
-        internal: true,
-      },
-    ],
-    followUps: ["price", "booking", "human"],
-    keywords: [
-      "package",
-      "packages",
-      "bundle",
-      "deal",
-      "discount",
-      "combo",
-      "together",
-      "everything at once",
-      "whole house",
-      "coupon",
-      "special",
-      "offer",
-      "cheaper if",
-      "subscription",
-      "plan",
-      "recurring",
-    ],
-  },
+  /*
+    The `bundles` topic ("Is there a package deal?") was removed with the plans
+    and offers. Its answer was "Yes, bundling surfaces into one visit is cheaper
+    than booking them separately", plus an action card advertising recurring
+    maintenance at "15–25% under one-off rates" — a discount figure, on a site
+    that publishes no prices, pointing at a page that no longer exists.
+
+    Its keywords went with it: deal, discount, coupon, special, offer, bundle,
+    package, subscription, recurring. Those now fall through `matchTopic` to
+    `other`, which hands off to a person — the right outcome for a question
+    about a discount nobody here is authorised to promise in a chat bubble.
+
+    If offers come back, restore this topic from git history rather than
+    retyping it, and put `bundles` back in the `price` and `lasts` follow-up
+    lists where it used to sit.
+  */
 
   {
     id: "other",

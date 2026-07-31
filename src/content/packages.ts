@@ -1,92 +1,39 @@
 /**
  * What this business sells BEYOND a single service.
  *
- * Two things now: recurring maintenance, and the travel rule behind the
- * neighbor discount `locations.ts` promises.
+ * One thing now: the travel rule behind the neighbor waiver `locations.ts`
+ * promises.
  *
- * WHAT USED TO BE HERE, and why it isn't: multi-service bundles, seasonal
- * campaigns (the homepage banner and its countdown), and the discount
- * percentages attached to all of them. The business is not running offers right
- * now and does not publish prices anywhere on the site, so a "Save 20%" badge
- * had no number to be a percentage of. Recover them from git history if offers
- * come back rather than retyping them.
+ * WHAT USED TO BE HERE, and why it isn't:
+ *
+ *   - Multi-service bundles, seasonal campaigns (the homepage banner and its
+ *     countdown), and the discount percentages attached to all of them. The
+ *     business is not running offers and does not publish prices anywhere on the
+ *     site, so a "Save 20%" badge had no number to be a percentage of.
+ *
+ *   - The three maintenance plans (Annual Refresh, Seasonal Care, Complete
+ *     Care), their month-to-month terms, and everything that rendered them:
+ *     `/maintenance-plan`, the homepage `MaintenanceTeaser`, the plan links in
+ *     the chat assistant, and the "at a lower rate" claims those carried.
+ *     Removed at the business's direction — the plans are not being sold right
+ *     now, and a product page for something nobody can buy is worse than no page
+ *     at all.
+ *
+ * Recover any of it from git history if it comes back, rather than retyping it.
+ * Note that a returning `/maintenance-plan` needs its sitemap entry back too
+ * (app/sitemap.ts), which is the piece most likely to be forgotten.
  *
  * All figures are PLACEHOLDER.
  */
 
 /* ---------------------------------------------------------------------------
-   1. MAINTENANCE PLANS
-   Converting a one-off customer into recurring revenue. Sold on cadence and
-   on not having to think about it, never on a discount figure.
-   ------------------------------------------------------------------------ */
-
-export type MaintenancePlan = {
-  slug: string;
-  name: string;
-  /** Visits per year. */
-  frequency: string;
-  blurb: string;
-  includes: string[];
-  bestFor: string;
-  mostPopular?: boolean;
-};
-
-export const maintenancePlans: MaintenancePlan[] = [
-  {
-    slug: "annual",
-    name: "Annual Refresh",
-    frequency: "1 visit per year",
-    blurb: "The minimum that keeps organic growth from ever getting established.",
-    includes: [
-      "One scheduled house wash per year",
-      "Booked automatically, no chasing",
-      "Held pricing for 12 months",
-      "Priority rescheduling after weather delays",
-    ],
-    bestFor: "Open, sunny properties with little tree cover",
-  },
-  {
-    slug: "seasonal",
-    name: "Seasonal Care",
-    frequency: "2 visits per year",
-    blurb:
-      "Spring and fall visits. It is the cadence that actually matches how fast growth returns in a humid climate.",
-    includes: [
-      "Two scheduled visits per year",
-      "House wash plus driveway each visit",
-      "Gutter clear included in the fall visit",
-      "Spot-treatment call-outs between visits",
-      "Held pricing for 12 months",
-    ],
-    bestFor: "Most homes, especially anything with shade on one elevation",
-    mostPopular: true,
-  },
-  {
-    slug: "complete",
-    name: "Complete Care",
-    frequency: "4 visits per year",
-    blurb:
-      "Quarterly attention across every exterior surface. For properties where appearance is never allowed to slip.",
-    includes: [
-      "Quarterly scheduled visits",
-      "All exterior surfaces on rotation",
-      "Lake-facing and second-story glass every visit",
-      "Unlimited spot-treatment call-outs",
-      "First call after storms",
-      "Held pricing for 24 months",
-    ],
-    bestFor: "Heavily shaded properties, lakefront homes, and HOA communities with strict standards",
-  },
-];
-
-/** Terms are month-to-month by design. See faqs.ts → `contracts`. */
-export const maintenancePlanTerms =
-  "Month-to-month. Cancel any time. We'd rather keep the work by doing it well than by locking you in.";
-
-/* ---------------------------------------------------------------------------
-   2. TRAVEL / SERVICE RADIUS
-   locations.ts already promises a neighbor discount on the furthest route.
+   TRAVEL / SERVICE RADIUS
+   locations.ts already promises a neighbor waiver on the furthest route.
    This is the rule behind it.
+
+   Kept deliberately when the plans came out: this is a fee policy, not an
+   offer. It states when a charge does and does not apply, which the city pages
+   need in order to be straight about travel fees at all.
    ------------------------------------------------------------------------ */
 
 export const travelPolicy = {

@@ -44,8 +44,6 @@ export type Service = {
     /** Typical job duration, human readable. */
     duration: string;
   };
-  /** How often it should be repeated. Powers the maintenance-plan upsell. */
-  cadence: string;
   /** Service-specific FAQ ids, resolved against content/faqs.ts */
   faqIds: string[];
   /** Related service slugs for internal linking. */
@@ -78,7 +76,6 @@ export const services: Service[] = [
       "Dark spots spreading under the eaves",
     ],
     pricing: { unit: "sq ft", from: 0.15, to: 0.3, minimum: 249, duration: "2–4 hours" },
-    cadence: "Every 12–18 months",
     faqIds: ["soft-vs-pressure", "plants-safe", "how-long-lasts", "need-to-be-home"],
     related: ["gutter-cleaning", "window-cleaning", "deck-patio"],
     featured: true,
@@ -107,7 +104,6 @@ export const services: Service[] = [
       "Previous cleaning left visible stripes",
     ],
     pricing: { unit: "sq ft", from: 0.12, to: 0.25, minimum: 179, duration: "1–3 hours" },
-    cadence: "Every 12 months",
     faqIds: ["stripes", "oil-stains", "how-long-lasts"],
     related: ["deck-patio", "fence-cleaning", "pool-deck"],
     featured: true,
@@ -135,7 +131,6 @@ export const services: Service[] = [
       "Moss growing in the paver joints",
     ],
     pricing: { unit: "sq ft", from: 0.2, to: 0.4, minimum: 199, duration: "2–4 hours" },
-    cadence: "Every 12 months",
     faqIds: ["wood-damage", "how-long-lasts", "furniture"],
     related: ["driveway-concrete", "pool-deck", "fence-cleaning"],
     featured: true,
@@ -163,7 +158,6 @@ export const services: Service[] = [
       "Black mildew spotting on wood",
     ],
     pricing: { unit: "linear ft", from: 2.5, to: 5, minimum: 179, duration: "1–3 hours" },
-    cadence: "Every 12–18 months",
     faqIds: ["wood-damage", "plants-safe", "how-long-lasts"],
     related: ["house-washing", "deck-patio"],
   },
@@ -190,7 +184,6 @@ export const services: Service[] = [
       "Plants growing out of the gutter",
     ],
     pricing: { unit: "linear ft", from: 1.5, to: 3.5, minimum: 149, duration: "1–3 hours" },
-    cadence: "Twice yearly",
     faqIds: ["gutter-frequency", "need-to-be-home"],
     related: ["house-washing", "window-cleaning"],
   },
@@ -218,7 +211,6 @@ export const services: Service[] = [
       "Cobwebs in the corners of every frame",
     ],
     pricing: { unit: "per item", from: 6, to: 14, minimum: 149, duration: "1–3 hours" },
-    cadence: "Every 6–12 months",
     faqIds: ["hard-water", "interior-windows", "need-to-be-home"],
     related: ["house-washing", "gutter-cleaning"],
     featured: true,
@@ -246,7 +238,6 @@ export const services: Service[] = [
       "Green tint across the cage panels",
     ],
     pricing: { unit: "sq ft", from: 0.18, to: 0.35, minimum: 249, duration: "2–4 hours" },
-    cadence: "Every 12 months",
     faqIds: ["pool-chemicals", "plants-safe", "how-long-lasts"],
     related: ["deck-patio", "driveway-concrete"],
   },

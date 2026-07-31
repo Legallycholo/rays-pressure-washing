@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { site, credentialBadges, cityState, guaranteeName } from "@/content/site";
 import { stats } from "@/content/stats";
 import { featuredServices, residentialServices } from "@/content/services";
-import { maintenancePlans, maintenancePlanTerms } from "@/content/packages";
 import { locations } from "@/content/locations";
 import { featuredProjects } from "@/content/gallery";
 import { featuredTestimonials } from "@/content/testimonials";
@@ -15,7 +14,6 @@ import { ServicesGrid } from "@/components/sections/ServicesGrid";
 import { BeforeAfterShowcase } from "@/components/sections/BeforeAfterShowcase";
 import { HowItWorks } from "@/components/sections/HowItWorks";
 import { GuaranteeBand } from "@/components/sections/GuaranteeBand";
-import { MaintenanceTeaser } from "@/components/sections/MaintenanceTeaser";
 import { StatsRow } from "@/components/sections/StatsRow";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { PressBar } from "@/components/sections/PressBar";
@@ -34,18 +32,22 @@ export const metadata: Metadata = {
 };
 
 /**
- * The ten highest-intent questions, in the order a buyer actually asks them:
+ * The nine highest-intent questions, in the order a buyer actually asks them:
  * what is this, what will it cost me, how long does it last, is it safe, how
  * does booking work, and finally how do I pay.
  *
- * Ten rather than six because this section carries the homepage's answer-engine
+ * Nine rather than six because this section carries the homepage's answer-engine
  * weight — each entry is a question/answer pair emitted as FAQPage JSON-LD below,
  * and these are the queries people type. `hard-water` and `gutter-frequency` are
  * the two additions worth calling out: the first is the only window-cleaning
  * question here, which matters when half the business name is window cleaning,
  * and the second is the highest-repeat service we sell.
  *
- * All ten live in content/faqs.ts — the homepage never holds its own copy of an
+ * It was ten until `contracts` ("Am I locked into a contract?") came out with
+ * the maintenance plans — that answer described recurring visits that are no
+ * longer sold. See the note where it used to sit in content/faqs.ts.
+ *
+ * All nine live in content/faqs.ts — the homepage never holds its own copy of an
  * answer, so this list and /faq can never contradict each other.
  */
 const homeFaqIds = [
@@ -56,7 +58,6 @@ const homeFaqIds = [
   "need-to-be-home",
   "gutter-frequency",
   "hard-water",
-  "contracts",
   "weather",
   "payment",
 ];
@@ -109,10 +110,13 @@ export default function HomePage() {
           in the gallery. */}
       <HowItWorks />
       <GuaranteeBand guarantee={site.guarantee} />
-      <MaintenanceTeaser
-        plan={maintenancePlans.find((p) => p.mostPopular) ?? maintenancePlans[0]}
-        terms={maintenancePlanTerms}
-      />
+      {/* `MaintenanceTeaser` sat here, between the guarantee and the reviews.
+          It and `/maintenance-plan` were deleted with the rest of the plans and
+          offers at the business's direction — see the note in content/packages.ts.
+
+          Tone alternation still holds without it: this ran hydro → sand → light
+          and now runs hydro → light, so no two adjacent sections share a tone.
+          Check that again if anything goes back in this slot. */}
       {/* Carousel on the homepage only. /reviews and the detail pages keep the
           grid, where seeing every review at once is the point (SECTIONS.md §2.10). */}
       <Testimonials items={featuredTestimonials} layout="carousel" />

@@ -47,7 +47,10 @@ export const faqs: Faq[] = [
     category: "Process",
     question: "How long will the results last?",
     answer:
-      "It depends on shade, humidity and how much tree cover you have. As a rough guide: house washing holds up 12–18 months, decks and fences around 12 months, and concrete around 12 months. Heavily shaded north-facing walls are always first to regrow, and anything within sight of open water regrows faster than the same surface a mile inland. If you'd rather not track it, our maintenance plan schedules it automatically at a lower rate.",
+      // Closing sentence removed with the plans: it pointed at a maintenance
+      // plan "at a lower rate" — a product that is no longer sold and a discount
+      // the site no longer claims. The answer is complete without it.
+      "It depends on shade, humidity and how much tree cover you have. As a rough guide: house washing holds up 12–18 months, decks and fences around 12 months, and concrete around 12 months. Heavily shaded north-facing walls are always first to regrow, and anything within sight of open water regrows faster than the same surface a mile inland.",
   },
   {
     id: "need-to-be-home",
@@ -112,13 +115,21 @@ export const faqs: Faq[] = [
     answer:
       "We cover the pool surface before we start and rinse the enclosure away from the water. Minor overspray is diluted to the point of irrelevance in a full pool, but we'd still recommend running your filter for a few hours afterwards as normal practice.",
   },
-  {
-    id: "contracts",
-    category: "Pricing",
-    question: "Am I locked into a contract?",
-    answer:
-      "No. Recurring visits are month-to-month and you can stop at any time. We'd rather keep the work by doing it well than by locking you in.",
-  },
+  /*
+    The `contracts` entry ("Am I locked into a contract?") was removed with the
+    maintenance plans. Its answer — "Recurring visits are month-to-month and you
+    can stop at any time" — was entirely about a product that is no longer sold,
+    and it was answering an objection nobody can raise once there is nothing to
+    sign up to.
+
+    It also lines up with the business already pulling "No Contracts" from
+    `site.credentials` (see the note there): this reverses nothing, it finishes
+    the same removal.
+
+    It was one of the ten homepage FAQs and came out of `homeFaqIds` in
+    app/page.tsx at the same time, so the visible list and the FAQPage JSON-LD
+    stay in agreement. Restore both together if plans ever come back.
+  */
   {
     id: "quote-accuracy",
     category: "Pricing",

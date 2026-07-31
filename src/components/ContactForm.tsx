@@ -1,6 +1,7 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
+import { useRouter } from "next/navigation";
 import { site } from "@/content/site";
 import { residentialServices } from "@/content/services";
 import { locations } from "@/content/locations";
@@ -37,7 +38,24 @@ import { cn } from "@/lib/utils";
  * keeps the form and everything in it on screen and offers the phone: a green
  * tick over a message nobody received is worse than no form at all, because the
  * visitor stops waiting for a reply that isn't coming.
+ *
+ * ── WHERE A SUCCESS GOES ────────────────────────────────────────────────────
+ * A confirmed send hands off to `/thank-you`. That page can say what the panel
+ * below cannot — what happens next, how to correct a mistyped number, where to
+ * go meanwhile — and it gives the conversion a URL of its own, which is what
+ * analytics and ad platforms need to count one.
+ *
+ * `replace`, not `push`: this is the redirect in Post/Redirect/Get, and its
+ * whole job is to make sure Back and Reload cannot land on a submitted form and
+ * send it a second time.
+ *
+ * The panel below still renders in the frame before the route commits, so a
+ * slow navigation never shows a spinner over a form that already succeeded, and
+ * it stands in as the confirmation outright if the client-side navigation is
+ * blocked. It must keep saying the same thing `/thank-you` says.
  */
+
+const THANK_YOU = "/thank-you";
 
 const STEPS = [
   { n: 1 as const, label: "What needs cleaning" },
@@ -119,6 +137,7 @@ const borderFor = (invalid?: boolean) =>
 export function ContactForm() {
   const uid = useId();
   const id = (n: string) => `${uid}-${n}`;
+  const router = useRouter();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [form, setForm] = useState(emptyForm);
@@ -129,6 +148,16 @@ export function ContactForm() {
   const [failedToSend, setFailedToSend] = useState(false);
   /** Field names to outline in amber. Cleared on every navigation attempt. */
   const [missing, setMissing] = useState<string[]>([]);
+
+  /**
+   * Pull `/thank-you` down as soon as someone reaches the last step, so the
+   * redirect after a successful POST is a render rather than a round trip. Not
+   * on mount: most people who open this page never reach step 3, and paying for
+   * the route on their behalf is bandwidth spent on a page they won't see.
+   */
+  useEffect(() => {
+    if (step === 3) router.prefetch(THANK_YOU);
+  }, [step, router]);
 
   const set = (k: keyof ReturnType<typeof emptyForm>, v: string | string[]) =>
     setForm((f) => ({ ...f, [k]: v }));
@@ -247,6 +276,7 @@ export function ContactForm() {
         throw new Error(detail?.error || "That didn't send.");
       }
       setSent(true);
+      router.replace(THANK_YOU);
     } catch (err) {
       setFailedToSend(true);
       setError((err as Error).message);
