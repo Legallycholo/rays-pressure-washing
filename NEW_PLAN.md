@@ -163,6 +163,172 @@ New content, additive only — does not touch the residential catalog.
 
 ---
 
+## Phase 6 — Align site structure with the Google Business Profile categories
+
+New scope, added after the initial planning session: the owner has optimized
+the Google Business Profile with **primary category "Pressure washing
+service"** and **secondary categories "Gutter cleaning service"** and
+**"Window cleaning service."** Local-search ranking leans on the GBP
+categories and the on-site service structure agreeing with each other — a
+profile that says "pressure washing + gutter + window" pointing at a site
+that only ever groups things as "residential/commercial" is a mismatch
+signal, not a neutral one. This phase makes the site's service taxonomy
+mirror the GBP categories explicitly, on top of (not instead of) the
+residential/commercial split from Phases 3-4.
+
+**Schema is explicitly out of scope for this phase.** Task 2 below is
+documented as a spec for later, not implemented now — see the note at the end
+of this phase.
+
+### Task 1 — "Services" layout section (H2 category / H3 sub-service)
+
+Three H2 categories, matching the GBP primary + two secondary categories
+exactly, each with its own H3 sub-services and one line of placeholder copy
+the owner fills in later:
+
+```
+## Pressure Washing
+### Power / Pressure Washing
+[Placeholder: describe your general pressure washing service here.]
+### Soft Wash Cleaning
+[Placeholder: describe your soft washing process and what it protects.]
+### House Washing
+[Placeholder: describe your house washing service here.]
+### Driveway & Sidewalk Cleaning
+[Placeholder: describe your driveway and sidewalk cleaning service here.]
+### Patio & Deck Cleaning
+[Placeholder: describe your patio and deck cleaning service here.]
+### Fence Cleaning
+[Placeholder: describe your fence cleaning service here.]
+### Commercial Pressure Washing
+[Placeholder: describe your commercial pressure washing offering here.]
+### Rust Removal
+[Placeholder: describe your rust removal service here.]
+
+## Gutter Cleaning
+### Gutter Cleaning
+[Placeholder: describe your gutter cleaning service here.]
+### Downspout Cleaning
+[Placeholder: describe your downspout cleaning service here.]
+### Roof Debris Removal
+[Placeholder: describe your roof debris removal service here.]
+### Gutter Brightening
+[Placeholder: describe your gutter brightening / exterior whitening service here.]
+### Gutter Guard Cleaning
+[Placeholder: describe your gutter guard cleaning service here.]
+
+## Window Cleaning
+### Window Washing
+[Placeholder: describe your window washing service here.]
+### Commercial Window Cleaning
+[Placeholder: describe your commercial window cleaning service here.]
+### Screen Cleaning
+[Placeholder: describe your screen cleaning service here.]
+### Skylight Cleaning
+[Placeholder: describe your skylight cleaning service here.]
+### Glass Door Cleaning
+[Placeholder: describe your glass door cleaning service here.]
+```
+
+**How this plugs into the existing architecture** (don't build a parallel
+content system):
+
+- `src/content/services.ts` already drives the `/services` hub, every
+  service detail page, and the nav mega-menu from one array — this section
+  should extend that array, not replace it. Today `Service` only carries
+  `segment: "residential" | "commercial"` (audience). Add a second,
+  orthogonal field — e.g. `category: "pressure-washing" | "gutter-cleaning" |
+  "window-cleaning"` — so a service can be tagged *both* "residential" and
+  "pressure-washing" at once. Segment answers "who's it for"; category
+  answers "which GBP line of business is this," and the two must not be
+  collapsed into one field.
+- Several sub-services above already exist in `services.ts` under different
+  names/scope (`house-washing`, `driveways-sidewalks`, `decks-fences`,
+  `gutters`) — reuse those entries with a `category` tag added rather than
+  duplicating them. Net-new entries needed: power/pressure washing (general),
+  soft wash cleaning (as its own page, distinct from house-washing), fence
+  cleaning (currently folded into decks-fences — decide whether it needs to
+  split out to match the GBP list 1:1), commercial pressure washing, rust
+  removal, downspout cleaning, roof debris removal, gutter brightening,
+  gutter guard cleaning, window washing, commercial window cleaning, screen
+  cleaning, skylight cleaning, glass door cleaning.
+- The H2/H3 section itself is a new component (e.g. `ServicesByCategory`)
+  that groups the same `services` array by `category` instead of `segment`,
+  rendered wherever the owner wants this view — likely the `/services` hub,
+  possibly the homepage. It reads from the same source of truth, so a
+  service added once shows up correctly in the residential/commercial nav
+  split (Phase 3) and in this GBP-category view without re-entry.
+- Placeholder copy goes in as literal placeholder strings (matching this
+  repo's existing `PLACEHOLDER` convention noted in `site.ts` and
+  `services.ts`), not filled in by the agent — these are the owner's words to
+  write, not invented claims.
+
+### Task 2 — LocalBusiness `hasOfferCatalog` schema (spec only, do not implement)
+
+**Do not touch `src/lib/schema.ts` or emit any new JSON-LD for this yet.**
+Documented here so the next session has a scoped, reviewed spec instead of
+guessing at markup:
+
+- Today `schema.ts` emits one `LocalBusiness`-family node
+  (`localBusinessSchema()`, `@type: "HomeAndConstructionBusiness"`) with no
+  `hasOfferCatalog`, plus a separate `serviceSchema()` emitted per-service on
+  each service page. Adding `hasOfferCatalog` means nesting an `OfferCatalog`
+  → `itemListElement` → `Offer` → `itemOffered` (`Service`) chain onto the
+  business node — a structural addition, not a one-line edit.
+- **Best practice: derive it, don't hand-write it.** The same drift risk
+  `site.ts` already guards against for `aggregateRating` applies here —
+  build `hasOfferCatalog` from the `services.ts` array (grouped by the new
+  `category` field) so the catalog can never list a service the site doesn't
+  actually have a page for, and never omit one that does.
+- **Match GBP's own category grammar.** Google's own guidance for
+  `hasOfferCatalog` on a `LocalBusiness` groups offers under named
+  `OfferCatalog` sub-catalogs — one per category makes the closest possible
+  mirror of "Pressure washing service / Gutter cleaning service / Window
+  cleaning service" as it appears on the GBP listing itself, which is the
+  actual goal (agreement between the two, not just valid syntax).
+- **Don't duplicate `serviceSchema()`'s job.** Decide whether
+  `hasOfferCatalog`'s `itemOffered` nodes should be full inline `Service`
+  objects or thin `@id` references pointing at the existing per-page
+  `Service` schema — inline duplication is more common in examples online but
+  drifts from the per-page node over time; an `@id` reference keeps one
+  definition of each service's schema.
+- **No pricing in the catalog unless real.** `serviceSchema()`'s own comment
+  explains why a `minPrice` pulled from placeholder pricing data was removed
+  from service pages already — the same rule applies to any `Offer` added
+  here: no price claim until Ray supplies real numbers.
+- Validate at https://validator.schema.org and Google's Rich Results Test
+  before shipping, same as every other change in `schema.ts`.
+- Sequencing: do this *after* Task 1 ships and the `category` field exists on
+  every service, since the catalog should be generated from that field, not
+  built by hand alongside it.
+
+### Best practices for the rollout, generally
+
+1. **GBP profile first, site second, schema last.** The profile is already
+   updated per the prompt; make sure the categories are actually live on
+   Google (they can take a review cycle) before the site copy leans on them,
+   so the two never visibly disagree mid-rollout.
+2. **NAP and category language consistency.** Whatever the GBP profile calls
+   these three categories verbatim ("Pressure washing service," not "Power
+   Washing Services" or some other variant) should be the phrase that shows
+   up in the H2s and eventually the schema `serviceType`/category names —
+   small wording drift between GBP and on-site copy is exactly the kind of
+   mismatch this phase exists to close.
+3. **One taxonomy per concern, not one field doing two jobs.** Keep
+   `segment` (residential/commercial) and `category` (pressure/gutter/window)
+   separate fields on `Service`, per Task 1 above — collapsing them forces
+   ugly compound values (`"commercial-window"`) and breaks the nav split from
+   Phase 3.
+4. **Don't invent claims to fill placeholders.** Every H3 blurb ships as a
+   literal placeholder for the owner to write, and no commercial pricing or
+   service specifics get invented to make the section look finished.
+5. **Sequence schema after content, not alongside it.** Task 2 stays
+   unimplemented until Task 1's `category` field exists and is populated —
+   generating `hasOfferCatalog` from real data beats hand-writing it once and
+   letting it drift.
+
+---
+
 ## Suggested Claude Code prompt (paste into Cursor)
 
 > Work through `NEW_PLAN.md` in this repo phase by phase. Start with Phase 1
@@ -178,3 +344,11 @@ New content, additive only — does not touch the residential catalog.
 > residential/commercial information architecture. Do not modify
 > `layout.tsx` metadata, `sitemap.ts`, `robots`, or `schema.ts`. Run Phase 5's
 > QA grep and a visual check of the nav before calling it done.
+>
+> After Phase 1-5 land, do Phase 6 Task 1 only: add the `category` field to
+> `Service`, tag every existing and net-new service, and build the H2/H3
+> Pressure Washing / Gutter Cleaning / Window Cleaning layout section with
+> literal placeholder copy. Do not implement Phase 6 Task 2
+> (`hasOfferCatalog` schema) in the same pass — that stays a documented spec
+> until Task 1's `category` data exists and the owner explicitly asks for the
+> schema work.
