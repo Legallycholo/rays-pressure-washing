@@ -1,23 +1,27 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
-import { site } from "@/content/site";
+import { createClient } from "@supabase/supabase-js";
 
 /**
  * Every lead the site produces leaves through here: the contact page's callback
- * form is the only sender. It becomes an email to the business, with
- * validation, a spam floor, and an honest failure when Resend is unreachable.
+ * form is the only sender. It becomes a row in Supabase (`public.ryan_leads`),
+ * with validation, a spam floor, and an honest failure when Supabase is
+ * unreachable.
  *
- * ── SENDING IDENTITY, AND WHY IT LOOKS TEMPORARY ────────────────────────────
- * `from` defaults to Resend's shared sandbox sender, which can only deliver to
- * the address the Resend account was signed up with. That is deliberate: it
- * needs no DNS records, so lead capture works the day the API key is pasted in
- * rather than the day a domain finishes verifying. It is also a hard ceiling,
- * nothing else will ever receive mail from it.
+ * ── STORAGE, NOT NOTIFICATION ────────────────────────────────────────────────
+ * This writes the lead and nothing else. Nobody is emailed, texted or paged
+ * when a row lands — that used to happen here via Resend, and it's gone for
+ * now by request, to come back later. Until it does, a new lead is only
+ * visible by looking at the table (Supabase dashboard, or a query), not by
+ * waiting for a notification.
  *
- * Once a domain is verified in Resend, set `LEADS_FROM_EMAIL` to an address on
- * it (e.g. "Website <leads@yourdomain.com>") and the ceiling lifts. Nothing in
- * this file changes.
- *
+ * ── WHY THE ANON KEY IS FINE HERE ───────────────────────────────────────────
+ * `ryan_leads` has row level security on with exactly one policy: anon may
+ * INSERT, and nothing may SELECT, UPDATE or DELETE. So the anon key, even
+ * though it's not secret, can only ever add rows — never read back other
+ * people's submissions, never edit or remove one. That's the same shape the
+ * honeypot and rate limit below are for: this endpoint is reachable by
+ * anyone, so the only thing standing between it and abuse is what the
+ * database itself will allow.
  */
 
 /* ---------------------------------------------------------------------------
@@ -26,9 +30,8 @@ import { site } from "@/content/site";
 
 /** Read lazily, per request: at module scope this is baked in at build time. */
 const config = () => ({
-  apiKey: process.env.RESEND_API_KEY,
-  from: process.env.LEADS_FROM_EMAIL || `${site.shortName} Website <onboarding@resend.dev>`,
-  to: process.env.LEADS_TO_EMAIL || site.contact.email,
+  url: process.env.SUPABASE_URL,
+  anonKey: process.env.SUPABASE_ANON_KEY,
 });
 
 const MAX = {
@@ -45,12 +48,8 @@ const MAX = {
 /* ---------------------------------------------------------------------------
    Rate limiting
 
-   Stricter than `/api/assistant`, because the thing on the other side of this
-   one is a person's inbox. A flood there doesn't just cost CPU, it buries real
-   leads underneath junk, which is the actual damage.
-
-   Still per-instance and therefore still best-effort on serverless. It stops
-   the naive case (a script hammering one endpoint) and the common accident (an
+   Per-instance and therefore best-effort on serverless. It stops the naive
+   case (a script hammering one endpoint) and the common accident (an
    impatient double-tap on Send). A distributed spam run needs a shared store;
    Upstash Redis via the Vercel Marketplace is the small version of that, and
    is worth adding the first time this is actually abused, not before.
@@ -83,8 +82,8 @@ const clientIp = (req: Request) =>
 /* ---------------------------------------------------------------------------
    Validation
 
-   Deliberately shallow. This is the second line: both forms validate before
-   they get here, and the point of repeating it server-side is that the client
+   Deliberately shallow. This is the second line: the form validates before
+   it gets here, and the point of repeating it server-side is that the client
    is not a security boundary, not that we know better than the visitor what
    their address looks like. Anything stricter starts rejecting real customers:
    there is no regex that correctly accepts every valid email address, and the
@@ -152,71 +151,21 @@ function parse(body: Record<string, unknown>): { lead: Lead } | { error: string 
   return { error: "Unrecognised submission." };
 }
 
-/* ---------------------------------------------------------------------------
-   The email
-
-   Written for one reader on a phone in a truck. The answer to "who is this and
-   what do they want" is in the subject line and the first row; everything else
-   is below it in the order it would be asked on a call.
-   ------------------------------------------------------------------------- */
-
-const esc = (v: string) =>
-  v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-
-/** Ordered the way it would be asked on a call, and empty optional fields drop
- *  out entirely rather than rendering a row saying nothing. */
-function rowsFor(lead: Lead): [string, string][] {
-  return (
-    [
-      ["Call back on", lead.phone],
-      ["Best time", lead.bestTime],
-      ["Name", lead.name],
-      ["Town", lead.city],
-      ["Wants cleaned", lead.services],
-      ["Notes", lead.message],
-      ["Email", lead.email],
-      ["Found us via", lead.howHeard],
-    ] as [string, string][]
-  ).filter(([, value]) => value);
-}
-
-function render(lead: Lead) {
-  const rows = rowsFor(lead);
-  const heading = "New callback request";
-
-  const html = `<!doctype html><html><body style="margin:0;padding:24px;background:#f4f1ec;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#16232e">
-  <div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0">
-    <div style="background:#06131d;padding:20px 24px">
-      <div style="color:#ffffff;font-size:18px;font-weight:700">${heading}</div>
-      <div style="color:#a3c0d8;font-size:13px;margin-top:4px">${esc(site.name)} · via the website</div>
-    </div>
-    <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse">
-      ${rows
-        .map(
-          ([label, value]) => `<tr>
-        <td style="padding:12px 24px;border-bottom:1px solid #eef2f6;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#64748b;white-space:nowrap;vertical-align:top">${esc(label)}</td>
-        <td style="padding:12px 24px;border-bottom:1px solid #eef2f6;font-size:15px;line-height:1.5;color:#16232e;white-space:pre-wrap">${esc(value)}</td>
-      </tr>`,
-        )
-        .join("")}
-    </table>
-    <div style="padding:20px 24px 24px">
-      <a href="tel:${esc(lead.phone.replace(/[^\d+]/g, ""))}" style="display:block;background:#f6ae1e;color:#030b12;font-size:16px;font-weight:700;text-align:center;text-decoration:none;padding:14px 20px;border-radius:999px">Call ${esc(lead.name)} back</a>
-      <div style="font-size:13px;color:#64748b;margin-top:14px;text-align:center">
-        Or reply to this email and it goes straight to them.
-      </div>
-    </div>
-  </div>
-</body></html>`;
-
-  // Sent alongside the HTML, not instead of it. Plenty of trade inboxes read
-  // plain text by default, and a lead nobody can read is a lead nobody calls.
-  const text = [`${heading} · ${site.name}`, "", ...rows.map(([l, v]) => `${l}: ${v}`)].join("\n");
-
-  // Name and town in the subject: it is the whole preview on a locked phone,
-  // and it is what makes two pending leads distinguishable without opening them.
-  const where = lead.city ? ` (${lead.city})` : "";
-  return { subject: `Callback request: ${lead.name}${where}`, html, text };
+/** `lead.services` arrives as one comma-joined string (ContactForm does the
+ *  join before it POSTs); the column is `text[]`, so split it back apart. */
+function toRow(lead: Lead) {
+  return {
+    name: lead.name,
+    email: lead.email,
+    phone: lead.phone,
+    city: lead.city,
+    services: lead.services
+      ? lead.services.split(",").map((s) => s.trim()).filter(Boolean)
+      : [],
+    best_time: lead.bestTime || null,
+    how_heard: lead.howHeard || null,
+    message: lead.message || null,
+  };
 }
 
 /* ------------------------------------------------------------------------- */
@@ -246,14 +195,14 @@ export async function POST(req: Request) {
   if ("error" in parsed) return NextResponse.json({ error: parsed.error }, { status: 400 });
   const { lead } = parsed;
 
-  const { apiKey, from, to } = config();
-  if (!apiKey) {
+  const { url, anonKey } = config();
+  if (!url || !anonKey) {
     // Loud on the server, honest to the browser. The form shows the phone
     // number rather than a success state it can't back up, a lead that
     // silently evaporates is worse than one that was never submitted, because
     // the customer stops waiting for a call that isn't coming.
     console.error(
-      "[api/leads] RESEND_API_KEY is not set. Lead NOT delivered. See .env.example.",
+      "[api/leads] SUPABASE_URL or SUPABASE_ANON_KEY is not set. Lead NOT stored. See .env.example.",
     );
     return NextResponse.json(
       { error: "Our form isn't reaching us right now." },
@@ -261,47 +210,13 @@ export async function POST(req: Request) {
     );
   }
 
-  const { subject, html, text } = render(lead);
-  const resend = new Resend(apiKey);
+  const supabase = createClient(url, anonKey);
+  const { error } = await supabase.from("ryan_leads").insert(toRow(lead));
 
-  // Same payload inside 24h is the same lead, a double-tapped Send button or a
-  // retry after a flaky connection. The digest is the entity id because there
-  // is no database to take one from.
-  const idempotencyKey = `lead-${lead.kind}/${await digest(JSON.stringify(lead))}`;
-
-  // The SDK returns `{ data, error }` and does not throw on API errors, so the
-  // try/catch here is only for the network beneath it.
-  try {
-    const { data, error } = await resend.emails.send(
-      {
-        from,
-        to: [to],
-        subject,
-        html,
-        text,
-        // The whole point: hitting Reply in the inbox answers the customer,
-        // not the sandbox sender.
-        replyTo: lead.email,
-      },
-      { idempotencyKey },
-    );
-
-    if (error) {
-      console.error("[api/leads] Resend rejected the send:", error);
-      return NextResponse.json({ error: "We couldn't get that through." }, { status: 502 });
-    }
-
-    return NextResponse.json({ ok: true, id: data?.id });
-  } catch (err) {
-    console.error("[api/leads] Network failure sending lead:", err);
+  if (error) {
+    console.error("[api/leads] Supabase rejected the insert:", error);
     return NextResponse.json({ error: "We couldn't get that through." }, { status: 502 });
   }
-}
 
-/** Short, stable hash of the payload. Not security, just an identity for the key. */
-async function digest(input: string) {
-  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(input));
-  return Array.from(new Uint8Array(bytes).slice(0, 12))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+  return NextResponse.json({ ok: true });
 }
