@@ -9,6 +9,7 @@ import { ContactHub } from "@/components/ContactHub";
 import { JsonLd } from "@/components/JsonLd";
 import { localBusinessSchema, websiteSchema } from "@/lib/schema";
 import { INDEXABLE } from "@/lib/indexing";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -140,6 +141,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             every breakpoint. */}
         <StickyCallBar />
         <ContactHub />
+        <Analytics />
       </body>
     </html>
   );
