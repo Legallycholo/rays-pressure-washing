@@ -51,11 +51,11 @@ const sansFont = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   /**
-   * Leads with the primary target keyword "Pressure Washing Service" and location.
+   * Title tag strategy: BEST + Primary category + cityname + near me phrases + business name (~200 chars).
    */
   title: {
-    default: `Pressure Washing Service in ${cityState} | ${site.shortName}`,
-    template: `%s | ${site.shortName}`,
+    default: `BEST Pressure Washing Service Lexington SC - If you're looking for Pressure Washing near me or Soft Washing & Window Cleaning near me - Ray's Window Cleaning & Pressure Washing is the place to be`,
+    template: `%s | Ray's Window Cleaning & Pressure Washing`,
   },
   /**
    * The fallback description for any page that doesn't set its own.

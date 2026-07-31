@@ -24,7 +24,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { faqSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: `Pressure Washing Service in ${cityState} | ${site.shortName}`,
+  title: `BEST Pressure Washing Service Lexington SC - If you're looking for Pressure Washing near me or Soft Washing & Window Cleaning near me - Ray's Window Cleaning & Pressure Washing is the place to be`,
   description:
     `Professional pressure washing service, soft washing, deck and concrete cleaning for homes ` +
     `across ${site.serviceRegion}. Same-day availability and the ${guaranteeName}.`,
@@ -72,10 +72,10 @@ export default function HomePage() {
           health sites in 2023 — but it hands answer engines ten pre-parsed
           question/answer pairs, which is what gets quoted. See content/faqs.ts. */}
       <JsonLd data={faqSchema(getFaqs(homeFaqIds))} />
-      {/* The H1 features the primary target keyword "Pressure Washing Service". */}
+      {/* H1 = primary category + cityname */}
       <Hero
         eyebrow={`Serving ${site.serviceRegion}`}
-        title={`Pressure Washing Service in ${cityState}`}
+        title="Pressure Washing Service Lexington SC"
         lede={`Glass, siding, decks and driveways, each on the method that surface can take. Backed by the ${guaranteeName}.`}
         primaryCta={{ label: "Request a Callback", href: "/contact" }}
         secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
@@ -83,15 +83,23 @@ export default function HomePage() {
       />
       <TrustBar items={site.credentials} badges={credentialBadges} />
       <SymptomChecker services={residentialServices} />
+      {/* H2 = secondary categories + most pertinent services */}
       <ServicesGrid
         services={featuredServices}
         heading={{
-          eyebrow: "What we clean",
-          title: "Every surface on a lake house, its own method",
-          lede: "Pressure where pressure works, chemistry where it doesn't. The badge on each card tells you which.",
+          eyebrow: "Secondary Categories & Services",
+          title: "Soft Washing, House Washing, Window Cleaning & Driveway Pressure Washing Services",
+          lede: "Pressure where pressure works, safe chemistry where soft washing is required.",
         }}
       />
-      <BeforeAfterShowcase projects={featuredProjects} />
+      <BeforeAfterShowcase
+        projects={featuredProjects}
+        heading={{
+          eyebrow: "Recent Work Portfolio",
+          title: "Pressure Washing, Soft Washing & Roof Cleaning Projects in Lexington SC",
+          lede: "Real local properties cleaned with precision soft washing, pressure washing, and streak-free window cleaning.",
+        }}
+      />
       {/* `VideoShowcase` used to sit here, between the photo proof and the
           process. It came out because `siteVideo` in content/media.ts is still
           an empty placeholder, so the live homepage was rendering a grey
