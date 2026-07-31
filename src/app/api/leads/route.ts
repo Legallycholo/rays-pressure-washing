@@ -28,10 +28,14 @@ import { createClient } from "@supabase/supabase-js";
    Configuration
    ------------------------------------------------------------------------- */
 
-/** Read lazily, per request: at module scope this is baked in at build time. */
+/** Read lazily, per request: at module scope this is baked in at build time.
+ *  Names match what Vercel's Supabase integration provisions — NEXT_PUBLIC_
+ *  because the same publishable key is safe in a browser bundle, not because
+ *  this route runs on the client. It doesn't; it just doesn't need a second,
+ *  server-only copy of a key that's already public by design. */
 const config = () => ({
-  url: process.env.SUPABASE_URL,
-  anonKey: process.env.SUPABASE_ANON_KEY,
+  url: process.env.NEXT_PUBLIC_SUPABASE_URL,
+  anonKey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
 });
 
 const MAX = {
@@ -202,7 +206,7 @@ export async function POST(req: Request) {
     // silently evaporates is worse than one that was never submitted, because
     // the customer stops waiting for a call that isn't coming.
     console.error(
-      "[api/leads] SUPABASE_URL or SUPABASE_ANON_KEY is not set. Lead NOT stored. See .env.example.",
+      "[api/leads] NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY is not set. Lead NOT stored. See .env.example.",
     );
     return NextResponse.json(
       { error: "Our form isn't reaching us right now." },
