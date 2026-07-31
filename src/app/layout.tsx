@@ -51,28 +51,18 @@ const sansFont = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   /**
-   * The default was `${site.name} | Pressure Washing & Exterior Cleaning in
-   * ${site.serviceRegion}` — 103 characters, against the ~60 Google shows before
-   * truncating. Everything that identified the business sat past the cut. This
-   * leads with what someone searched and the city, and puts the short brand name
-   * last where a truncation costs nothing.
-   *
-   * The `%s | Ray's` template keeps child titles short for the same reason —
-   * check any new page title lands under about 60 characters including the suffix.
+   * Leads with the primary target keyword "Pressure Washing Service" and location.
    */
   title: {
-    default: `Pressure Washing & Window Cleaning in ${cityState} | ${site.shortName}`,
+    default: `Pressure Washing Service in ${cityState} | ${site.shortName}`,
     template: `%s | ${site.shortName}`,
   },
   /**
-   * The fallback description for any page that doesn't set its own. Was 218
-   * characters — past the ~160 Google renders — so the call to action at the end
-   * was never shown. Trimmed to fit; the pages that most need a CTA in the
-   * snippet set their own description anyway.
+   * The fallback description for any page that doesn't set its own.
    */
   description:
-    `Soft washing, pressure washing and window cleaning for big lake houses and the ` +
-    `homes around them, across ${site.serviceRegion}. Backed by the ${guaranteeName}.`,
+    `Professional pressure washing service, soft washing, and window cleaning for homes ` +
+    `across ${site.serviceRegion}. Backed by the ${guaranteeName}.`,
   applicationName: site.name,
   /**
    * Google has ignored the keywords meta since 2009, so this earns its place

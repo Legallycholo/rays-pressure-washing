@@ -24,9 +24,9 @@ import { JsonLd } from "@/components/JsonLd";
 import { faqSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: `Pressure Washing Big Lake Houses in ${cityState}`,
+  title: `Pressure Washing Service in ${cityState} | ${site.shortName}`,
   description:
-    `Window cleaning, soft washing, deck and concrete cleaning for big lake homes ` +
+    `Professional pressure washing service, soft washing, deck and concrete cleaning for homes ` +
     `across ${site.serviceRegion}. Same-day availability and the ${guaranteeName}.`,
   alternates: { canonical: "/" },
 };
@@ -72,16 +72,10 @@ export default function HomePage() {
           health sites in 2023 — but it hands answer engines ten pre-parsed
           question/answer pairs, which is what gets quoted. See content/faqs.ts. */}
       <JsonLd data={faqSchema(getFaqs(homeFaqIds))} />
-      {/* The H1 is the search phrase, not the tagline. `site.tagline` still
-          carries the brand line in the footer and the OG card, where it has
-          room to be a slogan rather than the thing someone typed to get here.
-          The eyebrow stays the region: it renders against a map-pin icon. */}
+      {/* The H1 features the primary target keyword "Pressure Washing Service". */}
       <Hero
         eyebrow={`Serving ${site.serviceRegion}`}
-        title={`Pressure washing big lake houses in ${cityState}`}
-        // Was two sentences. The first ("Big houses on the water need more than
-        // a pressure washer and a ladder") restated the H1 immediately above it
-        // and spent the lede's whole attention budget agreeing with itself.
+        title={`Pressure Washing Service in ${cityState}`}
         lede={`Glass, siding, decks and driveways, each on the method that surface can take. Backed by the ${guaranteeName}.`}
         primaryCta={{ label: "Request a Callback", href: "/contact" }}
         secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}
