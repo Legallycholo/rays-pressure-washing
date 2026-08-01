@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { site, hoursLine, weeklyHours } from "@/content/site";
-import { residentialServices } from "@/content/services";
+import { residentialServices, commercialServices } from "@/content/services";
 import { locations } from "@/content/locations";
 import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
@@ -152,6 +152,28 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+            </ul>
+
+            {/* Commercial stacks inside this column rather than claiming a
+                sixth. The grid is `lg:grid-cols-5` with identity spanning two,
+                so a new top-level column would wrap the whole row — and three
+                commercial links do not need a track of their own. */}
+            <h3 className="mt-8 font-display text-sm uppercase tracking-[0.16em] text-white">
+              Commercial
+            </h3>
+            <ul className={footerList}>
+              {commercialServices.map((s) => (
+                <li key={s.slug}>
+                  <Link href={`/services/${s.slug}`} className={footerLink}>
+                    {s.navLabel}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/services/commercial" className={footerLink}>
+                  All commercial services
+                </Link>
+              </li>
             </ul>
           </div>
 

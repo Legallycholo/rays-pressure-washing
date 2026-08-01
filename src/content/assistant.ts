@@ -151,7 +151,7 @@ export const assistantTopics: AssistantTopic[] = [
     // this line isn't updated, this line is the one that's wrong.
     reply: [
       "Siding, driveways and walkways, decks, patios, fences, gutters, windows and pool enclosures.",
-      "We work on big lake homes, and the whole exterior can go in one visit rather than four separate trips.",
+      "We work on homes and on commercial properties — storefronts, offices and small commercial buildings — and the whole exterior can go in one visit rather than four separate trips.",
     ],
     actions: [
       { label: "Browse every service", href: "/services", icon: "spray", internal: true },

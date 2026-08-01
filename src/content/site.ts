@@ -103,10 +103,15 @@ export const site = {
    * also the term people here actually search.
    *
    * Note this field only ever describes *where we go*. It is not the marketing
-   * angle: the homepage H1 and title still lead on lake houses, built from
-   * `cityState` rather than this value, so the lake-home targeting survives a
-   * change here untouched. Keep those two jobs separate — the moment a coverage
-   * string starts doing positioning work, one of the two ends up a lie.
+   * angle: the homepage H1 and title are built from `cityState` rather than
+   * this value, so the positioning survives a change here untouched. Keep those
+   * two jobs separate — the moment a coverage string starts doing positioning
+   * work, one of the two ends up a lie.
+   *
+   * The positioning itself moved in 2026 from "big lake houses" to residential
+   * and commercial exterior cleaning, matching the Google Business Profile
+   * categories. Lake Murray survives as a place we serve (see the Chapin entry
+   * in `locations.ts`), not as the audience the site sells to.
    */
   serviceRegion: "the SC Midlands",
 

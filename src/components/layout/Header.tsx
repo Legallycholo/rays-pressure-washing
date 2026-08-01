@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { site, hoursLine } from "@/content/site";
-import { residentialServices } from "@/content/services";
+import { residentialServices, commercialServices } from "@/content/services";
 import { priorityLocations } from "@/content/locations";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
@@ -12,7 +12,17 @@ import { Logo } from "@/components/ui/Logo";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
 
+/**
+ * `/services/commercial` is a top-level item as well as a column inside the
+ * Services mega-menu, at the business's direction. The duplication is the
+ * point: a business owner should not have to hover a menu labelled with
+ * residential work to find out we do commercial at all.
+ *
+ * It sits first so it reads next to Services rather than adrift among the
+ * proof-and-about links.
+ */
 const navLinks = [
+  { href: "/services/commercial", label: "Commercial" },
   { href: "/gallery", label: "Before & After" },
   { href: "/service-areas", label: "Service Areas" },
   { href: "/reviews", label: "Reviews" },
@@ -64,6 +74,14 @@ export function Header() {
     });
     return () => io.disconnect();
   }, [pathname]);
+
+  /**
+   * "Services" owns /services and every /services/[service] page, but NOT
+   * /services/commercial — that has its own nav item, and a shared prefix test
+   * would underline both at the same time.
+   */
+  const commercialActive = pathname.startsWith("/services/commercial");
+  const servicesActive = pathname.startsWith("/services") && !commercialActive;
 
   // Close the mobile drawer on navigation.
   useEffect(() => setOpen(false), [pathname]);
@@ -158,7 +176,10 @@ export function Header() {
                     "relative inline-flex items-center gap-1 rounded-pill px-3.5 py-2 text-sm font-semibold transition-colors",
                     "hover:bg-sand-50 hover:text-harbor-700",
                     "after:absolute after:inset-x-3.5 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-leaf-500 after:transition-transform after:duration-200 after:ease-out-expo",
-                    pathname.startsWith("/services")
+                    // Not a bare startsWith("/services"): /services/commercial is
+                    // its own top-level item now, and a plain prefix test lit
+                    // both underlines at once on that page.
+                    servicesActive
                       ? "text-harbor-700 after:scale-x-100"
                       : "text-ink-700 after:scale-x-0",
                   )}
@@ -175,11 +196,22 @@ export function Header() {
                     card left a column of dead white space and made the menu the
                     tallest thing on the page. Icons plus the short `navLabel`
                     carry each row; nothing here needs a sentence. */}
-                <div className="invisible absolute left-1/2 top-full w-[50rem] -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 ease-out-expo group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+                {/* Anchored to this item's left edge, not centred on it.
+                    `left-1/2 -translate-x-1/2` centred a 50rem panel on a link
+                    sitting ~375px from the viewport edge, so the first column —
+                    the "Residential" heading and its icons — was clipped off
+                    the left of the screen at every width below ~1550px. Growing
+                    the panel to fit two labelled groups made that worse. Left
+                    alignment cannot overflow on that side at any width. */}
+                <div className="invisible absolute left-0 top-full w-[52rem] max-w-[calc(100vw-2rem)] pt-3 opacity-0 transition-all duration-200 ease-out-expo group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                   <div className="grid grid-cols-3 gap-8 rounded-2xl bg-white p-7 shadow-lift ring-1 ring-ink-900/10">
+                    {/* Residential keeps the two-column treatment because it
+                        carries seven rows; commercial is three and would look
+                        stranded split in half. Both live under labelled
+                        headings so the split is legible rather than implied. */}
                     <div className="col-span-2">
                       <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-leaf-600">
-                        Services
+                        Residential
                       </p>
                       <ul className="grid grid-cols-2 gap-x-3 gap-y-0.5">
                         {residentialServices.map((s) => (
@@ -194,10 +226,36 @@ export function Header() {
                           </li>
                         ))}
                       </ul>
+
+                      <p className="mb-3 mt-6 text-xs font-bold uppercase tracking-[0.16em] text-leaf-600">
+                        Commercial
+                      </p>
+                      <ul className="grid grid-cols-2 gap-x-3 gap-y-0.5">
+                        {commercialServices.map((s) => (
+                          <li key={s.slug}>
+                            <Link
+                              href={`/services/${s.slug}`}
+                              className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-ink-600 transition-colors hover:bg-sand-50 hover:text-harbor-700"
+                            >
+                              <Icon name={s.icon} className="h-4 w-4 text-harbor-500" />
+                              {s.navLabel}
+                            </Link>
+                          </li>
+                        ))}
+                        <li>
+                          <Link
+                            href="/services/commercial"
+                            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-harbor-700 transition-colors hover:bg-sand-50"
+                          >
+                            <Icon name="arrow" className="h-4 w-4 text-harbor-500" />
+                            All commercial
+                          </Link>
+                        </li>
+                      </ul>
                     </div>
                     <div className="harbor-mesh flex flex-col justify-center rounded-xl bg-ink-900 p-5 text-white">
                       <p className="font-display text-xl leading-tight">
-                        Own a big place on the lake?
+                        Home or business?
                       </p>
                       <p className="mt-2 text-sm leading-relaxed text-ink-200">
                         Send your address. We come back with a price.
@@ -315,7 +373,7 @@ export function Header() {
           </div>
 
           <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-leaf-600">
-            Services
+            Residential Services
           </p>
           <ul className="divide-y divide-ink-100 border-y border-ink-100">
             {residentialServices.map((s) => (
@@ -332,16 +390,48 @@ export function Header() {
           </ul>
 
           <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-leaf-600">
-            Explore
+            Commercial Services
           </p>
           <ul className="divide-y divide-ink-100 border-y border-ink-100">
-            {navLinks.map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} className="block py-3.5 font-medium text-ink-800">
-                  {l.label}
+            {commercialServices.map((s) => (
+              <li key={s.slug}>
+                <Link
+                  href={`/services/${s.slug}`}
+                  className="flex items-center gap-3 py-3.5 font-medium text-ink-800"
+                >
+                  <Icon name={s.icon} className="h-5 w-5 text-harbor-500" />
+                  {s.navLabel}
                 </Link>
               </li>
             ))}
+            <li>
+              <Link
+                href="/services/commercial"
+                className="flex items-center gap-3 py-3.5 font-semibold text-harbor-700"
+              >
+                <Icon name="arrow" className="h-5 w-5 text-harbor-500" />
+                All commercial services
+              </Link>
+            </li>
+          </ul>
+
+          <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-leaf-600">
+            Explore
+          </p>
+          {/* Commercial is filtered out here, unlike on desktop: the drawer
+              already gave it a labelled section with an "All commercial
+              services" row directly above, and listing it a third time reads
+              as a mistake rather than as emphasis. */}
+          <ul className="divide-y divide-ink-100 border-y border-ink-100">
+            {navLinks
+              .filter((l) => l.href !== "/services/commercial")
+              .map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className="block py-3.5 font-medium text-ink-800">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
           </ul>
 
           <p className="mt-8 mb-2 text-xs font-bold uppercase tracking-[0.16em] text-leaf-600">
