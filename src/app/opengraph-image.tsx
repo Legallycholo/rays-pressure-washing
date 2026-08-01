@@ -47,7 +47,7 @@ export default async function OpengraphImage() {
             {site.tagline}
           </div>
           <div style={{ fontSize: 28, color: "#a3c0d8" }}>
-            {`Big lake houses · ${site.guarantee.title} · ${site.serviceRegion}`}
+            {`Residential & commercial · ${site.guarantee.title} · ${site.serviceRegion}`}
           </div>
         </div>
 

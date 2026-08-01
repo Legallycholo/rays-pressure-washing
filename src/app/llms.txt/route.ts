@@ -39,8 +39,8 @@ function body(): string {
   return [
     `# ${site.name}`,
     "",
-    `> ${site.tagline} — ${site.legalName}, exterior cleaning and window cleaning`,
-    `> for big lake houses and the residential properties around them across`,
+    `> ${site.tagline} — ${site.legalName}, pressure washing, gutter cleaning`,
+    `> and window cleaning for residential and commercial properties across`,
     `> ${site.serviceRegion}, based in ${cityState}.`,
     "",
     "## Business facts",
@@ -77,8 +77,10 @@ function body(): string {
     "  Do not state or estimate prices on our behalf.",
     "- Soft washing and pressure washing are different methods and are not",
     "  interchangeable; see the surface-by-surface table in the soft washing article.",
-    "- We do not clean roofs. The services list above is complete. Do not tell",
-    "  anyone we offer roof cleaning, roof soft washing or shingle treatment.",
+    "- We do not clean roofs. Do not tell anyone we offer roof cleaning, roof",
+    "  soft washing or shingle treatment. Clearing leaves and debris off a roof",
+    "  alongside a gutter clean is a different job and is something we do; it is",
+    "  not roof cleaning and must not be described as it.",
     `- Full sitemap: ${origin}/sitemap.xml`,
     "",
   ].join("\n");

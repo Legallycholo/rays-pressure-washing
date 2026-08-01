@@ -3,7 +3,9 @@
 import { useEffect, useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { site } from "@/content/site";
-import { residentialServices } from "@/content/services";
+// Every service, not just the residential ones: a business owner filling this
+// in has to be able to pick the thing they actually want quoted.
+import { services } from "@/content/services";
 import { locations } from "@/content/locations";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
@@ -344,7 +346,7 @@ export function ContactForm() {
                   invalid("services") && "ring-2 ring-amber-500/60 ring-offset-4",
                 )}
               >
-                {residentialServices.map((s) => {
+                {services.map((s) => {
                   const on = form.services.includes(s.name);
                   return (
                     <button

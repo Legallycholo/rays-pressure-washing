@@ -62,7 +62,7 @@ const meanwhile = [
     href: "/gallery",
     icon: "camera",
     title: "Before & after",
-    body: "Real jobs around the lake, dragged side by side.",
+    body: "Real local jobs, dragged side by side.",
   },
   {
     href: "/reviews",

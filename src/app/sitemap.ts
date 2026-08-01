@@ -34,6 +34,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     "",
     "/services",
+    // Listed explicitly because it is a static page, not a `services.ts` entry:
+    // `serviceRoutes` below is built from `serviceSlugs`, so the commercial hub
+    // is the one service URL that array cannot know about. Miss this and the
+    // page is orphaned from the sitemap while every page linking to it is in it.
+    "/services/commercial",
     "/service-areas",
     "/gallery",
     "/reviews",

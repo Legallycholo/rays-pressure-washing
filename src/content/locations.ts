@@ -224,7 +224,7 @@ export const locations: Location[] = [
     driveMinutes: 22,
     population: "≈ 1,700",
     intro:
-      "Chapin calls itself the Capital of Lake Murray, and the work here reflects it: big houses on the north shore with a lot of glass facing the water, boat docks, screened porches and pool surrounds. Everything sits close enough to open water that humidity never really lets go, and second-story lakefront glass is the single most requested job we run out here.",
+      "Chapin is Lake Murray's north shore, and the properties here reflect it: a lot of glass facing the water, boat docks, screened porches and pool surrounds, plus the shops and offices along Columbia Avenue. Everything sits close enough to open water that humidity never really lets go, and second-story glass is the single most requested job we run out here.",
     housingStock:
       "Large waterfront and near-waterfront homes, high glass-to-wall ratio, docks, boathouses, screened porches and pool decks",
     summary:

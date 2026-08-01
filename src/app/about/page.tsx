@@ -18,7 +18,7 @@ import { breadcrumbSchema, personSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
   title: "About Us",
-  description: `${site.name}: locally owned exterior cleaning for big lake houses, based in ${cityState}.`,
+  description: `${site.name}: locally owned residential and commercial exterior cleaning, based in ${cityState}.`,
   alternates: { canonical: "/about" },
 };
 
@@ -39,7 +39,7 @@ export default function AboutPage() {
         variant="page"
         breadcrumbs={crumbs}
         title={`The local crew that treats your place like the ${guaranteeName.toLowerCase()} depends on it`}
-        lede={`Because it does. ${site.name} washes big lake houses and the homes around them across ${site.serviceRegion}, and has for years. Same owner, same standard, same trucks you see around town.`}
+        lede={`Because it does. ${site.name} washes homes and businesses across ${site.serviceRegion}, and has for years. Same owner, same standard, same trucks you see around town.`}
         primaryCta={{ label: "Request a Callback", href: "/contact" }}
       />
 
@@ -66,12 +66,14 @@ export default function AboutPage() {
                 before-and-afters do the selling.
               </p>
               <p>
-                The lake work is what sharpened it. A big house on the water is a
-                wall of glass, a deck that never dries, stone or stucco holding
-                humidity, and a driveway long enough that one bad pass shows
-                forever. Four surfaces, four settings, one visit. You cannot do
-                that with one machine and one nozzle, and finding that out is
-                what turned a pressure washing business into a method one.
+                The big jobs are what sharpened it. One property can be a wall of
+                glass, a deck that never dries, stone or stucco holding humidity,
+                and a driveway long enough that one bad pass shows forever. Four
+                surfaces, four settings, one visit. You cannot do that with one
+                machine and one nozzle, and finding that out is what turned a
+                pressure washing business into a method one — which is the same
+                reason the storefronts and offices we clean now get the same
+                treatment as the houses.
               </p>
               <p>
                 Today it&apos;s a small crew, trained on every material we touch, but
