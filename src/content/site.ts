@@ -58,18 +58,33 @@ export const site = {
   /**
    * Canonical production origin, no trailing slash.
    *
-   * Read from the environment so preview deploys stop claiming production
-   * canonicals: set NEXT_PUBLIC_SITE_URL on Vercel's Production environment
-   * only, and leave it unset everywhere else so previews fall back to the
-   * Vercel alias below.
+   * The real domain, confirmed by the business on 1 Aug 2026 and corroborated
+   * by the Google Business Profile's booking link, which points at
+   * www.rayspropertywash.com. `www` rather than the bare domain specifically to
+   * match that listing — NAP and URL consistency between the site and the GBP
+   * is the entire point of the local-SEO pass, so the two must not disagree
+   * over a subdomain. Whichever form is not canonical must 301 to this one.
    *
-   * The fallback MUST resolve. This was `https://www.ryanspressurewashing.example`,
-   * and `.example` is an IANA-reserved TLD that can never exist — which quietly
-   * invalidated every canonical, every sitemap entry, the robots.txt sitemap
-   * pointer and every schema @id on the site at once. When the real domain is
-   * registered, set the env var; nothing in the codebase needs to change.
+   * WHY THE FALLBACK IS THE PRODUCTION DOMAIN AND NOT THE VERCEL ALIAS.
+   * It used to be `ryan-pressure-washing.vercel.app`, on the reasoning that a
+   * preview deploy should never claim production canonicals. That reasoning
+   * assumed NEXT_PUBLIC_SITE_URL was actually set in production — and it was
+   * not, so every canonical, every sitemap URL, the robots.txt sitemap pointer
+   * and every schema @id on the live site advertised a Vercel preview alias
+   * instead of the business's domain. Silently, and for as long as nobody
+   * checked.
+   *
+   * Inverting the default makes the failure mode safe. Forget the env var now
+   * and production is still correct. The cost is that preview deploys emit
+   * production canonicals, which is the benign direction: a preview pointing at
+   * production says "the real version lives there", whereas production pointing
+   * at a preview alias asks Google to index the wrong host entirely.
+   *
+   * Setting NEXT_PUBLIC_SITE_URL still overrides this and is still worth doing
+   * — it is the only way to point a preview at itself, and the only way to move
+   * domains without a deploy.
    */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://ryan-pressure-washing.vercel.app",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.rayspropertywash.com",
 
   contact: {
     /** Human-readable phone format. */
@@ -145,6 +160,21 @@ export const site = {
     "Same-Day Availability · Instant Pricing",
     "Locally owned and operated",
   ],
+
+  /**
+   * `src` for the homepage Google map embed, from the Business Profile's own
+   * Share → Embed a map dialog.
+   *
+   * Empty on purpose rather than guessed. The embed URL that renders the
+   * *business listing* — name, rating, hours, photos — carries a Google-issued
+   * place identifier that cannot be derived from an address, so there is no
+   * value that could be written here without opening that dialog.
+   *
+   * While it is empty, `GoogleMapEmbed` falls back to an address query: the
+   * right pin, but a plain marker instead of the listing. Paste the real `src`
+   * in and the component picks it up; nothing else changes.
+   */
+  mapEmbedUrl: "",
 
   /** Direct link for customers to leave a 5-star Google review */
   reviewLink: "https://g.page/r/CcTTVMucwQXsEBM/review",

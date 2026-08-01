@@ -18,6 +18,7 @@ import { StatsRow } from "@/components/sections/StatsRow";
 import { Testimonials } from "@/components/sections/Testimonials";
 import { PressBar } from "@/components/sections/PressBar";
 import { ServiceAreaSection } from "@/components/sections/ServiceAreaSection";
+import { GoogleMapEmbed } from "@/components/sections/GoogleMapEmbed";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { ArticlePreview } from "@/components/sections/ArticlePreview";
 import { JsonLd } from "@/components/JsonLd";
@@ -125,6 +126,13 @@ export default function HomePage() {
       {/* Renders nothing until there is real press coverage. See content/press.ts. */}
       <PressBar />
       <ServiceAreaSection locations={locations} />
+      {/* GBP map embed. Sits directly after the coverage section because the two
+          answer adjacent questions — "which towns" then "where are you" — and
+          low on the page because it is a lazy-loaded third-party iframe.
+          `light`, not the component's `sand` default: ServiceAreaSection above
+          is ink and FaqSection below is sand, so sand here would put two sand
+          sections back to back (STRUCTURE.md tone alternation). */}
+      <GoogleMapEmbed tone="light" />
       {/* limit={10}: FaqSection defaults to 6 and would silently truncate. */}
       <FaqSection items={getFaqs(homeFaqIds)} limit={10} groupName="faq-home" />
       <StatsRow stats={stats} />
