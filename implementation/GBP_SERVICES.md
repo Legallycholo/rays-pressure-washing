@@ -42,6 +42,75 @@ actually changed what it sells.
 
 ---
 
+## Confirmed profile state — recon, 1 Aug 2026
+
+Run via Claude in Chrome (Prompt 1 in `GBP_CHROME_PROMPTS.md`), read-only.
+
+**Categories are exactly as assumed**, which validates the whole structure in
+`content/service-categories.ts`:
+
+- Primary: **Pressure washing service**
+- Secondary: **Gutter cleaning service**, **Window cleaning service**
+
+**Services currently on the profile: 22 entries, 18 unique.** The 18 are
+precisely the 18 sub-services in `content/service-categories.ts` — the site and
+the profile already mirror each other, which is what the whole GBP-alignment
+pass was for.
+
+Four entries are the *same service cross-listed under several categories*
+("Gutter cleaning" appears under all three; "Power/pressure washing" under all
+three). That is not an error to fix — it is how a service gets attributed to
+more than one category — but it means the raw count of 22 overstates coverage.
+
+**18 unique against a top-20 average of roughly 30** (per the workflow doc) is
+below par, which is exactly the gap the 88-service list closes.
+
+Other findings worth acting on:
+
+| Finding | Action |
+|---|---|
+| **Booking link → `www.rayspropertywash.com`** | See the domain note below. This is the important one. |
+| No cover photo set | Easy profile-completeness win. Set one. |
+| Red notification dot on the listing | Open it — Google has a pending suggested edit. Review before it auto-applies. |
+| 18 photos, most recent today | Healthy. Keep the weekly cadence. |
+| Opening date Feb 11 2009 | Established business — good trust signal, leave it. |
+| Attributes empty (Accessibility, Amenities, Crowd, Parking, Planning) | **Deliberately skip.** The workflow doc's own GMB Everywhere data shows most top-10 profiles have zero attributes, i.e. near-zero correlation with ranking. Not worth the time. |
+
+### ⚠️ The domain question this raises
+
+The profile's booking link points at **`www.rayspropertywash.com`**, and
+`app/api/leads/route.ts` already refers to `rayspropertywash.com` as Ray's
+domain. Meanwhile `site.url` falls back to `ryan-pressure-washing.vercel.app`
+because `NEXT_PUBLIC_SITE_URL` is unset.
+
+So every canonical, every sitemap URL and every schema `@id` this site emits
+currently points at a Vercel preview domain rather than the business's real one.
+**Nothing else in the SEO workflow matters until that is resolved**, because
+Google is being told the site lives somewhere it doesn't.
+
+What needs deciding, by a human who knows the setup:
+
+1. Is `rayspropertywash.com` where this Next.js site will live, or is there an
+   older site there now that this one replaces?
+2. Once that's settled: point the domain at this Vercel project and set
+   `NEXT_PUBLIC_SITE_URL` to the canonical form (with or without `www`, picking
+   one and redirecting the other).
+
+No code change is needed for any of it — `site.url` reads the env var already.
+
+### Note on near-duplicates when adding the list below
+
+The profile currently uses two *combined* entries that this list splits apart:
+
+- "Driveway & sidewalk cleaning" → we list `Driveway Cleaning` + `Sidewalk Cleaning`
+- "Patio & deck cleaning" → we list `Patio Cleaning` + `Deck Cleaning`
+
+These won't be detected as duplicates, so you'll end up with both forms. That is
+fine and mildly useful — each variant is its own longtail target — and the
+standing rule against deleting existing services applies. Leave all of them.
+
+---
+
 ## The list — 96 services
 
 Grouped by the GBP category each belongs under. If the profile has one category,
