@@ -27,10 +27,18 @@
  * wording. The point of this file is agreement between the two, and a category
  * this file calls something the profile doesn't is worse than no category at all.
  *
- * The `blurb` on every sub-service is intentionally a PLACEHOLDER for the owner
- * to write. Do not fill these in with invented specifics: an inch of real copy
- * about what Ray actually does on a rust stain beats a paragraph of plausible
- * filler, and the FTC note on `testimonials.ts` applies to service claims too.
+ * WRITING THE BLURBS. One or two sentences, describing the surface and what
+ * comes off it. Three rules, all of which exist because breaking one creates a
+ * claim the business then has to honour on the phone:
+ *
+ *   1. No prices, and no durations that read as a quote. Nothing on this site
+ *      publishes a figure — see the note on `offers` in `lib/schema.ts`.
+ *   2. Nothing that implies we clean or treat a roof surface. "Roof Debris
+ *      Removal" below is the one roof-adjacent entry and its wording is load
+ *      bearing; see the comment on it.
+ *   3. No superlatives or invented specifics — no "military-grade", no
+ *      equipment we don't own, no guarantee that isn't `site.guarantee`. The
+ *      FTC note on `testimonials.ts` applies to service claims too.
  */
 
 import type { ServiceCategory } from "./services";
@@ -62,8 +70,6 @@ export type ServiceCategoryGroup = {
   subServices: SubService[];
 };
 
-const PLACEHOLDER = "[Placeholder: add a short description of this service.]";
-
 export const serviceCategories: ServiceCategoryGroup[] = [
   {
     id: "pressure-washing",
@@ -73,18 +79,51 @@ export const serviceCategories: ServiceCategoryGroup[] = [
     icon: "spray",
     lede: "Pressure where the surface can take it, soft washing where it can't. The method is chosen per surface, never per job.",
     subServices: [
-      { name: "Power / Pressure Washing", blurb: PLACEHOLDER },
-      { name: "Soft Wash Cleaning", blurb: PLACEHOLDER },
-      { name: "House Washing", slug: "house-washing", blurb: PLACEHOLDER },
-      { name: "Driveway & Sidewalk Cleaning", slug: "driveway-concrete", blurb: PLACEHOLDER },
-      { name: "Patio & Deck Cleaning", slug: "deck-patio", blurb: PLACEHOLDER },
-      { name: "Fence Cleaning", slug: "fence-cleaning", blurb: PLACEHOLDER },
+      {
+        name: "Power / Pressure Washing",
+        blurb:
+          "High-pressure cleaning for the surfaces that can take it — concrete, masonry, hard-wearing flatwork. Pressure is a tool here, not a default setting.",
+      },
+      {
+        name: "Soft Wash Cleaning",
+        blurb:
+          "Low pressure and the right chemistry for siding, stucco and anything a wand would damage. It kills the growth at the root instead of blasting the top off it.",
+      },
+      {
+        name: "House Washing",
+        slug: "house-washing",
+        blurb:
+          "The whole exterior — siding, soffits, fascia, gutter faces, frames and sills — soft washed so the green comes off and the house stays where it is.",
+      },
+      {
+        name: "Driveway & Sidewalk Cleaning",
+        slug: "driveway-concrete",
+        blurb:
+          "A rotating surface cleaner lifts the grey evenly across the whole slab, then we hand-detail the edges and expansion joints. No wand stripes to look at later.",
+      },
+      {
+        name: "Patio & Deck Cleaning",
+        slug: "deck-patio",
+        blurb:
+          "Wood, composite, pavers and stone each get their own pressure and chemistry, so boards come back clean rather than furred, etched or stripped.",
+      },
+      {
+        name: "Fence Cleaning",
+        slug: "fence-cleaning",
+        blurb:
+          "Both faces, top rail to the green line at the base, at a pressure the material can take. We don't skip the side your neighbour looks at.",
+      },
       {
         name: "Commercial Pressure Washing",
         slug: "commercial-building-washing",
-        blurb: PLACEHOLDER,
+        blurb:
+          "Facades, entries and walkways for local businesses, cleaned early, late or at the weekend so nobody steps over a hose to get through your door.",
       },
-      { name: "Rust Removal", blurb: PLACEHOLDER },
+      {
+        name: "Rust Removal",
+        blurb:
+          "Irrigation rust, fertilizer stains and battery marks on concrete and masonry, treated with chemistry rather than pressure. Most lift out; some only lighten, and we say which before we start.",
+      },
     ],
   },
   {
@@ -94,8 +133,17 @@ export const serviceCategories: ServiceCategoryGroup[] = [
     icon: "gutter",
     lede: "Clearing a gutter and cleaning a gutter are two different jobs. We do both, and we flow-test the downspouts before we leave.",
     subServices: [
-      { name: "Gutter Cleaning", slug: "gutter-cleaning", blurb: PLACEHOLDER },
-      { name: "Downspout Cleaning", blurb: PLACEHOLDER },
+      {
+        name: "Gutter Cleaning",
+        slug: "gutter-cleaning",
+        blurb:
+          "Debris out by hand, not blown into the flowerbeds, then every downspout flushed and flow-tested. You get before-and-after photos of each run.",
+      },
+      {
+        name: "Downspout Cleaning",
+        blurb:
+          "The blockage is usually in the elbow, not the trough. We clear and flush each downspout and confirm water is actually moving away from the foundation.",
+      },
       /*
         "Roof debris removal" is clearing leaves, branches and grit off a roof
         surface and out of the valleys — usually the same visit as the gutters,
@@ -109,9 +157,25 @@ export const serviceCategories: ServiceCategoryGroup[] = [
         moment it starts implying we treat a roof surface, it contradicts two
         deliberate statements elsewhere in the codebase.
       */
-      { name: "Roof Debris Removal", blurb: PLACEHOLDER },
-      { name: "Gutter Brightening", slug: "gutter-cleaning", blurb: PLACEHOLDER },
-      { name: "Gutter Guard Cleaning", blurb: PLACEHOLDER },
+      {
+        name: "Roof Debris Removal",
+        // Wording is load bearing. It describes clearing loose debris OFF a
+        // roof; it must never imply washing, soft washing or treating the roof
+        // surface. See the comment above and the note in llms.txt.
+        blurb:
+          "Leaves, twigs and grit cleared out of the valleys and off the shingles, usually in the same visit as the gutters — because what's in the gutter came off the roof.",
+      },
+      {
+        name: "Gutter Brightening",
+        slug: "gutter-cleaning",
+        blurb:
+          "The black vertical tiger-striping on the outward face is oxidation, and ordinary washing leaves it behind. This is the treatment that actually lifts it.",
+      },
+      {
+        name: "Gutter Guard Cleaning",
+        blurb:
+          "Guards keep the big stuff out and let shingle grit and pollen through. We lift the covers, clear what's built up underneath, and refit them properly.",
+      },
     ],
   },
   {
@@ -121,23 +185,36 @@ export const serviceCategories: ServiceCategoryGroup[] = [
     icon: "window",
     lede: "Deionized pure water, reached from the ground. The glass dries clear on its own, so there is nothing left behind to towel off.",
     subServices: [
-      { name: "Window Washing", slug: "window-cleaning", blurb: PLACEHOLDER },
+      {
+        name: "Window Washing",
+        slug: "window-cleaning",
+        blurb:
+          "Deionized water, so the glass dries clear on its own with nothing left to squeegee. Second-storey panes reached from the ground — no ladders in your flowerbeds.",
+      },
       {
         name: "Commercial Window Cleaning",
         slug: "commercial-window-cleaning",
-        blurb: PLACEHOLDER,
+        blurb:
+          "Storefront and low-rise glass on a monthly or quarterly round, cleaned from the ground so no ladder ever blocks your entrance. No contract required.",
       },
-      { name: "Screen Cleaning", blurb: PLACEHOLDER },
-      { name: "Skylight Cleaning", blurb: PLACEHOLDER },
-      { name: "Glass Door Cleaning", blurb: PLACEHOLDER },
+      {
+        name: "Screen Cleaning",
+        blurb:
+          "Screens come out, get washed and dried, and go back in the opening they came from. Clean glass behind a grey screen still reads as dirty.",
+      },
+      {
+        name: "Skylight Cleaning",
+        blurb:
+          "Glass, frame and the surrounding curb cleaned from above, where years of grit and organic film collect and quietly cost you the light you paid for.",
+      },
+      {
+        name: "Glass Door Cleaning",
+        blurb:
+          "Entry and sliding doors, both sides, including the tracks and the handle area that takes every fingerprint. The first glass anyone actually touches.",
+      },
     ],
   },
 ];
-
-/** True while any sub-service blurb is still the untouched placeholder. */
-export const hasPlaceholderBlurbs = serviceCategories.some((c) =>
-  c.subServices.some((s) => s.blurb === PLACEHOLDER),
-);
 
 export const getServiceCategory = (id: ServiceCategory) =>
   serviceCategories.find((c) => c.id === id);
