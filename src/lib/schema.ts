@@ -1,4 +1,5 @@
 import { site, expandDays } from "@/content/site";
+import { serviceCategories } from "@/content/service-categories";
 import { locations } from "@/content/locations";
 import type { Service } from "@/content/services";
 import type { Location } from "@/content/locations";
@@ -33,11 +34,94 @@ export const WEBSITE_ID = `${origin}/#website`;
 export const PERSON_ID = `${origin}/#ray`;
 
 /**
+ * Stable `@id` for a service, so the `Service` node on its own page and the
+ * entry for it in the business's `hasOfferCatalog` are the same node rather
+ * than two similar ones a crawler has to guess about.
+ *
+ * Base service page only. The `/services/[service]/[city]` pages deliberately
+ * do NOT get one — see the note in `serviceSchema`.
+ */
+export const serviceId = (slug: string) => `${origin}/services/${slug}#service`;
+
+/**
  * Absolute URL for the sitewide social image. `opengraph-image.tsx` is the file
  * convention Next serves this from, and schema.org wants an absolute URL rather
  * than the relative path metadata can get away with.
  */
 const OG_IMAGE = `${origin}/opengraph-image`;
+
+/**
+ * `hasOfferCatalog` for the business node: the three Google Business Profile
+ * categories, each as a named sub-catalog holding the services under it.
+ *
+ * WHY IT IS BUILT AND NOT WRITTEN. It is generated from
+ * `content/service-categories.ts`, the same array that renders the H2/H3
+ * section on /services, so the catalog a crawler reads and the list a visitor
+ * reads cannot drift apart. A hand-maintained copy of this would be wrong
+ * within two service changes — the same reasoning as `publishedRating` in
+ * content/site.ts.
+ *
+ * WHY THE SUB-CATALOG NAMES ARE THE GBP STRINGS VERBATIM. The entire point of
+ * this property is to tell Google that the categories on the profile and the
+ * services on the site are the same three things. `gbpCategory` holds the exact
+ * profile wording; do not "improve" it here to read better, because matching is
+ * the feature.
+ *
+ * WHY IT INCLUDES SERVICES WITH NO PAGE. The catalog describes what the
+ * business sells, which is not the same set as what the site has URLs for.
+ * Sub-services without a page (rust removal, skylight cleaning, and the rest)
+ * are real work the profile already advertises, so they belong here; they
+ * simply carry no `url`. Ones with a page point at that page's `Service` node
+ * by `@id`, so the catalog entry and the page are one node.
+ *
+ * NO `price`, `priceRange` OR `priceSpecification` ON THESE OFFERS, EVER. See
+ * the long note in `serviceSchema` about why `offers` was stripped from the
+ * service pages: structured data is published data, the figures in
+ * content/services.ts are PLACEHOLDER, and this business does not publish
+ * prices. An `Offer` with no price is valid and still resolves the service to
+ * the business, which is all this needs to do.
+ */
+function offerCatalog() {
+  /*
+    More than one sub-service can point at the same page — "Gutter Cleaning" and
+    "Gutter Brightening" are both aspects of the one gutter service, exactly as
+    the profile lists them.
+
+    Only the first of them may carry the page's `@id`. Emitting it on both would
+    put two nodes with the same `@id` and different `name` values into the
+    graph, which asks a crawler to believe one node is called two things — and
+    an `@id` that resolves ambiguously is worse than no `@id`, because it
+    corrupts the node the service page itself depends on. The later ones keep
+    `url`, which links them to the page without claiming to *be* it.
+  */
+  const claimed = new Set<string>();
+
+  return {
+    "@type": "OfferCatalog",
+    name: `Services offered by ${site.name}`,
+    itemListElement: serviceCategories.map((category) => ({
+      "@type": "OfferCatalog",
+      // Verbatim from the Google Business Profile. Do not reword.
+      name: category.gbpCategory,
+      itemListElement: category.subServices.map((sub) => {
+        const canonical = Boolean(sub.slug) && !claimed.has(sub.slug!);
+        if (sub.slug) claimed.add(sub.slug);
+
+        return {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: sub.name,
+            serviceType: sub.name,
+            provider: { "@id": BUSINESS_ID },
+            ...(sub.slug ? { url: `${origin}/services/${sub.slug}` } : {}),
+            ...(canonical ? { "@id": serviceId(sub.slug!) } : {}),
+          },
+        };
+      }),
+    })),
+  };
+}
 
 export function localBusinessSchema() {
   return {
@@ -84,6 +168,11 @@ export function localBusinessSchema() {
       "@type": "City",
       name: `${l.city}, ${l.region}`,
     })),
+    /**
+     * The three GBP categories and everything under them. Generated — see
+     * `offerCatalog` above, including why none of these offers carries a price.
+     */
+    hasOfferCatalog: offerCatalog(),
     /** Matches the `payment` FAQ. Keep the two in step. */
     paymentAccepted: "Credit Card, Bank Transfer, Digital Wallet",
     currenciesAccepted: "USD",
@@ -179,9 +268,22 @@ export function serviceSchema(service: Service, location?: Location) {
   return {
     "@context": "https://schema.org",
     "@type": "Service",
+    /*
+      `@id` on the base service page only, so it resolves to the same node the
+      business's `hasOfferCatalog` points at.
+
+      The city variants are left un-`@id`'d on purpose. Giving every
+      `/services/[service]/[city]` page the same `@id` would declare forty pages
+      to be one node; giving each a unique one would put forty near-identical
+      Service nodes into the graph for a business that sells seven services.
+      An anonymous node on those pages says the true thing — this page is about
+      that service in that city — without either problem.
+    */
+    ...(location ? {} : { "@id": serviceId(service.slug) }),
     name: location ? `${service.name} in ${location.city}` : service.name,
     description: service.blurb,
     serviceType: service.name,
+    category: service.category,
     provider: { "@id": BUSINESS_ID },
     areaServed: { "@type": "City", name: areaName },
     /*
