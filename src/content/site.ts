@@ -146,6 +146,21 @@ export const site = {
     "Locally owned and operated",
   ],
 
+  /**
+   * `src` for the homepage Google map embed, from the Business Profile's own
+   * Share → Embed a map dialog.
+   *
+   * Empty on purpose rather than guessed. The embed URL that renders the
+   * *business listing* — name, rating, hours, photos — carries a Google-issued
+   * place identifier that cannot be derived from an address, so there is no
+   * value that could be written here without opening that dialog.
+   *
+   * While it is empty, `GoogleMapEmbed` falls back to an address query: the
+   * right pin, but a plain marker instead of the listing. Paste the real `src`
+   * in and the component picks it up; nothing else changes.
+   */
+  mapEmbedUrl: "",
+
   /** Direct link for customers to leave a 5-star Google review */
   reviewLink: "https://g.page/r/CcTTVMucwQXsEBM/review",
   googleMapsUrl: "https://www.google.com/maps/place/Ray's+Window+Cleaning+And+Pressure+Washing+LLC/@33.8608907,-81.4194598,10z/data=!3m1!4b1!4m6!3m5!1s0x6faf424f02aaa63:0xec05c19ccb54d3c4!8m2!3d33.8613312!4d-81.089143!16s%2Fg%2F11lyhtlts1",
