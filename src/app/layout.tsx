@@ -12,8 +12,10 @@ import { localBusinessSchema, websiteSchema } from "@/lib/schema";
 import { INDEXABLE } from "@/lib/indexing";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
+import { PhoneClickTracker } from "@/components/analytics/PhoneClickTracker";
 
 const GOOGLE_ADS_ID = "AW-18151841356";
+const GA4_MEASUREMENT_ID = "G-BS8J59041J";
 
 /**
  * The two faces STRUCTURE.md §10.3 specified and nothing ever loaded.
@@ -179,7 +181,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <StickyCallBar />
         <ContactHub />
         <Analytics />
-        {/* Google tag (gtag.js) for Google Ads conversion tracking. */}
+        <PhoneClickTracker />
+        {/* Google tag (gtag.js) for Google Ads conversion tracking, and GA4
+            riding the same loader and dataLayer — one config call each,
+            same script, same tag ID isn't required on both. */}
         <Script
           src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
           strategy="afterInteractive"
@@ -190,6 +195,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', '${GOOGLE_ADS_ID}');
+            gtag('config', '${GA4_MEASUREMENT_ID}');
           `}
         </Script>
       </body>
