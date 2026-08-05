@@ -11,6 +11,9 @@ import { JsonLd } from "@/components/JsonLd";
 import { localBusinessSchema, websiteSchema } from "@/lib/schema";
 import { INDEXABLE } from "@/lib/indexing";
 import { Analytics } from "@vercel/analytics/next";
+import Script from "next/script";
+
+const GA_MEASUREMENT_ID = "G-BS8J59041J";
 
 /**
  * The two faces STRUCTURE.md §10.3 specified and nothing ever loaded.
@@ -176,6 +179,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <StickyCallBar />
         <ContactHub />
         <Analytics />
+        {/* Google tag (gtag.js) for GA4 conversion tracking. */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
       </body>
     </html>
   );
