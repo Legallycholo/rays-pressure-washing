@@ -102,6 +102,9 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
   verification: {
     google: "-G-b-F6PaBVkTb_Ns5yMUL6JD_0weuqYgIsT5LopW5s",
+    other: {
+      "msvalidate.01": "B48039C27D548BB35223EC04C4D43B49",
+    },
   },
   // Read from lib/indexing.ts, which app/robots.ts also reads. The two files
   // must agree and the failure mode when they don't is silent, so there is one
