@@ -11,9 +11,6 @@ import { JsonLd } from "@/components/JsonLd";
 import { localBusinessSchema, websiteSchema } from "@/lib/schema";
 import { INDEXABLE } from "@/lib/indexing";
 import { Analytics } from "@vercel/analytics/next";
-import Script from "next/script";
-
-const GOOGLE_ADS_ID = "AW-18151841356";
 
 /**
  * The two faces STRUCTURE.md §10.3 specified and nothing ever loaded.
@@ -179,19 +176,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <StickyCallBar />
         <ContactHub />
         <Analytics />
-        {/* Google tag (gtag.js) for Google Ads conversion tracking. */}
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-tag" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GOOGLE_ADS_ID}');
-          `}
-        </Script>
       </body>
     </html>
   );
