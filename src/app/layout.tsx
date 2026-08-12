@@ -194,6 +194,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             gtag('config', 'AW-18151841356');
           `}
         </Script>
+        <Script id="google-call-conversion-listener" strategy="afterInteractive">
+          {`
+            document.addEventListener('click', function(e) {
+              var target = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+              if (target && typeof window.gtag === 'function') {
+                window.gtag('event', 'conversion', {
+                  'send_to': 'AW-18151841356/uHDkCL2a3uAcEMy8vM9D',
+                  'value': 1.0,
+                  'currency': 'USD'
+                });
+              }
+            });
+          `}
+        </Script>
       </body>
     </html>
   );
