@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { site, hoursLine } from "@/content/site";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -224,6 +225,15 @@ export default function ThankYouPage() {
           </ul>
         </Reveal>
       </Section>
+      <Script id="google-conversion-lead-form" strategy="afterInteractive">
+        {`
+          gtag('event', 'conversion', {
+            'send_to': 'AW-18151841356/dGqlCMSB5KocEMy8vM9D',
+            'value': 1.0,
+            'currency': 'USD'
+          });
+        `}
+      </Script>
     </>
   );
 }

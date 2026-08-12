@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Barlow_Condensed, Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { site, cityState, guaranteeName } from "@/content/site";
 import { locations } from "@/content/locations";
@@ -179,6 +180,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <StickyCallBar />
         <ContactHub />
         <Analytics />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-BS8J59041J"
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-BS8J59041J');
+            gtag('config', 'AW-18151841356');
+          `}
+        </Script>
       </body>
     </html>
   );
