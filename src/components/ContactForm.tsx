@@ -10,7 +10,6 @@ import { locations } from "@/content/locations";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { cn } from "@/lib/utils";
-import { trackLeadConversion } from "@/lib/leadAnalytics";
 
 /**
  * The callback request form. POSTs to `/api/leads`.
@@ -278,7 +277,6 @@ export function ContactForm() {
         const detail = await res.json().catch(() => null);
         throw new Error(detail?.error || "That didn't send.");
       }
-      trackLeadConversion();
       setSent(true);
       router.replace(THANK_YOU);
     } catch (err) {

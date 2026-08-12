@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { Card } from "@/components/ui/Card";
 import { Reveal } from "@/components/Reveal";
-import { ThankYouConversionTracker } from "./ThankYouConversionTracker";
 
 /**
  * `noindex, follow`.
@@ -82,11 +81,6 @@ const meanwhile = [
 export default function ThankYouPage() {
   return (
     <>
-      {/* Redundant safety net for the `generate_lead` conversion: covers a
-          direct/bookmarked/back-button arrival that never ran ContactForm's
-          own tracking call. Renders nothing. */}
-      <ThankYouConversionTracker />
-
       {/*
         Same entrance vocabulary as the hero — `hero-in` for the surrounding
         elements, `hero-rise` for the H1 — because this is the same situation the
