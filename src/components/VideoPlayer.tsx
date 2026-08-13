@@ -4,13 +4,15 @@ import { useEffect, useState } from "react";
 import { Placeholder } from "@/components/ui/Placeholder";
 import { cn } from "@/lib/utils";
 
-type Ratio = "1/1" | "4/3" | "3/2" | "16/9" | "21/9";
+type Ratio = "1/1" | "4/3" | "3/2" | "16/9" | "3/4" | "4/5" | "21/9";
 
 const ratios: Record<Ratio, string> = {
   "1/1": "aspect-square",
   "4/3": "aspect-[4/3]",
   "3/2": "aspect-[3/2]",
   "16/9": "aspect-video",
+  "3/4": "aspect-[3/4]",
+  "4/5": "aspect-[4/5]",
   "21/9": "aspect-[21/9]",
 };
 

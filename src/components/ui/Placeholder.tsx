@@ -17,7 +17,7 @@ export function Placeholder({
   tone = "light",
 }: {
   label: string;
-  ratio?: "1/1" | "4/3" | "3/2" | "16/9" | "3/4" | "21/9";
+  ratio?: "1/1" | "4/3" | "3/2" | "16/9" | "3/4" | "4/5" | "21/9";
   className?: string;
   icon?: string;
   tone?: "light" | "dark";
@@ -28,6 +28,7 @@ export function Placeholder({
     "3/2": "aspect-[3/2]",
     "16/9": "aspect-video",
     "3/4": "aspect-[3/4]",
+    "4/5": "aspect-[4/5]",
     "21/9": "aspect-[21/9]",
   };
 

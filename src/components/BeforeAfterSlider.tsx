@@ -22,6 +22,7 @@ export function BeforeAfterSlider({
   label,
   className,
   ratio = "3/2",
+  fit = "cover",
   priority = false,
 }: {
   before?: string;
@@ -29,7 +30,8 @@ export function BeforeAfterSlider({
   alt: string;
   label?: string;
   className?: string;
-  ratio?: "4/3" | "3/2" | "16/9" | "1/1";
+  ratio?: "4/3" | "3/2" | "16/9" | "1/1" | "3/4" | "4/5";
+  fit?: "cover" | "contain";
   /**
    * Homepage hero only. That slider is the LCP element, so its images load
    * eagerly and the base layer is hinted `fetchPriority="high"`.
@@ -48,6 +50,8 @@ export function BeforeAfterSlider({
     "4/3": "aspect-[4/3]",
     "3/2": "aspect-[3/2]",
     "16/9": "aspect-video",
+    "3/4": "aspect-[3/4]",
+    "4/5": "aspect-[4/5]",
   };
 
   /**
@@ -78,7 +82,7 @@ export function BeforeAfterSlider({
     /** The base layer, the one that fills the frame on first paint. */
     lead?: boolean;
   }) => (
-    <picture>
+    <picture className="block h-full w-full">
       {src.endsWith(".jpg") && (
         <source srcSet={src.replace(/\.jpg$/, ".webp")} type="image/webp" />
       )}
@@ -86,7 +90,10 @@ export function BeforeAfterSlider({
       <img
         src={src}
         alt={imgAlt}
-        className="h-full w-full object-cover"
+        className={cn(
+          "h-full w-full",
+          fit === "contain" ? "object-contain bg-ink-950" : "object-cover"
+        )}
         loading={priority ? "eager" : "lazy"}
         // Only the base layer gets the hint. Marking both high would have them
         // competing for the same bandwidth to render one frame.

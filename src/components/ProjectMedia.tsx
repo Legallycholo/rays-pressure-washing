@@ -26,11 +26,14 @@ export function ProjectMedia({
   priority = false,
 }: {
   project: Project;
-  ratio?: "4/3" | "3/2" | "16/9";
+  ratio?: "4/3" | "3/2" | "16/9" | "1/1" | "3/4" | "4/5";
   className?: string;
   /** Set on the homepage hero only — the one project image that is LCP. */
   priority?: boolean;
 }) {
+  const effectiveRatio = project.ratio ?? ratio;
+  const effectiveFit = project.fit ?? "cover";
+
   if (project.video?.src) {
     return (
       <VideoPlayer
@@ -38,10 +41,10 @@ export function ProjectMedia({
         src={project.video.src}
         poster={project.video.poster}
         alt={project.video.alt}
-        ratio={ratio}
+        ratio={effectiveRatio}
         // Ray's clips are portrait phone video in a landscape card. See the
         // `fit` note in VideoPlayer.
-        fit="contain"
+        fit={project.fit ?? "contain"}
         className={className}
       />
     );
@@ -52,7 +55,8 @@ export function ProjectMedia({
       before={project.before}
       after={project.after}
       alt={project.alt}
-      ratio={ratio}
+      ratio={effectiveRatio}
+      fit={effectiveFit}
       priority={priority}
       className={className}
     />

@@ -50,6 +50,8 @@ export type Project = {
   /** Surfaced as a stat chip on the card. */
   surfaceArea?: string;
   featured?: boolean;
+  fit?: "cover" | "contain";
+  ratio?: "4/3" | "3/2" | "16/9" | "1/1" | "3/4" | "4/5";
 };
 
 export const projects: Project[] = [
@@ -173,6 +175,8 @@ export const projects: Project[] = [
       "Wall of double-height windows in a residential living room reaching two stories above hardwood flooring. Safely detailed using ladder setup and pure water system, restoring crystal-clear clarity to all upper and lower panes.",
     durationHours: 3,
     featured: true,
+    fit: "contain",
+    ratio: "4/3",
   },
   {
     id: "p8",
