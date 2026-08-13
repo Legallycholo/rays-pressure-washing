@@ -132,6 +132,8 @@ await still("after-1.jpg", "house-washing-vinyl-after");
 // Poster frames for the two clips. Same house and ladder as the footage.
 await still("context-shots/gutter-cleaning-ladder.jpg", "gutter-cleaning-poster");
 await still("context-shots/window-cleaning-ladder.jpg", "window-cleaning-poster");
+await still("window-cleaning-livingroom-before.png", "window-cleaning-livingroom-before");
+await still("window-cleaning-livingroom-after.jpg", "window-cleaning-livingroom-after");
 
 console.log("video:");
 video("videos/gutter-cleaning.mp4", "gutter-cleaning");

@@ -163,15 +163,16 @@ export const projects: Project[] = [
   },
   {
     id: "p7",
-    title: "Pollen-filmed river-house glass",
+    title: "Double-height living room interior window cleaning",
     serviceSlug: "window-cleaning",
-    citySlug: "gadsden",
-    before: "",
-    after: "",
-    alt: "River-facing home windows before and after pure water cleaning",
+    citySlug: "lexington",
+    before: "/gallery/window-cleaning-livingroom-before.jpg",
+    after: "/gallery/window-cleaning-livingroom-after.jpg",
+    alt: "Two-story living room windows before and after interior ladder window cleaning",
     summary:
-      "Baked-on spring pollen across 22 panes. Pure-water deionized system, frames and sills included, screens rinsed and refitted.",
+      "Wall of double-height windows in a residential living room reaching two stories above hardwood flooring. Safely detailed using ladder setup and pure water system, restoring crystal-clear clarity to all upper and lower panes.",
     durationHours: 3,
+    featured: true,
   },
   {
     id: "p8",
