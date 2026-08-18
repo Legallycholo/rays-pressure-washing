@@ -30,7 +30,7 @@ const publishedRating = {
     Math.round(
       (testimonials.reduce((sum, t) => sum + t.rating, 0) / testimonials.length) * 10,
     ) / 10,
-  count: testimonials.length,
+  count: 56,
 };
 
 export const site = {
