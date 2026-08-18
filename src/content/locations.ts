@@ -120,7 +120,7 @@ export const locations: Location[] = [
       "Lexington County Museum",
       "Lexington Main Street",
     ],
-    topServices: ["house-washing", "window-cleaning", "driveway-concrete"],
+    topServices: ["window-cleaning", "house-washing", "driveway-concrete"],
     priority: true,
   },
   {
@@ -214,7 +214,7 @@ export const locations: Location[] = [
       "the South Carolina State House",
       "Five Points",
     ],
-    topServices: ["house-washing", "window-cleaning", "driveway-concrete"],
+    topServices: ["window-cleaning", "house-washing", "driveway-concrete"],
     priority: true,
   },
   {
@@ -335,7 +335,7 @@ export const locations: Location[] = [
       "Cobblestone Park Golf Club",
       "the Blythewood Historic District",
     ],
-    topServices: ["driveway-concrete", "window-cleaning", "house-washing"],
+    topServices: ["window-cleaning", "driveway-concrete", "house-washing"],
   },
   {
     slug: "gadsden",
@@ -353,7 +353,7 @@ export const locations: Location[] = [
       "River fog keeps surfaces damp into mid-morning, so spring pine pollen bonds to siding and glass instead of rinsing off, and needle fall packs the gutters twice a year.",
     neighborhoods: ["Gadsden village", "the McCords Ferry Road corridor", "the Congaree bottomland"],
     landmarks: ["Congaree National Park", "the Congaree River", "McCords Ferry Road"],
-    topServices: ["house-washing", "window-cleaning", "gutter-cleaning"],
+    topServices: ["window-cleaning", "house-washing", "gutter-cleaning"],
   },
   {
     slug: "aiken",
@@ -404,7 +404,7 @@ export const locations: Location[] = [
       "Poinsett State Park",
       "Manchester State Forest",
     ],
-    topServices: ["house-washing", "driveway-concrete", "window-cleaning"],
+    topServices: ["window-cleaning", "house-washing", "driveway-concrete"],
   },
 ];
 

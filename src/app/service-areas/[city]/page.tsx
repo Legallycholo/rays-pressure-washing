@@ -31,11 +31,11 @@ export async function generateMetadata({
   const loc = getLocation((await params).city);
   if (!loc) return {};
   return {
-    title: `Pressure Washing in ${loc.city}, ${loc.region}`,
+    title: `Window Cleaning in ${loc.city}, ${loc.region}`,
     // `loc.summary`, not `loc.localChallenge`. The latter is page prose and runs
     // 170–200 characters on its own, which put every city page's description past
     // the truncation point. See the note on `summary` in content/locations.ts.
-    description: `Pressure washing and window cleaning in ${loc.city}, ${loc.region}. ${loc.summary}`,
+    description: `Window cleaning and pressure washing in ${loc.city}, ${loc.region}. ${loc.summary}`,
     alternates: { canonical: `/service-areas/${loc.slug}` },
   };
 }
@@ -64,7 +64,7 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
       <Hero
         variant="page"
         breadcrumbs={crumbs}
-        title={`Pressure washing in ${loc.city}`}
+        title={`Window cleaning in ${loc.city}`}
         lede={loc.intro}
         extras={
           <>

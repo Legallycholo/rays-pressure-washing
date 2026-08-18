@@ -25,7 +25,7 @@ export const metadata: Metadata = {
    * the number instead of lengthening the string past the limit.
    */
   description:
-    `Pressure washing and window cleaning across ${locations.length} ${site.address.regionName} ` +
+    `Window cleaning and pressure washing across ${locations.length} ${site.address.regionName} ` +
     `Midlands cities including ${locations
       .filter((l) => l.priority)
       .map((l) => l.city)

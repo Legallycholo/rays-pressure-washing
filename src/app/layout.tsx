@@ -55,14 +55,14 @@ export const metadata: Metadata = {
    * Title tag strategy: BEST + Primary category + cityname + near me phrases + business name (~200 chars).
    */
   title: {
-    default: `BEST Pressure Washing Service Lexington SC - If you're looking for Pressure Washing near me or Soft Washing & Window Cleaning near me - Ray's Window Cleaning & Pressure Washing is the place to be`,
+    default: `BEST Window Cleaning Service Lexington SC - If you're looking for Window Cleaning near me or Pressure Washing near me - Ray's Window Cleaning & Pressure Washing is the place to be`,
     template: `%s | Ray's Window Cleaning & Pressure Washing`,
   },
   /**
    * The fallback description for any page that doesn't set its own.
    */
   description:
-    `Professional pressure washing service, soft washing, and window cleaning for homes ` +
+    `Professional window cleaning, pressure washing, and soft washing service for homes ` +
     `across ${site.serviceRegion}. Backed by the ${guaranteeName}.`,
   applicationName: site.name,
   /**
@@ -73,17 +73,17 @@ export const metadata: Metadata = {
    * nothing — the city names are the terms with search behind them.
    */
   keywords: [
+    "window cleaning",
     "pressure washing",
     "power washing",
     "soft washing",
     "house washing",
-    "window cleaning",
     "driveway cleaning",
-    "lake house pressure washing",
-    "Lake Murray pressure washing",
-    "waterfront home washing",
-    `pressure washing ${cityState}`,
-    ...locations.slice(0, 5).map((l) => `pressure washing ${l.city} ${l.region}`),
+    "residential window cleaning",
+    "commercial window cleaning",
+    "window washing",
+    `window cleaning ${cityState}`,
+    ...locations.slice(0, 5).map((l) => `window cleaning ${l.city} ${l.region}`),
   ],
   openGraph: {
     type: "website",

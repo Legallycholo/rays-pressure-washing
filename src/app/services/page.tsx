@@ -11,7 +11,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Pressure Washing & Exterior Cleaning Services",
+  title: "Window Cleaning & Pressure Washing Services",
   description: `Every exterior cleaning service we run on residential and commercial properties across ${site.serviceRegion}.`,
   alternates: { canonical: "/services" },
 };
