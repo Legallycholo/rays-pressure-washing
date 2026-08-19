@@ -25,7 +25,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { faqSchema } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: `BEST Window Cleaning Service Lexington SC - If you're looking for Window Cleaning near me or Soft Washing & Pressure Washing near me - Ray's Window Cleaning & Pressure Washing is the place to be`,
+  title: `BEST Window Cleaning & Pressure Washing Service Lexington SC - If you're looking for Window Cleaning or Pressure Washing near me - Ray's is the place to be`,
   description:
     `Professional window cleaning, pressure washing, soft washing, deck and concrete cleaning for homes ` +
     `across ${site.serviceRegion}. Same-day availability and the ${guaranteeName}.`,
@@ -76,7 +76,7 @@ export default function HomePage() {
       {/* H1 = primary category + cityname */}
       <Hero
         eyebrow={`Serving ${site.serviceRegion}`}
-        title="Window Cleaning Service Lexington SC"
+        title="Window Cleaning & Pressure Washing Service Lexington SC"
         lede={`Glass, siding, decks and driveways, each on the method that surface can take. Backed by the ${guaranteeName}.`}
         primaryCta={{ label: "Request a Callback", href: "/contact" }}
         secondaryCta={{ label: `Call ${site.contact.phone}`, href: `tel:${site.contact.phoneHref}` }}

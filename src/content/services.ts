@@ -83,6 +83,35 @@ export type Service = {
 
 export const services: Service[] = [
   {
+    slug: "pressure-washing",
+    name: "Pressure Washing",
+    navLabel: "Pressure Washing",
+    segment: "residential",
+    category: "pressure-washing",
+    blurb:
+      "Full-service residential and commercial pressure washing that restores surfaces without damaging them.",
+    intro:
+      "A property isn't clean until all of it is clean. Whether it's siding, concrete, brick, or decking, we bring the right pressure and the right chemistry to lift years of dirt, algae, and grime. From heavy-duty rotary surface cleaning on driveways to low-pressure soft washing on delicate siding, we restore your exterior safely and thoroughly.",
+    icon: "water",
+    method: "Pressure wash",
+    includes: [
+      "Driveways, walkways, and patios",
+      "Siding, brick, and stucco soft washed",
+      "Decks and fences restored",
+      "Algae, mildew, and mineral stain removal",
+      "Material-matched pressure and chemistry",
+    ],
+    symptoms: [
+      "Concrete looks dull, gray, or stained",
+      "Siding has green algae or black streaks",
+      "Outdoor surfaces feel slippery when wet",
+    ],
+    pricing: { unit: "flat", from: 199, to: 499, minimum: 199, duration: "2–6 hours" },
+    faqIds: ["soft-vs-pressure", "plants-safe", "how-long-lasts", "quote-accuracy"],
+    related: ["house-washing", "driveway-concrete", "deck-patio"],
+    featured: true,
+  },
+  {
     slug: "house-washing",
     name: "House Washing",
     navLabel: "House Washing",

@@ -55,7 +55,7 @@ export const metadata: Metadata = {
    * Title tag strategy: BEST + Primary category + cityname + near me phrases + business name (~200 chars).
    */
   title: {
-    default: `BEST Window Cleaning Service Lexington SC - If you're looking for Window Cleaning near me or Pressure Washing near me - Ray's Window Cleaning & Pressure Washing is the place to be`,
+    default: `BEST Window Cleaning & Pressure Washing Service Lexington SC | Ray's`,
     template: `%s | Ray's Window Cleaning & Pressure Washing`,
   },
   /**
